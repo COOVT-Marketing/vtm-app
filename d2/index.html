@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>D2 Ping Tab</title>
+<title>VTM RTB Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -33,29 +33,14 @@
   }
   .card {
     width: 100%;
-    max-width: 460px;
+    max-width: 420px;
     background: var(--panel);
     border: 1px solid var(--panel-border);
     border-radius: var(--radius);
     padding: 28px;
   }
-  h1 {
-    font-size: 18px;
-    margin: 0 0 4px;
-    font-weight: 600;
-  }
-  .subtitle {
-    color: var(--text-dim);
-    font-size: 13px;
-    margin: 0 0 24px;
-  }
-  label {
-    display: block;
-    font-size: 13px;
-    color: var(--text-dim);
-    margin-bottom: 6px;
-    font-weight: 500;
-  }
+  h1 { font-size: 18px; margin: 0 0 24px; font-weight: 600; text-align: center; }
+  label { display: block; font-size: 13px; color: var(--text-dim); margin-bottom: 6px; font-weight: 500; }
   input {
     width: 100%;
     padding: 11px 12px;
@@ -67,10 +52,7 @@
     font-family: inherit;
     margin-bottom: 16px;
   }
-  input:focus {
-    outline: none;
-    border-color: var(--accent);
-  }
+  input:focus { outline: none; border-color: var(--accent); }
   button {
     width: 100%;
     padding: 12px;
@@ -87,95 +69,50 @@
   button:hover:not(:disabled) { background: var(--accent-light); }
   button:disabled { opacity: 0.6; cursor: not-allowed; }
 
+  /* Minimal Results Box */
   .result {
     margin-top: 20px;
-    padding: 18px;
+    padding: 16px;
     border-radius: 8px;
     border: 1px solid var(--panel-border);
     background: #1a1a1e;
     display: none;
   }
   .result.show { display: block; }
-  .result.rejected { border-color: var(--danger); }
-  .result.accepted { border-color: var(--success); }
-
+  
   .row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 6px 0;
-    border-bottom: 1px solid var(--panel-border);
+    padding: 10px 0;
   }
-  .row:last-child { border-bottom: none; }
-  .row .label { color: var(--text-dim); font-size: 12px; }
-  .row .value { font-size: 15px; font-weight: 600; }
-  .did-value { color: var(--accent-light); font-size: 18px; }
+  .row:first-child { border-bottom: 1px solid var(--panel-border); }
+  
+  .label { color: var(--text-dim); font-size: 13px; font-weight: 500; }
+  .value { font-size: 16px; font-weight: 600; }
+  .did-value { color: var(--accent-light); font-size: 18px; letter-spacing: 0.5px; }
 
-  .did-wrap {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+  .did-wrap { display: flex; align-items: center; gap: 8px; }
   .copy-btn {
-    width: auto;
-    padding: 5px 10px;
-    font-size: 11px;
-    font-weight: 600;
-    background: #2a2a30;
-    border: 1px solid var(--panel-border);
-    color: var(--text-dim);
-    border-radius: 6px;
+    width: auto; padding: 4px 10px; font-size: 11px; font-weight: 600;
+    background: #2a2a30; border: 1px solid var(--panel-border);
+    color: var(--text-dim); border-radius: 6px;
   }
-  .copy-btn:hover:not(:disabled) {
-    background: var(--accent);
-    color: #fff;
-    border-color: var(--accent);
-  }
-  .copy-btn.copied {
-    background: var(--success);
-    color: #fff;
-    border-color: var(--success);
-  }
+  .copy-btn:hover:not(:disabled) { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .copy-btn.copied { background: var(--success); color: #fff; border-color: var(--success); }
 
-  .buffer-bar-wrap {
-    margin-top: 12px;
-    height: 6px;
-    background: #2a2a30;
-    border-radius: 3px;
-    overflow: hidden;
-  }
-  .buffer-bar {
-    height: 100%;
-    background: var(--success);
-    transition: width 1s linear, background 0.3s ease;
-  }
-  .buffer-label {
-    margin-top: 8px;
-    font-size: 12px;
-    color: var(--text-dim);
-    text-align: center;
-  }
-
-  .status-msg {
-    font-size: 13px;
-    margin-top: 12px;
-    text-align: center;
-  }
+  .buffer-bar-wrap { margin-top: 12px; height: 6px; background: #2a2a30; border-radius: 3px; overflow: hidden; }
+  .buffer-bar { height: 100%; background: var(--accent); transition: width 1s linear, background 0.3s ease; }
+  .buffer-label { margin-top: 8px; font-size: 12px; color: var(--text-dim); text-align: center; }
+  
+  .status-msg { font-size: 13px; margin-top: 12px; text-align: center; font-weight: 500; }
   .status-msg.error { color: var(--danger); }
-
-  .source-note {
-    font-size: 11px;
-    color: var(--text-dim);
-    text-align: center;
-    margin-top: 6px;
-    font-style: italic;
-  }
 </style>
 </head>
 <body>
 
 <div class="card">
-  <h1>VTM — D2 Ping Tab</h1>
+  <h1>VTM RTB Portal</h1>
 
   <form id="pingForm">
     <label for="cid">Phone Number</label>
@@ -190,6 +127,7 @@
   <div id="statusMsg" class="status-msg"></div>
 
   <div id="result" class="result">
+    <!-- ONLY DID -->
     <div class="row">
       <span class="label">DID</span>
       <span class="did-wrap">
@@ -197,24 +135,21 @@
         <button type="button" class="copy-btn" id="copyBtn">Copy</button>
       </span>
     </div>
+
+    <!-- ONLY BUFFER TIME -->
     <div class="row">
-      <span class="label">Billable After</span>
-      <span class="value" id="billableValue">—</span>
+      <span class="label">Buffer Time</span>
+      <span class="value" id="bufferTimeValue">—</span>
     </div>
-    <div class="row">
-      <span class="label">Transfer Window</span>
-      <span class="value" id="transferWindowValue">—</span>
-    </div>
+    
     <div class="buffer-bar-wrap">
-      <div class="buffer-bar" id="bufferBar" style="width: 100%;"></div>
+      <div class="buffer-bar" id="bufferBar" style="width: 0%;"></div>
     </div>
     <div class="buffer-label" id="bufferLabel">—</div>
-    <div class="source-note" id="sourceNote"></div>
   </div>
 </div>
 
 <script>
-  // Replace with your deployed Apps Script Web App /exec URL
   const RTB_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxrw4Zf8Yf7MOkzDj2O4l4LzUtFWVB7Uw5LGhTdc6dLKPDqALRR2hd-zcAfdBoPpTGG/exec';
 
   const form = document.getElementById('pingForm');
@@ -223,18 +158,15 @@
   const result = document.getElementById('result');
   const didValue = document.getElementById('didValue');
   const copyBtn = document.getElementById('copyBtn');
-  const billableValue = document.getElementById('billableValue');
-  const transferWindowValue = document.getElementById('transferWindowValue');
+  const bufferTimeValue = document.getElementById('bufferTimeValue');
   const bufferBar = document.getElementById('bufferBar');
   const bufferLabel = document.getElementById('bufferLabel');
-  const sourceNote = document.getElementById('sourceNote');
 
   let countdownTimer = null;
   let copyResetTimer = null;
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-
     const cid = document.getElementById('cid').value.trim();
     const zipcode = document.getElementById('zipcode').value.trim();
 
@@ -245,7 +177,7 @@
     try {
       const res = await fetch(RTB_APP_SCRIPT_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // avoids CORS preflight on Apps Script
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({ cid, zipcode })
       });
 
@@ -257,7 +189,7 @@
         showResult(data);
       }
     } catch (err) {
-      showStatus('Network error — could not reach the ping service.', true);
+      showStatus('Network error — could not reach ping service.', true);
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = 'Submit';
@@ -271,7 +203,6 @@
     try {
       await navigator.clipboard.writeText(did);
     } catch (err) {
-      // Fallback for environments without clipboard API access
       const temp = document.createElement('textarea');
       temp.value = did;
       document.body.appendChild(temp);
@@ -292,7 +223,7 @@
   function resetUI() {
     statusMsg.textContent = '';
     statusMsg.classList.remove('error');
-    result.classList.remove('show', 'accepted', 'rejected');
+    result.classList.remove('show');
     copyBtn.textContent = 'Copy';
     copyBtn.classList.remove('copied');
     if (countdownTimer) clearInterval(countdownTimer);
@@ -305,55 +236,43 @@
 
   function showResult(data) {
     didValue.textContent = data.did || '—';
-    transferWindowValue.textContent = data.transferWindowSeconds != null ? `${data.transferWindowSeconds}s` : '—';
-    result.classList.add('show', 'accepted');
+    result.classList.add('show');
 
-    const seconds = data.billableAfterSeconds;
+    const totalSeconds = data.bufferTimeSeconds;
 
-    if (seconds == null) {
-      billableValue.textContent = 'Not returned';
-      bufferLabel.textContent = 'This ping didn\'t return a billable-duration field';
+    if (totalSeconds == null) {
+      bufferTimeValue.textContent = 'N/A';
+      bufferLabel.textContent = 'No buffer duration returned';
       bufferBar.style.width = '0%';
-      sourceNote.textContent = data.billableDurationNote
-        ? `bidTerms says: "${data.billableDurationNote}"`
-        : 'Check the Raw Response column in the Sheet log for this ping.';
       return;
     }
 
-    billableValue.textContent = `${seconds}s`;
-    sourceNote.textContent = `Source field: ${data.billableDurationSource}`;
-    startBillableCountdown(seconds);
+    bufferTimeValue.textContent = `${totalSeconds}s`;
+    startBufferCountdown(totalSeconds);
   }
 
-  // Counts down toward the moment the call BECOMES billable (not a transfer deadline)
-  function startBillableCountdown(totalSeconds) {
+  function startBufferCountdown(totalSeconds) {
     let elapsed = 0;
-    updateBillableDisplay(elapsed, totalSeconds);
+    updateDisplay(elapsed, totalSeconds);
 
     countdownTimer = setInterval(() => {
       elapsed += 1;
-      updateBillableDisplay(elapsed, totalSeconds);
+      updateDisplay(elapsed, totalSeconds);
 
       if (elapsed >= totalSeconds) {
         clearInterval(countdownTimer);
-        bufferLabel.textContent = 'Call is now billable';
+        bufferLabel.textContent = 'Buffer time reached (Billable)';
         bufferBar.style.background = 'var(--success)';
       }
     }, 1000);
   }
 
-  function updateBillableDisplay(elapsed, total) {
+  function updateDisplay(elapsed, total) {
     const pct = Math.min(100, (elapsed / total) * 100);
     bufferBar.style.width = `${pct}%`;
-    bufferBar.style.background = pct >= 100 ? 'var(--success)' : var_accent();
+    bufferBar.style.background = pct >= 100 ? 'var(--success)' : getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
     const remaining = Math.max(0, total - elapsed);
-    bufferLabel.textContent = remaining > 0
-      ? `${remaining}s until this call becomes billable`
-      : 'Call is now billable';
-  }
-
-  function var_accent() {
-    return getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+    bufferLabel.textContent = remaining > 0 ? `${remaining}s remaining in buffer` : 'Buffer time reached (Billable)';
   }
 </script>
 
