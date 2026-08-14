@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>D2 Ping Tab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #548888;
+    --accent-light: #6ba3a3;
+    --bg: #18181c;
+    --panel: #222227;
+    --panel-border: #2f2f36;
+    --text: #e8e8ea;
+    --text-dim: #9a9aa2;
+    --danger: #d9534f;
+    --success: #4caf7d;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 48px 16px;
+  }
+  .card {
+    width: 100%;
+    max-width: 460px;
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+    padding: 28px;
+  }
+  h1 {
+    font-size: 18px;
+    margin: 0 0 4px;
+    font-weight: 600;
+  }
+  .subtitle {
+    color: var(--text-dim);
+    font-size: 13px;
+    margin: 0 0 24px;
+  }
+  label {
+    display: block;
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  input {
+    width: 100%;
+    padding: 11px 12px;
+    background: #1a1a1e;
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: inherit;
+    margin-bottom: 16px;
+  }
+  input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  button {
+    width: 100%;
+    padding: 12px;
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  button:hover:not(:disabled) { background: var(--accent-light); }
+  button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .result {
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 8px;
+    border: 1px solid var(--panel-border);
+    background: #1a1a1e;
+    display: none;
+  }
+  .result.show { display: block; }
+  .result.rejected { border-color: var(--danger); }
+  .result.accepted { border-color: var(--success); }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--panel-border);
+  }
+  .row:last-child { border-bottom: none; }
+  .row .label { color: var(--text-dim); font-size: 12px; }
+  .row .value { font-size: 15px; font-weight: 600; }
+  .did-value { color: var(--accent-light); font-size: 18px; }
+
+  .buffer-bar-wrap {
+    margin-top: 12px;
+    height: 6px;
+    background: #2a2a30;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .buffer-bar {
+    height: 100%;
+    background: var(--success);
+    transition: width 1s linear, background 0.3s ease;
+  }
+  .buffer-label {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-dim);
+    text-align: center;
+  }
+
+  .status-msg {
+    font-size: 13px;
+    margin-top: 12px;
+    text-align: center;
+  }
+  .status-msg.error { color: var(--danger); }
+
+  .source-note {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: center;
+    margin-top: 6px;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1>VTM — Auto Insured RTB Ping</h1>
+  <p class="subtitle">Auto Insured · Nationwide · Zip required</p>
+
+  <form id="pingForm">
+    <label for="cid">Caller ID (CID)</label>
+    <input type="text" id="cid" placeholder="e.g. 3055551234" required />
+
+    <label for="zipcode">Zip Code</label>
+    <input type="text" id="zipcode" placeholder="e.g. 33101" required maxlength="5" pattern="\d{5}" />
+
+    <button type="submit" id="submitBtn">Send Ping</button>
+  </form>
+
+  <div id="statusMsg" class="status-msg"></div>
+
+  <div id="result" class="result">
+    <div class="row">
+      <span class="label">DID</span>
+      <span class="value did-value" id="didValue">—</span>
+    </div>
+    <div class="row">
+      <span class="label">Bid Amount</span>
+      <span class="value" id="bidValue">—</span>
+    </div>
+    <div class="row">
+      <span class="label">Billable After</span>
+      <span class="value" id="billableValue">—</span>
+    </div>
+    <div class="row">
+      <span class="label">Transfer Window</span>
+      <span class="value" id="transferWindowValue">—</span>
+    </div>
+    <div class="buffer-bar-wrap">
+      <div class="buffer-bar" id="bufferBar" style="width: 100%;"></div>
+    </div>
+    <div class="buffer-label" id="bufferLabel">—</div>
+    <div class="source-note" id="sourceNote"></div>
+  </div>
+</div>
+
+<script>
+  // Replace with your deployed Apps Script Web App /exec URL
+  const RTB_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxrw4Zf8Yf7MOkzDj2O4l4LzUtFWVB7Uw5LGhTdc6dLKPDqALRR2hd-zcAfdBoPpTGG/exec';
+
+  const form = document.getElementById('pingForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const statusMsg = document.getElementById('statusMsg');
+  const result = document.getElementById('result');
+  const didValue = document.getElementById('didValue');
+  const bidValue = document.getElementById('bidValue');
+  const billableValue = document.getElementById('billableValue');
+  const transferWindowValue = document.getElementById('transferWindowValue');
+  const bufferBar = document.getElementById('bufferBar');
+  const bufferLabel = document.getElementById('bufferLabel');
+  const sourceNote = document.getElementById('sourceNote');
+
+  let countdownTimer = null;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const cid = document.getElementById('cid').value.trim();
+    const zipcode = document.getElementById('zipcode').value.trim();
+
+    resetUI();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Pinging...';
+
+    try {
+      const res = await fetch(RTB_APP_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // avoids CORS preflight on Apps Script
+        body: JSON.stringify({ cid, zipcode })
+      });
+
+      const data = await res.json();
+
+      if (data.error) {
+        showStatus(data.rejected ? `Rejected: ${data.rejectReason}` : data.message, true);
+      } else {
+        showResult(data);
+      }
+    } catch (err) {
+      showStatus('Network error — could not reach the ping service.', true);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send Ping';
+    }
+  });
+
+  function resetUI() {
+    statusMsg.textContent = '';
+    statusMsg.classList.remove('error');
+    result.classList.remove('show', 'accepted', 'rejected');
+    if (countdownTimer) clearInterval(countdownTimer);
+  }
+
+  function showStatus(msg, isError) {
+    statusMsg.textContent = msg;
+    if (isError) statusMsg.classList.add('error');
+  }
+
+  function showResult(data) {
+    didValue.textContent = data.did || '—';
+    bidValue.textContent = data.bidAmount != null ? `$${Number(data.bidAmount).toFixed(2)}` : '—';
+    transferWindowValue.textContent = data.transferWindowSeconds != null ? `${data.transferWindowSeconds}s` : '—';
+    result.classList.add('show', 'accepted');
+
+    const seconds = data.billableAfterSeconds;
+
+    if (seconds == null) {
+      billableValue.textContent = 'Not returned';
+      bufferLabel.textContent = 'VTM ping didn\'t return a billable-duration field this time';
+      bufferBar.style.width = '0%';
+      sourceNote.textContent = data.billableDurationNote
+        ? `bidTerms says: "${data.billableDurationNote}"`
+        : 'Check the Raw Response column in the Sheet log for this ping to find the actual field name.';
+      return;
+    }
+
+    billableValue.textContent = `${seconds}s`;
+    sourceNote.textContent = `Source field: ${data.billableDurationSource}`;
+    startBillableCountdown(seconds);
+  }
+
+  // Counts down toward the moment the call BECOMES billable (not a transfer deadline)
+  function startBillableCountdown(totalSeconds) {
+    let elapsed = 0;
+    updateBillableDisplay(elapsed, totalSeconds);
+
+    countdownTimer = setInterval(() => {
+      elapsed += 1;
+      updateBillableDisplay(elapsed, totalSeconds);
+
+      if (elapsed >= totalSeconds) {
+        clearInterval(countdownTimer);
+        bufferLabel.textContent = 'Call is now billable';
+        bufferBar.style.background = 'var(--success)';
+      }
+    }, 1000);
+  }
+
+  function updateBillableDisplay(elapsed, total) {
+    const pct = Math.min(100, (elapsed / total) * 100);
+    bufferBar.style.width = `${pct}%`;
+    bufferBar.style.background = pct >= 100 ? 'var(--success)' : var_accent();
+    const remaining = Math.max(0, total - elapsed);
+    bufferLabel.textContent = remaining > 0
+      ? `${remaining}s until this call becomes billable`
+      : 'Call is now billable';
+  }
+
+  function var_accent() {
+    return getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+  }
+</script>
+
+</body>
+</html>
