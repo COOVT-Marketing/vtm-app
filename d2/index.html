@@ -149,17 +149,16 @@
 <body>
 
 <div class="card">
-  <h1>VTM — Auto Insured RTB Ping</h1>
-  <p class="subtitle">Auto Insured · Nationwide · Zip required</p>
+  <h1>VTM — D2 Ping Tab</h1>
 
   <form id="pingForm">
-    <label for="cid">Caller ID (CID)</label>
+    <label for="cid">Phone Number</label>
     <input type="text" id="cid" placeholder="e.g. 3055551234" required />
 
     <label for="zipcode">Zip Code</label>
     <input type="text" id="zipcode" placeholder="e.g. 33101" required maxlength="5" pattern="\d{5}" />
 
-    <button type="submit" id="submitBtn">Send Ping</button>
+    <button type="submit" id="submitBtn">Submit</button>
   </form>
 
   <div id="statusMsg" class="status-msg"></div>
