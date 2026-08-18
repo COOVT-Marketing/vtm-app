@@ -10,31 +10,35 @@
 
   <style>
     :root {
-      --bg: #0b0f19;
-      --card: #111827;
-      --card2: #1f2937;
-      --border: #374151;
-      --txt: #f9fafb;
-      --txt2: #9ca3af;
-      --txt3: #6b7280;
-      --teal: #1a9e75;
-      --teal-glow: rgba(26,158,117,0.15);
-      --teal-b: rgba(26,158,117,0.35);
-      --green: #22c55e;
-      --green-glow: rgba(34,197,94,0.12);
-      --green-b: rgba(34,197,94,0.4);
-      --red: #ef4444;
-      --red-glow: rgba(239,68,68,0.12);
-      --red-b: rgba(239,68,68,0.4);
-      --yellow: #eab308;
-      --yellow-glow: rgba(234,179,8,0.12);
-      --yellow-b: rgba(234,179,8,0.4);
+      --bg:#0b0f19;
+      --card:#111827;
+      --card2:#1f2937;
+      --border:#374151;
+      --txt:#f9fafb;
+      --txt2:#9ca3af;
+      --txt3:#6b7280;
+
+      --teal:#1a9e75;
+      --teal-glow:rgba(26,158,117,0.15);
+      --teal-b:rgba(26,158,117,0.35);
+
+      --green:#22c55e;
+      --green-glow:rgba(34,197,94,0.12);
+      --green-b:rgba(34,197,94,0.4);
+
+      --red:#ef4444;
+      --red-glow:rgba(239,68,68,0.12);
+      --red-b:rgba(239,68,68,0.4);
+
+      --yellow:#eab308;
+      --yellow-glow:rgba(234,179,8,0.12);
+      --yellow-b:rgba(234,179,8,0.4);
     }
 
     *,*::before,*::after {
       box-sizing:border-box;
       margin:0;
-      padding:0
+      padding:0;
     }
 
     body {
@@ -81,19 +85,19 @@
 
     .logo i {
       font-size:22px;
-      color:#fff
+      color:#fff;
     }
 
     .header-txt h1 {
       font-size:16px;
       font-weight:600;
-      color:#fff
+      color:#fff;
     }
 
     .header-txt p {
       font-size:12px;
       color:var(--txt2);
-      margin-top:2px
+      margin-top:2px;
     }
 
     .company-badge {
@@ -116,12 +120,11 @@
     }
 
     .body {
-      padding:1.5rem
+      padding:1.5rem;
     }
 
     /* ==========================================================
-       EXISTING PHONE/DNC SECTION
-       LEFT UNCHANGED
+       PHONE / DNC SECTION
        ========================================================== */
 
     .input-container {
@@ -266,7 +269,7 @@
       word-break:break-word;
     }
 
-    .kv-value.mono {
+    .mono {
       font-family:'DM Mono',monospace;
       font-size:13px;
     }
@@ -290,7 +293,7 @@
     }
 
     /* ==========================================================
-       NEW TCPA NAME SEARCH SECTION
+       TCPA SECTION
        ========================================================== */
 
     .section-divider {
@@ -394,10 +397,16 @@
 
     .tcpa-result.found {
       border-color:var(--red-b);
+      background:rgba(239,68,68,0.07);
     }
 
     .tcpa-result.clean {
       border-color:var(--green-b);
+    }
+
+    .tcpa-result.review {
+      border-color:var(--yellow-b);
+      background:rgba(234,179,8,0.05);
     }
 
     .tcpa-result.error {
@@ -410,6 +419,14 @@
       align-items:center;
       gap:10px;
       border-bottom:0.5px solid var(--border);
+    }
+
+    .tcpa-result.found .tcpa-result-header {
+      background:rgba(239,68,68,0.10);
+    }
+
+    .tcpa-result.review .tcpa-result-header {
+      background:rgba(234,179,8,0.08);
     }
 
     .tcpa-result-header i {
@@ -429,6 +446,10 @@
       color:var(--green);
     }
 
+    .tcpa-result.review .tcpa-result-header i {
+      color:var(--yellow);
+    }
+
     .tcpa-result.error .tcpa-result-header i {
       color:var(--red);
     }
@@ -436,6 +457,18 @@
     .tcpa-result-title {
       font-size:15px;
       font-weight:600;
+    }
+
+    .tcpa-result.found .tcpa-result-title {
+      color:var(--red);
+    }
+
+    .tcpa-result.review .tcpa-result-title {
+      color:var(--yellow);
+    }
+
+    .tcpa-result.clean .tcpa-result-title {
+      color:var(--green);
     }
 
     .tcpa-result-subtitle {
@@ -499,6 +532,16 @@
       text-decoration:underline;
     }
 
+    .case-snippet {
+      margin-top:10px;
+      padding:9px 10px;
+      border-radius:8px;
+      background:rgba(0,0,0,0.18);
+      color:var(--txt2);
+      font-size:11px;
+      line-height:1.5;
+    }
+
     .tcpa-notice {
       margin:1rem 1.25rem;
       padding:0.75rem 0.9rem;
@@ -535,15 +578,22 @@
       line-height:1.5;
     }
 
+    /* ==========================================================
+       SPIN
+       ========================================================== */
+
     @keyframes spin {
       to {
-        transform:rotate(360deg)
+        transform:rotate(360deg);
       }
     }
 
-    /* ========== Mobile Responsive ========== */
+    /* ==========================================================
+       MOBILE
+       ========================================================== */
 
-    @media (max-width: 480px) {
+    @media (max-width:480px) {
+
       body {
         padding:1rem 0.75rem;
       }
@@ -607,7 +657,12 @@
 
 <div class="card">
 
+  <!-- ==========================================================
+       HEADER
+       ========================================================== -->
+
   <div class="header">
+
     <div class="logo">
       <i class="ti ti-shield-check"></i>
     </div>
@@ -617,20 +672,26 @@
       <p>Vocal Tech Marketing · Compliance Portal</p>
     </div>
 
-    <div class="company-badge" id="companyBadge" style="display:none">
+    <div
+      class="company-badge"
+      id="companyBadge"
+      style="display:none"
+    >
       <i class="ti ti-building"></i>
       <span id="companyBadgeText"></span>
     </div>
+
   </div>
+
 
   <div class="body">
 
-    <!-- ======================================================
-         EXISTING PHONE/DNC SECTION
-         DO NOT CHANGE
-         ====================================================== -->
+    <!-- ========================================================
+         PHONE / DNC CHECK
+         ======================================================== -->
 
     <div class="input-container">
+
       <input
         type="tel"
         id="phoneNumber"
@@ -646,39 +707,74 @@
         <i class="ti ti-search"></i>
         Check
       </button>
+
     </div>
 
-    <div class="result-box" id="resultBox">
 
-      <div class="result-header" id="resultHeader">
-        <i class="ti ti-loader-2" id="resultIcon"></i>
+    <div
+      class="result-box"
+      id="resultBox"
+    >
 
-        <span class="result-title" id="resultTitle">
+      <div
+        class="result-header"
+        id="resultHeader"
+      >
+
+        <i
+          class="ti ti-loader-2"
+          id="resultIcon"
+        ></i>
+
+        <span
+          class="result-title"
+          id="resultTitle"
+        >
           Looking up…
         </span>
 
-        <span class="result-phone" id="resultPhone"></span>
+        <span
+          class="result-phone"
+          id="resultPhone"
+        ></span>
+
       </div>
 
-      <div class="kv-list" id="kvList"></div>
+      <div
+        class="kv-list"
+        id="kvList"
+      ></div>
 
     </div>
 
 
-    <!-- ======================================================
-         NEW TCPA NAME SEARCH
-         ====================================================== -->
+    <!-- ========================================================
+         DIVIDER
+         ======================================================== -->
 
     <div class="section-divider"></div>
 
+
+    <!-- ========================================================
+         TCPA SEARCH
+         ======================================================== -->
+
     <div class="tcpa-section-title">
+
       <i class="ti ti-gavel"></i>
-      <h2>TCPA Name Search</h2>
+
+      <h2>
+        TCPA Name Search
+      </h2>
+
     </div>
 
+
     <p class="tcpa-description">
-      Search publicly available federal legal records for TCPA-related cases matching the entered name.
+      Search publicly available federal legal records for
+      TCPA-related cases matching the entered name.
     </p>
+
 
     <div class="name-inputs">
 
@@ -700,15 +796,23 @@
 
     </div>
 
+
     <button
       id="tcpaSearchBtn"
       class="tcpa-search-btn"
       onclick="searchTCPAName()"
     >
+
       <i class="ti ti-search"></i>
+
       Search TCPA Cases
+
     </button>
 
+
+    <!-- ========================================================
+         TCPA RESULT
+         ======================================================== -->
 
     <div
       class="tcpa-result"
@@ -723,6 +827,7 @@
         ></i>
 
         <div>
+
           <div
             class="tcpa-result-title"
             id="tcpaResultTitle"
@@ -734,9 +839,11 @@
             class="tcpa-result-subtitle"
             id="tcpaResultSubtitle"
           ></div>
+
         </div>
 
       </div>
+
 
       <div
         class="tcpa-cases"
@@ -746,21 +853,28 @@
     </div>
 
   </div>
+
 </div>
 
 
 <script>
 
-  // ── CONFIG ───────────────────────────────────────────────────
-  // EXISTING PHONE/DNC CONFIG — UNCHANGED
+  // ============================================================
+  // CONFIG
+  // ============================================================
 
   const PROXY_URL =
     'https://dnc-portal.syedshayanabbasr15121472.workers.dev';
 
+
   const GOOGLE_SCRIPT_URL =
     'https://script.google.com/macros/s/AKfycby8j6erDfX9E6j8Y03uv4JdLzLykAYY4dzvYJRj94QEl4LBBSR0uc2THu_sTXg97n5wIw/exec';
 
-  const ALLOWED_COMPANIES = ['echolink', 'vtm'];
+
+  const ALLOWED_COMPANIES = [
+    'echolink',
+    'vtm'
+  ];
 
 
   // ============================================================
@@ -768,22 +882,30 @@
   // ============================================================
 
   const urlParams =
-    new URLSearchParams(window.location.search);
+    new URLSearchParams(
+      window.location.search
+    );
+
 
   const companyParam =
     urlParams.get('company');
+
 
   const sanitizedCompany =
     companyParam
       ? companyParam.trim().toLowerCase()
       : '';
 
+
   if (
     !sanitizedCompany ||
-    !ALLOWED_COMPANIES.includes(sanitizedCompany)
+    !ALLOWED_COMPANIES.includes(
+      sanitizedCompany
+    )
   ) {
 
     document.body.innerHTML = `
+
       <div style="
         display:flex;
         flex-direction:column;
@@ -817,6 +939,7 @@
 
         </div>
 
+
         <h2 style="
           color:#f9fafb;
           font-size:20px;
@@ -825,6 +948,7 @@
         ">
           Access Restricted
         </h2>
+
 
         <p style="
           color:#6b7280;
@@ -837,50 +961,78 @@
         </p>
 
       </div>
+
     `;
 
-    throw new Error('Access blocked');
+    throw new Error(
+      'Access blocked'
+    );
+
   }
 
 
   const COMPANY_NAME =
     companyParam.trim();
 
+
   document.getElementById(
     'companyBadgeText'
-  ).textContent = COMPANY_NAME;
+  ).textContent =
+    COMPANY_NAME;
+
 
   document.getElementById(
     'companyBadge'
-  ).style.display = 'flex';
+  ).style.display =
+    'flex';
 
 
   // ============================================================
-  // EXISTING PHONE HELPERS
+  // PHONE HELPERS
   // ============================================================
 
   function formatPhone(d) {
 
-    d = d.replace(/\D/g, '');
+    d =
+      d.replace(/\D/g,'');
+
 
     if (d.length === 10) {
+
       return `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}`;
+
     }
 
-    if (d.length === 11 && d[0] === '1') {
+
+    if (
+      d.length === 11 &&
+      d[0] === '1'
+    ) {
+
       return `+1 (${d.slice(1,4)}) ${d.slice(4,7)}-${d.slice(7)}`;
+
     }
+
 
     return d;
+
   }
 
 
-  function renderRawResponse(data, phone) {
+  function renderRawResponse(
+    data,
+    phone
+  ) {
 
     const list =
-      document.getElementById('kvList');
+      document.getElementById(
+        'kvList'
+      );
 
-    list.innerHTML = '';
+
+    list.innerHTML =
+      '';
+
 
     const rows = [
 
@@ -933,8 +1085,11 @@
         key:'Carrier',
         value:
           data.carrier.name ||
-          JSON.stringify(data.carrier)
+          JSON.stringify(
+            data.carrier
+          )
       });
+
 
       if (data.carrier.type) {
 
@@ -944,6 +1099,7 @@
         });
 
       }
+
 
       if (data.carrier.state) {
 
@@ -974,7 +1130,9 @@
       of Object.entries(data)
     ) {
 
-      if (!known.has(k)) {
+      if (
+        !known.has(k)
+      ) {
 
         rows.push({
 
@@ -994,110 +1152,161 @@
     }
 
 
-    rows.forEach(r => {
+    rows.forEach(
+      r => {
 
-      const row =
-        document.createElement('div');
-
-      row.className = 'kv-row';
-
-
-      let valueHtml = r.value;
+        const row =
+          document.createElement(
+            'div'
+          );
 
 
-      if (r.badge) {
+        row.className =
+          'kv-row';
 
-        const isGood =
-          String(r.value)
-            .toLowerCase() === 'good' ||
-          String(r.value)
-            .toLowerCase() === 'none';
 
-        valueHtml = `
-          <span class="badge ${isGood ? 'good' : 'bad'}">
-            ${escapeHtml(String(r.value))}
-          </span>
+        let valueHtml =
+          r.value;
+
+
+        if (r.badge) {
+
+          const isGood =
+            String(r.value)
+              .toLowerCase() === 'good' ||
+            String(r.value)
+              .toLowerCase() === 'none';
+
+
+          valueHtml = `
+
+            <span class="badge ${isGood ? 'good' : 'bad'}">
+              ${escapeHtml(
+                String(r.value)
+              )}
+            </span>
+
+          `;
+
+        }
+
+        else if (r.mono) {
+
+          valueHtml = `
+
+            <span class="mono">
+              ${escapeHtml(
+                String(r.value)
+              )}
+            </span>
+
+          `;
+
+        }
+
+        else {
+
+          valueHtml =
+            escapeHtml(
+              String(valueHtml)
+            );
+
+        }
+
+
+        row.innerHTML = `
+
+          <div class="kv-key">
+            ${escapeHtml(
+              String(r.key)
+            )}
+          </div>
+
+          <div class="kv-value">
+            ${valueHtml}
+          </div>
+
         `;
 
-      }
 
-      else if (r.mono) {
-
-        valueHtml = `
-          <span class="mono">
-            ${escapeHtml(String(r.value))}
-          </span>
-        `;
+        list.appendChild(
+          row
+        );
 
       }
-
-      else {
-
-        valueHtml =
-          escapeHtml(String(valueHtml));
-
-      }
-
-
-      row.innerHTML = `
-
-        <div class="kv-key">
-          ${escapeHtml(String(r.key))}
-        </div>
-
-        <div class="kv-value">
-          ${valueHtml}
-        </div>
-
-      `;
-
-      list.appendChild(row);
-
-    });
+    );
 
   }
 
 
   // ============================================================
-  // EXISTING PHONE LOOKUP — UNCHANGED
+  // PHONE LOOKUP
   // ============================================================
 
   async function executeLookup() {
 
     const input =
-      document.getElementById('phoneNumber');
+      document.getElementById(
+        'phoneNumber'
+      );
+
 
     const btn =
-      document.getElementById('runBtn');
+      document.getElementById(
+        'runBtn'
+      );
+
 
     const box =
-      document.getElementById('resultBox');
+      document.getElementById(
+        'resultBox'
+      );
+
 
     const header =
-      document.getElementById('resultHeader');
+      document.getElementById(
+        'resultHeader'
+      );
+
 
     const icon =
-      document.getElementById('resultIcon');
+      document.getElementById(
+        'resultIcon'
+      );
+
 
     const title =
-      document.getElementById('resultTitle');
+      document.getElementById(
+        'resultTitle'
+      );
+
 
     const phoneEl =
-      document.getElementById('resultPhone');
+      document.getElementById(
+        'resultPhone'
+      );
 
 
     const phoneVal =
       input.value.trim();
 
+
     if (!phoneVal) {
-      return alert(
+
+      alert(
         'Please enter a phone number.'
       );
+
+      return;
+
     }
 
 
     const cleanNum =
-      phoneVal.replace(/\D/g, '');
+      phoneVal.replace(
+        /\D/g,
+        ''
+      );
 
 
     if (
@@ -1110,32 +1319,44 @@
       );
 
       return;
+
     }
 
 
-    btn.disabled = true;
+    btn.disabled =
+      true;
+
 
     box.className =
       'result-box visible loading';
 
+
     header.className =
       'result-header loading';
+
 
     icon.className =
       'ti ti-loader-2';
 
+
     title.textContent =
       'Looking up…';
 
+
     phoneEl.textContent =
-      formatPhone(cleanNum);
+      formatPhone(
+        cleanNum
+      );
+
 
     document.getElementById(
       'kvList'
-    ).innerHTML = '';
+    ).innerHTML =
+      '';
 
 
-    let userIP = 'Unknown';
+    let userIP =
+      'Unknown';
 
 
     try {
@@ -1145,11 +1366,14 @@
           'https://api.ipify.org?format=json'
         );
 
+
       const ipData =
         await ipRes.json();
 
+
       userIP =
-        ipData.ip || 'Unknown';
+        ipData.ip ||
+        'Unknown';
 
     }
 
@@ -1180,11 +1404,14 @@
       box.className =
         'result-box visible success';
 
+
       header.className =
         'result-header success';
 
+
       icon.className =
         'ti ti-circle-check';
+
 
       title.textContent =
         'API Response';
@@ -1197,21 +1424,37 @@
 
 
       const rawCode =
-        (data.code || 'none')
-          .toLowerCase();
+        (
+          data.code ||
+          'none'
+        ).toLowerCase();
+
 
       const rawMsg =
-        data.message || '';
+        data.message ||
+        '';
 
 
       fetch(
-        `${GOOGLE_SCRIPT_URL}?phone=${cleanNum}&company=${encodeURIComponent(COMPANY_NAME)}&ip=${encodeURIComponent(userIP)}&code=${encodeURIComponent(rawCode)}&msg=${encodeURIComponent(rawMsg)}&raw=${encodeURIComponent(JSON.stringify(data))}`,
+
+        `${GOOGLE_SCRIPT_URL}` +
+        `?phone=${cleanNum}` +
+        `&company=${encodeURIComponent(COMPANY_NAME)}` +
+        `&ip=${encodeURIComponent(userIP)}` +
+        `&code=${encodeURIComponent(rawCode)}` +
+        `&msg=${encodeURIComponent(rawMsg)}` +
+        `&raw=${encodeURIComponent(
+          JSON.stringify(data)
+        )}`,
+
         {
           method:'GET',
           mode:'no-cors'
         }
-      ).catch(() => {});
 
+      ).catch(
+        () => {}
+      );
 
     }
 
@@ -1220,11 +1463,14 @@
       box.className =
         'result-box visible error';
 
+
       header.className =
         'result-header error';
 
+
       icon.className =
         'ti ti-alert-triangle';
+
 
       title.textContent =
         'Lookup Failed';
@@ -1241,7 +1487,9 @@
           </div>
 
           <div class="kv-value">
-            ${escapeHtml(err.message)}
+            ${escapeHtml(
+              err.message
+            )}
           </div>
 
         </div>
@@ -1252,7 +1500,8 @@
 
     finally {
 
-      btn.disabled = false;
+      btn.disabled =
+        false;
 
     }
 
@@ -1260,7 +1509,7 @@
 
 
   // ============================================================
-  // NEW TCPA NAME SEARCH
+  // TCPA NAME SEARCH
   // ============================================================
 
   async function searchTCPAName() {
@@ -1270,13 +1519,17 @@
         'firstName'
       ).value.trim();
 
+
     const lastName =
       document.getElementById(
         'lastName'
       ).value.trim();
 
 
-    if (!firstName || !lastName) {
+    if (
+      !firstName ||
+      !lastName
+    ) {
 
       alert(
         'Please enter both first and last name.'
@@ -1292,25 +1545,30 @@
         'tcpaSearchBtn'
       );
 
+
     const result =
       document.getElementById(
         'tcpaResult'
       );
+
 
     const icon =
       document.getElementById(
         'tcpaResultIcon'
       );
 
+
     const title =
       document.getElementById(
         'tcpaResultTitle'
       );
 
+
     const subtitle =
       document.getElementById(
         'tcpaResultSubtitle'
       );
+
 
     const cases =
       document.getElementById(
@@ -1318,61 +1576,74 @@
       );
 
 
-    btn.disabled = true;
+    // ==========================================================
+    // LOADING
+    // ==========================================================
+
+    btn.disabled =
+      true;
 
 
     result.className =
       'tcpa-result visible loading';
 
+
+    result.style.borderColor =
+      '';
+
+
     icon.className =
       'ti ti-loader-2';
+
+
+    icon.style.color =
+      '';
+
 
     title.textContent =
       'Searching TCPA cases…';
 
+
+    title.style.color =
+      '';
+
+
     subtitle.textContent =
       `${firstName} ${lastName}`;
 
-    cases.innerHTML = '';
+
+    cases.innerHTML =
+      '';
 
 
     try {
 
-      /*
-       * CourtListener search.
-       *
-       * We search the full name together with TCPA-related
-       * terms so ordinary cases with the same name are less
-       * likely to appear.
-       */
+      // ========================================================
+      // WORKER REQUEST
+      // ========================================================
 
-      const fullName =
-        `"${firstName} ${lastName}"`;
-
-      const query =
-        `${fullName} TCPA OR "Telephone Consumer Protection Act" OR "47 U.S.C. 227"`;
-
-
-      const endpoint =
-        'https://www.courtlistener.com/api/rest/v3/search/' +
-        `?q=${encodeURIComponent(query)}` +
-        '&type=r' +
-        '&order_by=score%20desc';
+      const workerUrl =
+        `${PROXY_URL}` +
+        `?firstName=${encodeURIComponent(firstName)}` +
+        `&lastName=${encodeURIComponent(lastName)}`;
 
 
       const response =
-        await fetch(endpoint, {
-          method:'GET',
-          headers:{
-            'Accept':'application/json'
+        await fetch(
+          workerUrl,
+          {
+            method:'GET',
+            headers:{
+              'Accept':'application/json'
+            }
           }
-        });
+        );
 
 
       if (!response.ok) {
 
         throw new Error(
-          `Court search error (HTTP ${response.status})`
+          `Worker error (HTTP ${response.status})`
         );
 
       }
@@ -1382,282 +1653,593 @@
         await response.json();
 
 
+      if (!data.success) {
+
+        throw new Error(
+          data.error ||
+          'TCPA search failed.'
+        );
+
+      }
+
+
       const results =
-        Array.isArray(data.results)
+        Array.isArray(
+          data.results
+        )
           ? data.results
           : [];
 
 
-      /*
-       * Additional local filtering.
-       * We keep results that mention TCPA / Telephone
-       * Consumer Protection Act / 47 U.S.C. 227 somewhere
-       * in the returned record.
-       */
-
-      const tcpaResults =
-        results.filter(item => {
-
-          const searchable =
-            JSON.stringify(item)
-              .toLowerCase();
-
-          return (
-            searchable.includes('tcpa') ||
-            searchable.includes(
-              'telephone consumer protection'
-            ) ||
-            searchable.includes(
-              '47 u.s.c. 227'
-            )
-          );
-
-        });
+      const filterMode =
+        data.filterMode ||
+        'name-match-review';
 
 
-      if (tcpaResults.length === 0) {
+      // ========================================================
+      // TRUE TCPA MATCH
+      // ========================================================
+
+      if (
+        filterMode ===
+          'name-and-tcpa-match' &&
+        results.length > 0
+      ) {
 
         result.className =
-          'tcpa-result visible clean';
+          'tcpa-result visible found';
+
+
+        result.style.borderColor =
+          'var(--red-b)';
+
 
         icon.className =
-          'ti ti-circle-check';
+          'ti ti-alert-circle';
+
+
+        icon.style.color =
+          'var(--red)';
+
 
         title.textContent =
-          'No TCPA Cases Found';
+          `${results.length} TCPA Record${results.length === 1 ? '' : 's'} Found`;
+
+
+        title.style.color =
+          'var(--red)';
+
 
         subtitle.textContent =
           `${firstName} ${lastName}`;
 
-        cases.innerHTML = `
 
-          <div class="tcpa-empty">
+        cases.innerHTML =
+          '';
 
-            <i class="ti ti-circle-check"></i>
 
-            <div class="tcpa-empty-title">
-              No publicly indexed TCPA cases found
+        results
+          .slice(0,50)
+          .forEach(
+            item => {
+
+              const caseName =
+                item.caseName ||
+                'Case name unavailable';
+
+
+              const court =
+                item.court ||
+                'Court unavailable';
+
+
+              const docket =
+                item.docket ||
+                'Not available';
+
+
+              const dateFiled =
+                item.dateFiled ||
+                'Not available';
+
+
+              const status =
+                item.status ||
+                'Not available';
+
+
+              const absoluteUrl =
+                item.url ||
+                null;
+
+
+              const snippet =
+                item.snippet ||
+                null;
+
+
+              let linkHtml =
+                '';
+
+
+              if (
+                absoluteUrl
+              ) {
+
+                let finalUrl =
+                  String(
+                    absoluteUrl
+                  );
+
+
+                if (
+                  finalUrl.startsWith('/')
+                ) {
+
+                  finalUrl =
+                    'https://www.courtlistener.com' +
+                    finalUrl;
+
+                }
+
+
+                linkHtml = `
+
+                  <a
+                    class="case-link"
+                    href="${escapeAttribute(finalUrl)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <i class="ti ti-external-link"></i>
+                    View Public Record
+                  </a>
+
+                `;
+
+              }
+
+
+              let snippetHtml =
+                '';
+
+
+              if (
+                snippet
+              ) {
+
+                snippetHtml = `
+
+                  <div class="case-snippet">
+                    ${escapeHtml(
+                      snippet
+                    )}
+                  </div>
+
+                `;
+
+              }
+
+
+              const caseEl =
+                document.createElement(
+                  'div'
+                );
+
+
+              caseEl.className =
+                'tcpa-case';
+
+
+              caseEl.innerHTML = `
+
+                <div class="case-name">
+                  ${escapeHtml(
+                    String(caseName)
+                  )}
+                </div>
+
+
+                <div class="case-meta">
+
+                  <div class="case-label">
+                    Court
+                  </div>
+
+                  <div class="case-value">
+                    ${escapeHtml(
+                      String(court)
+                    )}
+                  </div>
+
+
+                  <div class="case-label">
+                    Case No.
+                  </div>
+
+                  <div class="case-value">
+                    ${escapeHtml(
+                      String(docket)
+                    )}
+                  </div>
+
+
+                  <div class="case-label">
+                    Filed
+                  </div>
+
+                  <div class="case-value">
+                    ${escapeHtml(
+                      String(dateFiled)
+                    )}
+                  </div>
+
+
+                  <div class="case-label">
+                    Status
+                  </div>
+
+                  <div class="case-value">
+                    ${escapeHtml(
+                      String(status)
+                    )}
+                  </div>
+
+                </div>
+
+
+                ${snippetHtml}
+
+                ${linkHtml}
+
+              `;
+
+
+              cases.appendChild(
+                caseEl
+              );
+
+            }
+          );
+
+
+        cases.insertAdjacentHTML(
+          'beforeend',
+          `
+
+            <div class="tcpa-notice">
+
+              ⚠️ <strong>Important:</strong>
+              A name match does not by itself prove that
+              the record belongs to the person you are checking.
+              Verify the case details, court, dates and other
+              identifying information before treating the result
+              as a confirmed match.
+
             </div>
 
-            <div class="tcpa-empty-text">
-              No TCPA-related federal records were returned
-              for this name from the searched public source.
-            </div>
+          `
+        );
 
-          </div>
-
-          <div class="tcpa-notice">
-            This is a public-record search, not a complete
-            nationwide court-record certification. A name-only
-            search can also miss cases or return records belonging
-            to another person with the same name.
-          </div>
-
-        `;
 
         return;
 
       }
 
 
+      // ========================================================
+      // NAME MATCH ONLY
+      // ========================================================
+
+      if (
+        filterMode ===
+          'name-match-review' &&
+        results.length > 0
+      ) {
+
+        result.className =
+          'tcpa-result visible review';
+
+
+        result.style.borderColor =
+          'var(--yellow-b)';
+
+
+        icon.className =
+          'ti ti-alert-triangle';
+
+
+        icon.style.color =
+          'var(--yellow)';
+
+
+        title.textContent =
+          `${results.length} Name Match${results.length === 1 ? '' : 'es'} — Review Required`;
+
+
+        title.style.color =
+          'var(--yellow)';
+
+
+        subtitle.textContent =
+          `${firstName} ${lastName}`;
+
+
+        cases.innerHTML =
+          '';
+
+
+        results
+          .slice(0,50)
+          .forEach(
+            item => {
+
+              const caseName =
+                item.caseName ||
+                'Case name unavailable';
+
+
+              const court =
+                item.court ||
+                'Court unavailable';
+
+
+              const docket =
+                item.docket ||
+                'Not available';
+
+
+              const dateFiled =
+                item.dateFiled ||
+                'Not available';
+
+
+              const status =
+                item.status ||
+                'Not available';
+
+
+              const absoluteUrl =
+                item.url ||
+                null;
+
+
+              let linkHtml =
+                '';
+
+
+              if (
+                absoluteUrl
+              ) {
+
+                let finalUrl =
+                  String(
+                    absoluteUrl
+                  );
+
+
+                if (
+                  finalUrl.startsWith('/')
+                ) {
+
+                  finalUrl =
+                    'https://www.courtlistener.com' +
+                    finalUrl;
+
+                }
+
+
+                linkHtml = `
+
+                  <a
+                    class="case-link"
+                    href="${escapeAttribute(finalUrl)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <i class="ti ti-external-link"></i>
+                    View Public Record
+                  </a>
+
+                `;
+
+              }
+
+
+              const caseEl =
+                document.createElement(
+                  'div'
+                );
+
+
+              caseEl.className =
+                'tcpa-case';
+
+
+              caseEl.innerHTML = `
+
+                <div class="case-name">
+                  ${escapeHtml(
+                    String(caseName)
+                  )}
+                </div>
+
+
+                <div class="case-meta">
+
+                  <div class="case-label">
+                    Court
+                  </div>
+
+                  <div class="case-value">
+                    ${escapeHtml(
+                      String(court)
+                    )}
+                  </div>
+
+
+                  <div class="case-label">
+                    Case No.
+                  </div>
+
+                  <div class="case-value">
+                    ${escapeHtml(
+                      String(docket)
+                    )}
+                  </div>
+
+
+                  <div class="case-label">
+                    Filed
+                  </div>
+
+                  <div class="case-value">
+                    ${escapeHtml(
+                      String(dateFiled)
+                    )}
+                  </div>
+
+
+                  <div class="case-label">
+                    Status
+                  </div>
+
+                  <div class="case-value">
+                    ${escapeHtml(
+                      String(status)
+                    )}
+                  </div>
+
+                </div>
+
+
+                ${linkHtml}
+
+              `;
+
+
+              cases.appendChild(
+                caseEl
+              );
+
+            }
+          );
+
+
+        cases.insertAdjacentHTML(
+          'beforeend',
+          `
+
+            <div class="tcpa-notice">
+
+              ⚠️ <strong>Manual Review:</strong>
+              Records matching the name were found, but
+              the Worker did not identify a TCPA keyword
+              in the returned records. Do not treat these
+              as confirmed TCPA cases without reviewing
+              the public record.
+
+            </div>
+
+          `
+        );
+
+
+        return;
+
+      }
+
+
+      // ========================================================
+      // NO CASES
+      // ========================================================
+
       result.className =
-        'tcpa-result visible found';
+        'tcpa-result visible clean';
+
+
+      result.style.borderColor =
+        'var(--green-b)';
+
 
       icon.className =
-        'ti ti-alert-circle';
+        'ti ti-circle-check';
+
+
+      icon.style.color =
+        'var(--green)';
+
 
       title.textContent =
-        `${tcpaResults.length} TCPA Record${tcpaResults.length === 1 ? '' : 's'} Found`;
+        'No TCPA Cases Found';
+
+
+      title.style.color =
+        'var(--green)';
+
 
       subtitle.textContent =
         `${firstName} ${lastName}`;
 
 
-      cases.innerHTML = '';
+      cases.innerHTML = `
 
+        <div class="tcpa-empty">
 
-      tcpaResults
-        .slice(0, 20)
-        .forEach(item => {
+          <i class="ti ti-circle-check"></i>
 
-          const caseName =
-            getFirstValue(item, [
-              'caseName',
-              'case_name',
-              'name',
-              'caseNameFull'
-            ]) || 'Case name unavailable';
-
-
-          const court =
-            getFirstValue(item, [
-              'court_citation_string',
-              'court',
-              'court_name',
-              'court_citation'
-            ]) || 'Court unavailable';
-
-
-          const docket =
-            getFirstValue(item, [
-              'docketNumber',
-              'docket_number',
-              'docket'
-            ]) || 'Not available';
-
-
-          const dateFiled =
-            getFirstValue(item, [
-              'dateFiled',
-              'date_filed',
-              'dateFiledFormatted'
-            ]) || 'Not available';
-
-
-          const status =
-            getFirstValue(item, [
-              'status',
-              'procedural_history',
-              'dateTerminated'
-            ]) || 'Not available';
-
-
-          const absoluteUrl =
-            getFirstValue(item, [
-              'absolute_url',
-              'absoluteUrl',
-              'url'
-            ]);
-
-
-          const caseEl =
-            document.createElement('div');
-
-          caseEl.className =
-            'tcpa-case';
-
-
-          let linkHtml = '';
-
-          if (absoluteUrl) {
-
-            let finalUrl =
-              String(absoluteUrl);
-
-            if (
-              finalUrl.startsWith('/')
-            ) {
-
-              finalUrl =
-                'https://www.courtlistener.com' +
-                finalUrl;
-
-            }
-
-
-            linkHtml = `
-
-              <a
-                class="case-link"
-                href="${escapeAttribute(finalUrl)}"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <i class="ti ti-external-link"></i>
-                View Public Record
-              </a>
-
-            `;
-
-          }
-
-
-          caseEl.innerHTML = `
-
-            <div class="case-name">
-              ${escapeHtml(String(caseName))}
-            </div>
-
-            <div class="case-meta">
-
-              <div class="case-label">
-                Court
-              </div>
-
-              <div class="case-value">
-                ${escapeHtml(String(court))}
-              </div>
-
-
-              <div class="case-label">
-                Case No.
-              </div>
-
-              <div class="case-value">
-                ${escapeHtml(String(docket))}
-              </div>
-
-
-              <div class="case-label">
-                Filed
-              </div>
-
-              <div class="case-value">
-                ${escapeHtml(String(dateFiled))}
-              </div>
-
-
-              <div class="case-label">
-                Status
-              </div>
-
-              <div class="case-value">
-                ${escapeHtml(String(status))}
-              </div>
-
-            </div>
-
-            ${linkHtml}
-
-          `;
-
-
-          cases.appendChild(caseEl);
-
-        });
-
-
-      cases.insertAdjacentHTML(
-        'beforeend',
-        `
-
-          <div class="tcpa-notice">
-
-            ⚠️ <strong>Important:</strong>
-            A name match does not by itself prove that
-            the record belongs to the person you are checking.
-            Verify the case details, court, dates and other
-            identifying information before treating the result
-            as a confirmed match.
-
+          <div class="tcpa-empty-title">
+            No publicly indexed TCPA cases found
           </div>
 
-        `
-      );
+          <div class="tcpa-empty-text">
+            No matching TCPA-related federal records
+            were returned for this name from the searched
+            public source.
+          </div>
 
+        </div>
+
+
+        <div class="tcpa-notice">
+
+          This is a public-record search, not a complete
+          nationwide court-record certification. A name-only
+          search can miss cases or return records belonging
+          to another person with the same name.
+
+        </div>
+
+      `;
 
     }
+
 
     catch (err) {
 
       result.className =
         'tcpa-result visible error';
 
+
+      result.style.borderColor =
+        'var(--red-b)';
+
+
       icon.className =
         'ti ti-alert-triangle';
 
+
+      icon.style.color =
+        'var(--red)';
+
+
       title.textContent =
         'TCPA Search Failed';
+
+
+      title.style.color =
+        'var(--red)';
+
 
       subtitle.textContent =
         'Unable to complete the public-record search.';
@@ -1672,6 +2254,7 @@
             style="color:var(--red)"
           ></i>
 
+
           <div
             class="tcpa-empty-title"
             style="color:var(--red)"
@@ -1679,8 +2262,11 @@
             Search Error
           </div>
 
+
           <div class="tcpa-empty-text">
-            ${escapeHtml(err.message)}
+            ${escapeHtml(
+              err.message
+            )}
           </div>
 
         </div>
@@ -1689,9 +2275,11 @@
 
     }
 
+
     finally {
 
-      btn.disabled = false;
+      btn.disabled =
+        false;
 
     }
 
@@ -1699,50 +2287,48 @@
 
 
   // ============================================================
-  // TCPA SEARCH HELPERS
+  // ESCAPE HELPERS
   // ============================================================
 
-  function getFirstValue(
-    obj,
-    keys
+  function escapeHtml(
+    value
   ) {
 
-    for (const key of keys) {
-
-      if (
-        obj &&
-        obj[key] !== undefined &&
-        obj[key] !== null &&
-        obj[key] !== ''
-      ) {
-
-        return obj[key];
-
-      }
-
-    }
-
-    return null;
-
-  }
-
-
-  function escapeHtml(value) {
-
     return String(value)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
+      .replace(
+        /&/g,
+        '&amp;'
+      )
+      .replace(
+        /</g,
+        '&lt;'
+      )
+      .replace(
+        />/g,
+        '&gt;'
+      )
+      .replace(
+        /"/g,
+        '&quot;'
+      )
+      .replace(
+        /'/g,
+        '&#039;'
+      );
 
   }
 
 
-  function escapeAttribute(value) {
+  function escapeAttribute(
+    value
+  ) {
 
-    return escapeHtml(value)
-      .replace(/`/g, '&#096;');
+    return escapeHtml(
+      value
+    ).replace(
+      /`/g,
+      '&#096;'
+    );
 
   }
 
@@ -1753,24 +2339,38 @@
 
   document
     .getElementById('firstName')
-    .addEventListener('keydown', function(e) {
+    .addEventListener(
+      'keydown',
+      function(e) {
 
-      if (e.key === 'Enter') {
-        searchTCPAName();
+        if (
+          e.key === 'Enter'
+        ) {
+
+          searchTCPAName();
+
+        }
+
       }
-
-    });
+    );
 
 
   document
     .getElementById('lastName')
-    .addEventListener('keydown', function(e) {
+    .addEventListener(
+      'keydown',
+      function(e) {
 
-      if (e.key === 'Enter') {
-        searchTCPAName();
+        if (
+          e.key === 'Enter'
+        ) {
+
+          searchTCPAName();
+
+        }
+
       }
-
-    });
+    );
 
 </script>
 
