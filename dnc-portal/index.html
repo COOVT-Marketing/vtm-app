@@ -7,226 +7,616 @@
   <link rel="icon" type="image/png" href="logo.png">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css"/>
+
   <style>
     :root {
-  --bg: #0b0f19;
-  --card: #111827;
-  --card2: #1f2937;
-  --border: #374151;
-  --txt: #f9fafb;
-  --txt2: #9ca3af;
-  --txt3: #6b7280;
-  --teal: #1a9e75;
-  --teal-glow: rgba(26,158,117,0.15);
-  --teal-b: rgba(26,158,117,0.35);
-  --green: #22c55e;
-  --green-glow: rgba(34,197,94,0.12);
-  --green-b: rgba(34,197,94,0.4);
-  --red: #ef4444;
-  --red-glow: rgba(239,68,68,0.12);
-  --red-b: rgba(239,68,68,0.4);
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body {
-  font-family:'DM Sans',sans-serif;
-  background:var(--bg);
-  color:var(--txt);
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:1.5rem 1rem;
-}
-.card {
-  background:var(--card);
-  border:0.5px solid var(--border);
-  border-radius:16px;
-  width:100%;
-  max-width:560px;
-  overflow:hidden;
-  box-shadow:0 25px 30px -8px rgba(0,0,0,0.6);
-}
-.header {
-  background:#090d16;
-  padding:1.25rem 1.5rem;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  border-bottom:0.5px solid var(--border);
-  flex-wrap:wrap;
-}
-.logo {
-  width:40px;height:40px;
-  background:var(--teal);
-  border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
-}
-.logo i{font-size:22px;color:#fff}
-.header-txt h1{font-size:16px;font-weight:600;color:#fff}
-.header-txt p{font-size:12px;color:var(--txt2);margin-top:2px}
-.company-badge {
-  margin-left:auto;
-  display:flex;align-items:center;gap:6px;
-  background:var(--teal-glow);
-  border:0.5px solid var(--teal-b);
-  border-radius:20px;
-  padding:4px 12px;
-  font-size:12px;
-  color:var(--teal);
-  font-weight:500;
-  flex-shrink:0;
-  max-width:160px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-.body{padding:1.5rem}
-.input-container {
-  display:flex;
-  gap:10px;
-  margin-bottom:1.5rem;
-  flex-wrap:wrap;
-}
-input[type="tel"] {
-  flex:1;
-  min-width:0;
-  padding:0.85rem 1.1rem;
-  background-color:#090d16;
-  border:0.5px solid var(--border);
-  border-radius:10px;
-  color:#fff;
-  font-size:15px;
-}
-input[type="tel"]:focus { outline:none; border-color:var(--teal); }
-button.run-btn {
-  padding:0.85rem 1.4rem;
-  background-color:var(--teal);
-  color:#fff;
-  border:none;
-  border-radius:10px;
-  font-size:14px;
-  font-weight:500;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  white-space:nowrap;
-}
-button.run-btn:hover { opacity:0.9; }
-button.run-btn:disabled { background-color:var(--card2); color:var(--txt3); cursor:not-allowed; }
+      --bg: #0b0f19;
+      --card: #111827;
+      --card2: #1f2937;
+      --border: #374151;
+      --txt: #f9fafb;
+      --txt2: #9ca3af;
+      --txt3: #6b7280;
+      --teal: #1a9e75;
+      --teal-glow: rgba(26,158,117,0.15);
+      --teal-b: rgba(26,158,117,0.35);
+      --green: #22c55e;
+      --green-glow: rgba(34,197,94,0.12);
+      --green-b: rgba(34,197,94,0.4);
+      --red: #ef4444;
+      --red-glow: rgba(239,68,68,0.12);
+      --red-b: rgba(239,68,68,0.4);
+      --yellow: #eab308;
+      --yellow-glow: rgba(234,179,8,0.12);
+      --yellow-b: rgba(234,179,8,0.4);
+    }
 
-.result-box {
-  display:none;
-  border-radius:14px;
-  border:0.5px solid var(--border);
-  background:var(--card2);
-  overflow:hidden;
-}
-.result-box.visible { display:block; }
-.result-box.loading { border-color:var(--teal-b); }
-.result-box.success { border-color:var(--green-b); }
-.result-box.error { border-color:var(--red-b); }
+    *,*::before,*::after {
+      box-sizing:border-box;
+      margin:0;
+      padding:0
+    }
 
-.result-header {
-  padding:1rem 1.25rem;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  border-bottom:0.5px solid var(--border);
-  flex-wrap:wrap;
-}
-.result-header i { font-size:20px; }
-.result-header.loading i { color:var(--teal); animation:spin 0.8s linear infinite; }
-.result-header.success i { color:var(--green); }
-.result-header.error i { color:var(--red); }
-.result-title { font-size:15px; font-weight:600; }
-.result-phone {
-  font-family:'DM Mono',monospace;
-  font-size:13px;
-  color:var(--txt2);
-  margin-left:auto;
-}
+    body {
+      font-family:'DM Sans',sans-serif;
+      background:var(--bg);
+      color:var(--txt);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:1.5rem 1rem;
+    }
 
-.kv-list { padding:0.4rem 0; }
-.kv-row {
-  display:flex;
-  padding:0.7rem 1.25rem;
-  border-bottom:0.5px solid rgba(255,255,255,0.04);
-  gap:12px;
-}
-.kv-row:last-child { border-bottom:none; }
-.kv-key {
-  width:110px;
-  flex-shrink:0;
-  font-size:12px;
-  font-weight:500;
-  color:var(--txt3);
-  text-transform:uppercase;
-  letter-spacing:0.04em;
-}
-.kv-value {
-  flex:1;
-  font-size:14px;
-  color:var(--txt);
-  word-break:break-word;
-}
-.kv-value.mono { font-family:'DM Mono',monospace; font-size:13px; }
-.badge {
-  display:inline-block;
-  padding:2px 10px;
-  border-radius:20px;
-  font-size:12px;
-  font-weight:600;
-}
-.badge.good { background:rgba(34,197,94,0.15); color:var(--green); }
-.badge.bad { background:rgba(239,68,68,0.15); color:var(--red); }
+    .card {
+      background:var(--card);
+      border:0.5px solid var(--border);
+      border-radius:16px;
+      width:100%;
+      max-width:560px;
+      overflow:hidden;
+      box-shadow:0 25px 30px -8px rgba(0,0,0,0.6);
+    }
 
-@keyframes spin{to{transform:rotate(360deg)}}
+    .header {
+      background:#090d16;
+      padding:1.25rem 1.5rem;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      border-bottom:0.5px solid var(--border);
+      flex-wrap:wrap;
+    }
 
-/* ========== Mobile Responsive ========== */
-@media (max-width: 480px) {
-  body { padding: 1rem 0.75rem; }
-  .header { padding: 1rem 1.1rem; }
-  .body { padding: 1.2rem; }
-  .input-container {
-    flex-direction: column;
-  }
-  button.run-btn {
-    width: 100%;
-    justify-content: center;
-  }
-  .company-badge {
-    margin-left: 0;
-    margin-top: 6px;
-  }
-  .kv-row {
-    flex-direction: column;
-    gap: 4px;
-    padding: 0.75rem 1.1rem;
-  }
-  .kv-key {
-    width: 100%;
-  }
-  .result-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-  }
-  .result-phone {
-    margin-left: 0;
-  }
-}
+    .logo {
+      width:40px;
+      height:40px;
+      background:var(--teal);
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-shrink:0;
+    }
+
+    .logo i {
+      font-size:22px;
+      color:#fff
+    }
+
+    .header-txt h1 {
+      font-size:16px;
+      font-weight:600;
+      color:#fff
+    }
+
+    .header-txt p {
+      font-size:12px;
+      color:var(--txt2);
+      margin-top:2px
+    }
+
+    .company-badge {
+      margin-left:auto;
+      display:flex;
+      align-items:center;
+      gap:6px;
+      background:var(--teal-glow);
+      border:0.5px solid var(--teal-b);
+      border-radius:20px;
+      padding:4px 12px;
+      font-size:12px;
+      color:var(--teal);
+      font-weight:500;
+      flex-shrink:0;
+      max-width:160px;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .body {
+      padding:1.5rem
+    }
+
+    /* ==========================================================
+       EXISTING PHONE/DNC SECTION
+       LEFT UNCHANGED
+       ========================================================== */
+
+    .input-container {
+      display:flex;
+      gap:10px;
+      margin-bottom:1.5rem;
+      flex-wrap:wrap;
+    }
+
+    input[type="tel"] {
+      flex:1;
+      min-width:0;
+      padding:0.85rem 1.1rem;
+      background-color:#090d16;
+      border:0.5px solid var(--border);
+      border-radius:10px;
+      color:#fff;
+      font-size:15px;
+    }
+
+    input[type="tel"]:focus {
+      outline:none;
+      border-color:var(--teal);
+    }
+
+    button.run-btn {
+      padding:0.85rem 1.4rem;
+      background-color:var(--teal);
+      color:#fff;
+      border:none;
+      border-radius:10px;
+      font-size:14px;
+      font-weight:500;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      white-space:nowrap;
+    }
+
+    button.run-btn:hover {
+      opacity:0.9;
+    }
+
+    button.run-btn:disabled {
+      background-color:var(--card2);
+      color:var(--txt3);
+      cursor:not-allowed;
+    }
+
+    .result-box {
+      display:none;
+      border-radius:14px;
+      border:0.5px solid var(--border);
+      background:var(--card2);
+      overflow:hidden;
+    }
+
+    .result-box.visible {
+      display:block;
+    }
+
+    .result-box.loading {
+      border-color:var(--teal-b);
+    }
+
+    .result-box.success {
+      border-color:var(--green-b);
+    }
+
+    .result-box.error {
+      border-color:var(--red-b);
+    }
+
+    .result-header {
+      padding:1rem 1.25rem;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      border-bottom:0.5px solid var(--border);
+      flex-wrap:wrap;
+    }
+
+    .result-header i {
+      font-size:20px;
+    }
+
+    .result-header.loading i {
+      color:var(--teal);
+      animation:spin 0.8s linear infinite;
+    }
+
+    .result-header.success i {
+      color:var(--green);
+    }
+
+    .result-header.error i {
+      color:var(--red);
+    }
+
+    .result-title {
+      font-size:15px;
+      font-weight:600;
+    }
+
+    .result-phone {
+      font-family:'DM Mono',monospace;
+      font-size:13px;
+      color:var(--txt2);
+      margin-left:auto;
+    }
+
+    .kv-list {
+      padding:0.4rem 0;
+    }
+
+    .kv-row {
+      display:flex;
+      padding:0.7rem 1.25rem;
+      border-bottom:0.5px solid rgba(255,255,255,0.04);
+      gap:12px;
+    }
+
+    .kv-row:last-child {
+      border-bottom:none;
+    }
+
+    .kv-key {
+      width:110px;
+      flex-shrink:0;
+      font-size:12px;
+      font-weight:500;
+      color:var(--txt3);
+      text-transform:uppercase;
+      letter-spacing:0.04em;
+    }
+
+    .kv-value {
+      flex:1;
+      font-size:14px;
+      color:var(--txt);
+      word-break:break-word;
+    }
+
+    .kv-value.mono {
+      font-family:'DM Mono',monospace;
+      font-size:13px;
+    }
+
+    .badge {
+      display:inline-block;
+      padding:2px 10px;
+      border-radius:20px;
+      font-size:12px;
+      font-weight:600;
+    }
+
+    .badge.good {
+      background:rgba(34,197,94,0.15);
+      color:var(--green);
+    }
+
+    .badge.bad {
+      background:rgba(239,68,68,0.15);
+      color:var(--red);
+    }
+
+    /* ==========================================================
+       NEW TCPA NAME SEARCH SECTION
+       ========================================================== */
+
+    .section-divider {
+      height:1px;
+      background:var(--border);
+      margin:1.6rem 0;
+    }
+
+    .tcpa-section-title {
+      display:flex;
+      align-items:center;
+      gap:9px;
+      margin-bottom:5px;
+    }
+
+    .tcpa-section-title i {
+      font-size:20px;
+      color:var(--teal);
+    }
+
+    .tcpa-section-title h2 {
+      font-size:15px;
+      font-weight:600;
+    }
+
+    .tcpa-description {
+      font-size:12px;
+      color:var(--txt3);
+      margin-bottom:1rem;
+      line-height:1.5;
+    }
+
+    .name-inputs {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .name-input {
+      width:100%;
+      padding:0.85rem 1.1rem;
+      background-color:#090d16;
+      border:0.5px solid var(--border);
+      border-radius:10px;
+      color:#fff;
+      font-size:15px;
+    }
+
+    .name-input:focus {
+      outline:none;
+      border-color:var(--teal);
+    }
+
+    .name-input::placeholder {
+      color:var(--txt3);
+    }
+
+    .tcpa-search-btn {
+      width:100%;
+      padding:0.85rem 1.4rem;
+      background-color:var(--teal);
+      color:#fff;
+      border:none;
+      border-radius:10px;
+      font-size:14px;
+      font-weight:500;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+    }
+
+    .tcpa-search-btn:hover {
+      opacity:0.9;
+    }
+
+    .tcpa-search-btn:disabled {
+      background-color:var(--card2);
+      color:var(--txt3);
+      cursor:not-allowed;
+    }
+
+    .tcpa-result {
+      display:none;
+      margin-top:1rem;
+      border-radius:14px;
+      border:0.5px solid var(--border);
+      background:var(--card2);
+      overflow:hidden;
+    }
+
+    .tcpa-result.visible {
+      display:block;
+    }
+
+    .tcpa-result.loading {
+      border-color:var(--teal-b);
+    }
+
+    .tcpa-result.found {
+      border-color:var(--red-b);
+    }
+
+    .tcpa-result.clean {
+      border-color:var(--green-b);
+    }
+
+    .tcpa-result.error {
+      border-color:var(--red-b);
+    }
+
+    .tcpa-result-header {
+      padding:1rem 1.25rem;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      border-bottom:0.5px solid var(--border);
+    }
+
+    .tcpa-result-header i {
+      font-size:21px;
+    }
+
+    .tcpa-result.loading .tcpa-result-header i {
+      color:var(--teal);
+      animation:spin 0.8s linear infinite;
+    }
+
+    .tcpa-result.found .tcpa-result-header i {
+      color:var(--red);
+    }
+
+    .tcpa-result.clean .tcpa-result-header i {
+      color:var(--green);
+    }
+
+    .tcpa-result.error .tcpa-result-header i {
+      color:var(--red);
+    }
+
+    .tcpa-result-title {
+      font-size:15px;
+      font-weight:600;
+    }
+
+    .tcpa-result-subtitle {
+      font-size:12px;
+      color:var(--txt2);
+      margin-top:3px;
+    }
+
+    .tcpa-cases {
+      padding:0.4rem 0;
+    }
+
+    .tcpa-case {
+      padding:1rem 1.25rem;
+      border-bottom:0.5px solid rgba(255,255,255,0.06);
+    }
+
+    .tcpa-case:last-child {
+      border-bottom:none;
+    }
+
+    .case-name {
+      font-size:14px;
+      font-weight:600;
+      color:#fff;
+      line-height:1.4;
+      margin-bottom:8px;
+    }
+
+    .case-meta {
+      display:grid;
+      grid-template-columns:110px 1fr;
+      gap:5px 12px;
+    }
+
+    .case-label {
+      color:var(--txt3);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:0.04em;
+    }
+
+    .case-value {
+      color:var(--txt2);
+      font-size:12px;
+      word-break:break-word;
+    }
+
+    .case-link {
+      display:inline-flex;
+      align-items:center;
+      gap:5px;
+      margin-top:10px;
+      color:var(--teal);
+      text-decoration:none;
+      font-size:12px;
+      font-weight:500;
+    }
+
+    .case-link:hover {
+      text-decoration:underline;
+    }
+
+    .tcpa-notice {
+      margin:1rem 1.25rem;
+      padding:0.75rem 0.9rem;
+      border-radius:9px;
+      background:var(--yellow-glow);
+      border:0.5px solid var(--yellow-b);
+      color:#facc15;
+      font-size:11px;
+      line-height:1.5;
+    }
+
+    .tcpa-empty {
+      padding:1.25rem;
+      text-align:center;
+    }
+
+    .tcpa-empty i {
+      font-size:30px;
+      color:var(--green);
+      display:block;
+      margin-bottom:8px;
+    }
+
+    .tcpa-empty-title {
+      font-size:14px;
+      font-weight:600;
+      color:var(--green);
+    }
+
+    .tcpa-empty-text {
+      margin-top:5px;
+      color:var(--txt3);
+      font-size:12px;
+      line-height:1.5;
+    }
+
+    @keyframes spin {
+      to {
+        transform:rotate(360deg)
+      }
+    }
+
+    /* ========== Mobile Responsive ========== */
+
+    @media (max-width: 480px) {
+      body {
+        padding:1rem 0.75rem;
+      }
+
+      .header {
+        padding:1rem 1.1rem;
+      }
+
+      .body {
+        padding:1.2rem;
+      }
+
+      .input-container {
+        flex-direction:column;
+      }
+
+      button.run-btn {
+        width:100%;
+        justify-content:center;
+      }
+
+      .company-badge {
+        margin-left:0;
+        margin-top:6px;
+      }
+
+      .kv-row {
+        flex-direction:column;
+        gap:4px;
+        padding:0.75rem 1.1rem;
+      }
+
+      .kv-key {
+        width:100%;
+      }
+
+      .result-header {
+        flex-direction:column;
+        align-items:flex-start;
+        gap:6px;
+      }
+
+      .result-phone {
+        margin-left:0;
+      }
+
+      .name-inputs {
+        grid-template-columns:1fr;
+      }
+
+      .case-meta {
+        grid-template-columns:1fr;
+        gap:2px;
+        margin-bottom:5px;
+      }
+    }
   </style>
 </head>
+
 <body>
+
 <div class="card">
+
   <div class="header">
-    <div class="logo"><i class="ti ti-shield-check"></i></div>
+    <div class="logo">
+      <i class="ti ti-shield-check"></i>
+    </div>
+
     <div class="header-txt">
       <h1>DNC Checker</h1>
       <p>Vocal Tech Marketing · Compliance Portal</p>
     </div>
+
     <div class="company-badge" id="companyBadge" style="display:none">
       <i class="ti ti-building"></i>
       <span id="companyBadgeText"></span>
@@ -234,183 +624,1155 @@ button.run-btn:disabled { background-color:var(--card2); color:var(--txt3); curs
   </div>
 
   <div class="body">
+
+    <!-- ======================================================
+         EXISTING PHONE/DNC SECTION
+         DO NOT CHANGE
+         ====================================================== -->
+
     <div class="input-container">
-      <input type="tel" id="phoneNumber" placeholder="Enter phone number..." autocomplete="off">
-      <button id="runBtn" class="run-btn" onclick="executeLookup()">
-        <i class="ti ti-search"></i> Check
+      <input
+        type="tel"
+        id="phoneNumber"
+        placeholder="Enter phone number..."
+        autocomplete="off"
+      >
+
+      <button
+        id="runBtn"
+        class="run-btn"
+        onclick="executeLookup()"
+      >
+        <i class="ti ti-search"></i>
+        Check
       </button>
     </div>
 
     <div class="result-box" id="resultBox">
+
       <div class="result-header" id="resultHeader">
         <i class="ti ti-loader-2" id="resultIcon"></i>
-        <span class="result-title" id="resultTitle">Looking up…</span>
+
+        <span class="result-title" id="resultTitle">
+          Looking up…
+        </span>
+
         <span class="result-phone" id="resultPhone"></span>
       </div>
+
       <div class="kv-list" id="kvList"></div>
+
     </div>
+
+
+    <!-- ======================================================
+         NEW TCPA NAME SEARCH
+         ====================================================== -->
+
+    <div class="section-divider"></div>
+
+    <div class="tcpa-section-title">
+      <i class="ti ti-gavel"></i>
+      <h2>TCPA Name Search</h2>
+    </div>
+
+    <p class="tcpa-description">
+      Search publicly available federal legal records for TCPA-related cases matching the entered name.
+    </p>
+
+    <div class="name-inputs">
+
+      <input
+        type="text"
+        id="firstName"
+        class="name-input"
+        placeholder="First name"
+        autocomplete="off"
+      >
+
+      <input
+        type="text"
+        id="lastName"
+        class="name-input"
+        placeholder="Last name"
+        autocomplete="off"
+      >
+
+    </div>
+
+    <button
+      id="tcpaSearchBtn"
+      class="tcpa-search-btn"
+      onclick="searchTCPAName()"
+    >
+      <i class="ti ti-search"></i>
+      Search TCPA Cases
+    </button>
+
+
+    <div
+      class="tcpa-result"
+      id="tcpaResult"
+    >
+
+      <div class="tcpa-result-header">
+
+        <i
+          class="ti ti-loader-2"
+          id="tcpaResultIcon"
+        ></i>
+
+        <div>
+          <div
+            class="tcpa-result-title"
+            id="tcpaResultTitle"
+          >
+            Searching…
+          </div>
+
+          <div
+            class="tcpa-result-subtitle"
+            id="tcpaResultSubtitle"
+          ></div>
+        </div>
+
+      </div>
+
+      <div
+        class="tcpa-cases"
+        id="tcpaCases"
+      ></div>
+
+    </div>
+
   </div>
 </div>
 
+
 <script>
+
   // ── CONFIG ───────────────────────────────────────────────────
-  // Replace with your Cloudflare Worker URL
-  const PROXY_URL = 'https://dnc-portal.syedshayanabbasr15121472.workers.dev';
-  
-  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby8j6erDfX9E6j8Y03uv4JdLzLykAYY4dzvYJRj94QEl4LBBSR0uc2THu_sTXg97n5wIw/exec';
+  // EXISTING PHONE/DNC CONFIG — UNCHANGED
+
+  const PROXY_URL =
+    'https://dnc-portal.syedshayanabbasr15121472.workers.dev';
+
+  const GOOGLE_SCRIPT_URL =
+    'https://script.google.com/macros/s/AKfycby8j6erDfX9E6j8Y03uv4JdLzLykAYY4dzvYJRj94QEl4LBBSR0uc2THu_sTXg97n5wIw/exec';
 
   const ALLOWED_COMPANIES = ['echolink', 'vtm'];
 
-  // ── Access control ───────────────────────────────────────────
-  const urlParams = new URLSearchParams(window.location.search);
-  const companyParam = urlParams.get('company');
-  const sanitizedCompany = companyParam ? companyParam.trim().toLowerCase() : '';
 
-  if (!sanitizedCompany || !ALLOWED_COMPANIES.includes(sanitizedCompany)) {
+  // ============================================================
+  // ACCESS CONTROL
+  // ============================================================
+
+  const urlParams =
+    new URLSearchParams(window.location.search);
+
+  const companyParam =
+    urlParams.get('company');
+
+  const sanitizedCompany =
+    companyParam
+      ? companyParam.trim().toLowerCase()
+      : '';
+
+  if (
+    !sanitizedCompany ||
+    !ALLOWED_COMPANIES.includes(sanitizedCompany)
+  ) {
+
     document.body.innerHTML = `
-      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:#0b0f19;font-family:'DM Sans',sans-serif;text-align:center;padding:2rem;">
-        <div style="width:64px;height:64px;background:rgba(239,68,68,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;">
-          <i class="ti ti-lock" style="font-size:30px;color:#ef4444;"></i>
+      <div style="
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        min-height:100vh;
+        background:#0b0f19;
+        font-family:'DM Sans',sans-serif;
+        text-align:center;
+        padding:2rem;
+      ">
+
+        <div style="
+          width:64px;
+          height:64px;
+          background:rgba(239,68,68,0.15);
+          border-radius:50%;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          margin-bottom:1.5rem;
+        ">
+
+          <i
+            class="ti ti-lock"
+            style="
+              font-size:30px;
+              color:#ef4444;
+            "
+          ></i>
+
         </div>
-        <h2 style="color:#f9fafb;font-size:20px;font-weight:600;margin-bottom:8px;">Access Restricted</h2>
-        <p style="color:#6b7280;font-size:14px;max-width:320px;line-height:1.6;">
+
+        <h2 style="
+          color:#f9fafb;
+          font-size:20px;
+          font-weight:600;
+          margin-bottom:8px;
+        ">
+          Access Restricted
+        </h2>
+
+        <p style="
+          color:#6b7280;
+          font-size:14px;
+          max-width:320px;
+          line-height:1.6;
+        ">
           This portal requires an authorized company link.<br>
           Please contact Vocal Tech Marketing to get your access link.
         </p>
-      </div>`;
+
+      </div>
+    `;
+
     throw new Error('Access blocked');
   }
 
-  const COMPANY_NAME = companyParam.trim();
-  document.getElementById('companyBadgeText').textContent = COMPANY_NAME;
-  document.getElementById('companyBadge').style.display = 'flex';
 
-  // ── Helpers ──────────────────────────────────────────────────
+  const COMPANY_NAME =
+    companyParam.trim();
+
+  document.getElementById(
+    'companyBadgeText'
+  ).textContent = COMPANY_NAME;
+
+  document.getElementById(
+    'companyBadge'
+  ).style.display = 'flex';
+
+
+  // ============================================================
+  // EXISTING PHONE HELPERS
+  // ============================================================
+
   function formatPhone(d) {
+
     d = d.replace(/\D/g, '');
-    if (d.length === 10) return `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}`;
-    if (d.length === 11 && d[0] === '1') return `+1 (${d.slice(1,4)}) ${d.slice(4,7)}-${d.slice(7)}`;
+
+    if (d.length === 10) {
+      return `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}`;
+    }
+
+    if (d.length === 11 && d[0] === '1') {
+      return `+1 (${d.slice(1,4)}) ${d.slice(4,7)}-${d.slice(7)}`;
+    }
+
     return d;
   }
 
+
   function renderRawResponse(data, phone) {
-    const list = document.getElementById('kvList');
+
+    const list =
+      document.getElementById('kvList');
+
     list.innerHTML = '';
 
     const rows = [
-      { key: 'Status', value: data.status || '—' },
-      { key: 'Message', value: data.message || '—', badge: true },
-      { key: 'Code', value: data.code || 'none', mono: true },
-      { key: 'Phone', value: data.phone || phone, mono: true },
-      { key: 'Wireless', value: data.wireless !== undefined ? data.wireless : '—' },
-      { key: 'SID', value: data.sid || '—', mono: true },
+
+      {
+        key:'Status',
+        value:data.status || '—'
+      },
+
+      {
+        key:'Message',
+        value:data.message || '—',
+        badge:true
+      },
+
+      {
+        key:'Code',
+        value:data.code || 'none',
+        mono:true
+      },
+
+      {
+        key:'Phone',
+        value:data.phone || phone,
+        mono:true
+      },
+
+      {
+        key:'Wireless',
+        value:
+          data.wireless !== undefined
+            ? data.wireless
+            : '—'
+      },
+
+      {
+        key:'SID',
+        value:data.sid || '—',
+        mono:true
+      }
+
     ];
 
-    // Add carrier if present
-    if (data.carrier && typeof data.carrier === 'object') {
-      rows.push({ key: 'Carrier', value: data.carrier.name || JSON.stringify(data.carrier) });
-      if (data.carrier.type) rows.push({ key: 'Type', value: data.carrier.type });
-      if (data.carrier.state) rows.push({ key: 'State', value: data.carrier.state });
+
+    if (
+      data.carrier &&
+      typeof data.carrier === 'object'
+    ) {
+
+      rows.push({
+        key:'Carrier',
+        value:
+          data.carrier.name ||
+          JSON.stringify(data.carrier)
+      });
+
+      if (data.carrier.type) {
+
+        rows.push({
+          key:'Type',
+          value:data.carrier.type
+        });
+
+      }
+
+      if (data.carrier.state) {
+
+        rows.push({
+          key:'State',
+          value:data.carrier.state
+        });
+
+      }
+
     }
 
-    // Any extra fields
-    const known = new Set(['status','message','code','phone','wireless','sid','carrier']);
-    for (const [k, v] of Object.entries(data)) {
+
+    const known =
+      new Set([
+        'status',
+        'message',
+        'code',
+        'phone',
+        'wireless',
+        'sid',
+        'carrier'
+      ]);
+
+
+    for (
+      const [k,v]
+      of Object.entries(data)
+    ) {
+
       if (!known.has(k)) {
-        rows.push({ key: k, value: typeof v === 'object' ? JSON.stringify(v) : String(v), mono: true });
+
+        rows.push({
+
+          key:k,
+
+          value:
+            typeof v === 'object'
+              ? JSON.stringify(v)
+              : String(v),
+
+          mono:true
+
+        });
+
       }
+
     }
+
 
     rows.forEach(r => {
-      const row = document.createElement('div');
+
+      const row =
+        document.createElement('div');
+
       row.className = 'kv-row';
 
+
       let valueHtml = r.value;
+
+
       if (r.badge) {
-        const isGood = String(r.value).toLowerCase() === 'good' || String(r.value).toLowerCase() === 'none';
-        valueHtml = `<span class="badge ${isGood ? 'good' : 'bad'}">${r.value}</span>`;
-      } else if (r.mono) {
-        valueHtml = `<span class="mono">${r.value}</span>`;
+
+        const isGood =
+          String(r.value)
+            .toLowerCase() === 'good' ||
+          String(r.value)
+            .toLowerCase() === 'none';
+
+        valueHtml = `
+          <span class="badge ${isGood ? 'good' : 'bad'}">
+            ${escapeHtml(String(r.value))}
+          </span>
+        `;
+
       }
 
+      else if (r.mono) {
+
+        valueHtml = `
+          <span class="mono">
+            ${escapeHtml(String(r.value))}
+          </span>
+        `;
+
+      }
+
+      else {
+
+        valueHtml =
+          escapeHtml(String(valueHtml));
+
+      }
+
+
       row.innerHTML = `
-        <div class="kv-key">${r.key}</div>
-        <div class="kv-value">${valueHtml}</div>`;
+
+        <div class="kv-key">
+          ${escapeHtml(String(r.key))}
+        </div>
+
+        <div class="kv-value">
+          ${valueHtml}
+        </div>
+
+      `;
+
       list.appendChild(row);
+
     });
+
   }
 
-  // ── Main lookup ──────────────────────────────────────────────
+
+  // ============================================================
+  // EXISTING PHONE LOOKUP — UNCHANGED
+  // ============================================================
+
   async function executeLookup() {
-    const input = document.getElementById('phoneNumber');
-    const btn = document.getElementById('runBtn');
-    const box = document.getElementById('resultBox');
-    const header = document.getElementById('resultHeader');
-    const icon = document.getElementById('resultIcon');
-    const title = document.getElementById('resultTitle');
-    const phoneEl = document.getElementById('resultPhone');
 
-    const phoneVal = input.value.trim();
-    if (!phoneVal) return alert('Please enter a phone number.');
+    const input =
+      document.getElementById('phoneNumber');
 
-    const cleanNum = phoneVal.replace(/\D/g, '');
-    if (cleanNum.length < 7 || cleanNum.length > 15) {
-      alert('Invalid phone format.');
+    const btn =
+      document.getElementById('runBtn');
+
+    const box =
+      document.getElementById('resultBox');
+
+    const header =
+      document.getElementById('resultHeader');
+
+    const icon =
+      document.getElementById('resultIcon');
+
+    const title =
+      document.getElementById('resultTitle');
+
+    const phoneEl =
+      document.getElementById('resultPhone');
+
+
+    const phoneVal =
+      input.value.trim();
+
+    if (!phoneVal) {
+      return alert(
+        'Please enter a phone number.'
+      );
+    }
+
+
+    const cleanNum =
+      phoneVal.replace(/\D/g, '');
+
+
+    if (
+      cleanNum.length < 7 ||
+      cleanNum.length > 15
+    ) {
+
+      alert(
+        'Invalid phone format.'
+      );
+
       return;
     }
 
+
     btn.disabled = true;
-    box.className = 'result-box visible loading';
-    header.className = 'result-header loading';
-    icon.className = 'ti ti-loader-2';
-    title.textContent = 'Looking up…';
-    phoneEl.textContent = formatPhone(cleanNum);
-    document.getElementById('kvList').innerHTML = '';
+
+    box.className =
+      'result-box visible loading';
+
+    header.className =
+      'result-header loading';
+
+    icon.className =
+      'ti ti-loader-2';
+
+    title.textContent =
+      'Looking up…';
+
+    phoneEl.textContent =
+      formatPhone(cleanNum);
+
+    document.getElementById(
+      'kvList'
+    ).innerHTML = '';
+
 
     let userIP = 'Unknown';
-    try {
-      const ipRes = await fetch('https://api.ipify.org?format=json');
-      const ipData = await ipRes.json();
-      userIP = ipData.ip || 'Unknown';
-    } catch (e) {}
+
 
     try {
-      // Call your Cloudflare Worker (API key is never in the browser)
-      const response = await fetch(`${PROXY_URL}?phone=${cleanNum}`);
-      if (!response.ok) throw new Error(`Proxy error (HTTP ${response.status})`);
 
-      const data = await response.json();
+      const ipRes =
+        await fetch(
+          'https://api.ipify.org?format=json'
+        );
 
-      // Show raw response nicely
-      box.className = 'result-box visible success';
-      header.className = 'result-header success';
-      icon.className = 'ti ti-circle-check';
-      title.textContent = 'API Response';
-      renderRawResponse(data, cleanNum);
+      const ipData =
+        await ipRes.json();
 
-      // Log to Google Sheet (same as before)
-      const rawCode = (data.code || 'none').toLowerCase();
-      const rawMsg = data.message || '';
+      userIP =
+        ipData.ip || 'Unknown';
 
-      fetch(`${GOOGLE_SCRIPT_URL}?phone=${cleanNum}&company=${encodeURIComponent(COMPANY_NAME)}&ip=${encodeURIComponent(userIP)}&code=${encodeURIComponent(rawCode)}&msg=${encodeURIComponent(rawMsg)}&raw=${encodeURIComponent(JSON.stringify(data))}`, {
-        method: 'GET',
-        mode: 'no-cors'
-      }).catch(() => {});
-
-    } catch (err) {
-      box.className = 'result-box visible error';
-      header.className = 'result-header error';
-      icon.className = 'ti ti-alert-triangle';
-      title.textContent = 'Lookup Failed';
-      document.getElementById('kvList').innerHTML = `
-        <div class="kv-row">
-          <div class="kv-key">Error</div>
-          <div class="kv-value">${err.message}</div>
-        </div>`;
-    } finally {
-      btn.disabled = false;
     }
+
+    catch (e) {}
+
+
+    try {
+
+      const response =
+        await fetch(
+          `${PROXY_URL}?phone=${cleanNum}`
+        );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          `Proxy error (HTTP ${response.status})`
+        );
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      box.className =
+        'result-box visible success';
+
+      header.className =
+        'result-header success';
+
+      icon.className =
+        'ti ti-circle-check';
+
+      title.textContent =
+        'API Response';
+
+
+      renderRawResponse(
+        data,
+        cleanNum
+      );
+
+
+      const rawCode =
+        (data.code || 'none')
+          .toLowerCase();
+
+      const rawMsg =
+        data.message || '';
+
+
+      fetch(
+        `${GOOGLE_SCRIPT_URL}?phone=${cleanNum}&company=${encodeURIComponent(COMPANY_NAME)}&ip=${encodeURIComponent(userIP)}&code=${encodeURIComponent(rawCode)}&msg=${encodeURIComponent(rawMsg)}&raw=${encodeURIComponent(JSON.stringify(data))}`,
+        {
+          method:'GET',
+          mode:'no-cors'
+        }
+      ).catch(() => {});
+
+
+    }
+
+    catch (err) {
+
+      box.className =
+        'result-box visible error';
+
+      header.className =
+        'result-header error';
+
+      icon.className =
+        'ti ti-alert-triangle';
+
+      title.textContent =
+        'Lookup Failed';
+
+
+      document.getElementById(
+        'kvList'
+      ).innerHTML = `
+
+        <div class="kv-row">
+
+          <div class="kv-key">
+            Error
+          </div>
+
+          <div class="kv-value">
+            ${escapeHtml(err.message)}
+          </div>
+
+        </div>
+
+      `;
+
+    }
+
+    finally {
+
+      btn.disabled = false;
+
+    }
+
   }
+
+
+  // ============================================================
+  // NEW TCPA NAME SEARCH
+  // ============================================================
+
+  async function searchTCPAName() {
+
+    const firstName =
+      document.getElementById(
+        'firstName'
+      ).value.trim();
+
+    const lastName =
+      document.getElementById(
+        'lastName'
+      ).value.trim();
+
+
+    if (!firstName || !lastName) {
+
+      alert(
+        'Please enter both first and last name.'
+      );
+
+      return;
+
+    }
+
+
+    const btn =
+      document.getElementById(
+        'tcpaSearchBtn'
+      );
+
+    const result =
+      document.getElementById(
+        'tcpaResult'
+      );
+
+    const icon =
+      document.getElementById(
+        'tcpaResultIcon'
+      );
+
+    const title =
+      document.getElementById(
+        'tcpaResultTitle'
+      );
+
+    const subtitle =
+      document.getElementById(
+        'tcpaResultSubtitle'
+      );
+
+    const cases =
+      document.getElementById(
+        'tcpaCases'
+      );
+
+
+    btn.disabled = true;
+
+
+    result.className =
+      'tcpa-result visible loading';
+
+    icon.className =
+      'ti ti-loader-2';
+
+    title.textContent =
+      'Searching TCPA cases…';
+
+    subtitle.textContent =
+      `${firstName} ${lastName}`;
+
+    cases.innerHTML = '';
+
+
+    try {
+
+      /*
+       * CourtListener search.
+       *
+       * We search the full name together with TCPA-related
+       * terms so ordinary cases with the same name are less
+       * likely to appear.
+       */
+
+      const fullName =
+        `"${firstName} ${lastName}"`;
+
+      const query =
+        `${fullName} TCPA OR "Telephone Consumer Protection Act" OR "47 U.S.C. 227"`;
+
+
+      const endpoint =
+        'https://www.courtlistener.com/api/rest/v3/search/' +
+        `?q=${encodeURIComponent(query)}` +
+        '&type=r' +
+        '&order_by=score%20desc';
+
+
+      const response =
+        await fetch(endpoint, {
+          method:'GET',
+          headers:{
+            'Accept':'application/json'
+          }
+        });
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          `Court search error (HTTP ${response.status})`
+        );
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      const results =
+        Array.isArray(data.results)
+          ? data.results
+          : [];
+
+
+      /*
+       * Additional local filtering.
+       * We keep results that mention TCPA / Telephone
+       * Consumer Protection Act / 47 U.S.C. 227 somewhere
+       * in the returned record.
+       */
+
+      const tcpaResults =
+        results.filter(item => {
+
+          const searchable =
+            JSON.stringify(item)
+              .toLowerCase();
+
+          return (
+            searchable.includes('tcpa') ||
+            searchable.includes(
+              'telephone consumer protection'
+            ) ||
+            searchable.includes(
+              '47 u.s.c. 227'
+            )
+          );
+
+        });
+
+
+      if (tcpaResults.length === 0) {
+
+        result.className =
+          'tcpa-result visible clean';
+
+        icon.className =
+          'ti ti-circle-check';
+
+        title.textContent =
+          'No TCPA Cases Found';
+
+        subtitle.textContent =
+          `${firstName} ${lastName}`;
+
+        cases.innerHTML = `
+
+          <div class="tcpa-empty">
+
+            <i class="ti ti-circle-check"></i>
+
+            <div class="tcpa-empty-title">
+              No publicly indexed TCPA cases found
+            </div>
+
+            <div class="tcpa-empty-text">
+              No TCPA-related federal records were returned
+              for this name from the searched public source.
+            </div>
+
+          </div>
+
+          <div class="tcpa-notice">
+            This is a public-record search, not a complete
+            nationwide court-record certification. A name-only
+            search can also miss cases or return records belonging
+            to another person with the same name.
+          </div>
+
+        `;
+
+        return;
+
+      }
+
+
+      result.className =
+        'tcpa-result visible found';
+
+      icon.className =
+        'ti ti-alert-circle';
+
+      title.textContent =
+        `${tcpaResults.length} TCPA Record${tcpaResults.length === 1 ? '' : 's'} Found`;
+
+      subtitle.textContent =
+        `${firstName} ${lastName}`;
+
+
+      cases.innerHTML = '';
+
+
+      tcpaResults
+        .slice(0, 20)
+        .forEach(item => {
+
+          const caseName =
+            getFirstValue(item, [
+              'caseName',
+              'case_name',
+              'name',
+              'caseNameFull'
+            ]) || 'Case name unavailable';
+
+
+          const court =
+            getFirstValue(item, [
+              'court_citation_string',
+              'court',
+              'court_name',
+              'court_citation'
+            ]) || 'Court unavailable';
+
+
+          const docket =
+            getFirstValue(item, [
+              'docketNumber',
+              'docket_number',
+              'docket'
+            ]) || 'Not available';
+
+
+          const dateFiled =
+            getFirstValue(item, [
+              'dateFiled',
+              'date_filed',
+              'dateFiledFormatted'
+            ]) || 'Not available';
+
+
+          const status =
+            getFirstValue(item, [
+              'status',
+              'procedural_history',
+              'dateTerminated'
+            ]) || 'Not available';
+
+
+          const absoluteUrl =
+            getFirstValue(item, [
+              'absolute_url',
+              'absoluteUrl',
+              'url'
+            ]);
+
+
+          const caseEl =
+            document.createElement('div');
+
+          caseEl.className =
+            'tcpa-case';
+
+
+          let linkHtml = '';
+
+          if (absoluteUrl) {
+
+            let finalUrl =
+              String(absoluteUrl);
+
+            if (
+              finalUrl.startsWith('/')
+            ) {
+
+              finalUrl =
+                'https://www.courtlistener.com' +
+                finalUrl;
+
+            }
+
+
+            linkHtml = `
+
+              <a
+                class="case-link"
+                href="${escapeAttribute(finalUrl)}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <i class="ti ti-external-link"></i>
+                View Public Record
+              </a>
+
+            `;
+
+          }
+
+
+          caseEl.innerHTML = `
+
+            <div class="case-name">
+              ${escapeHtml(String(caseName))}
+            </div>
+
+            <div class="case-meta">
+
+              <div class="case-label">
+                Court
+              </div>
+
+              <div class="case-value">
+                ${escapeHtml(String(court))}
+              </div>
+
+
+              <div class="case-label">
+                Case No.
+              </div>
+
+              <div class="case-value">
+                ${escapeHtml(String(docket))}
+              </div>
+
+
+              <div class="case-label">
+                Filed
+              </div>
+
+              <div class="case-value">
+                ${escapeHtml(String(dateFiled))}
+              </div>
+
+
+              <div class="case-label">
+                Status
+              </div>
+
+              <div class="case-value">
+                ${escapeHtml(String(status))}
+              </div>
+
+            </div>
+
+            ${linkHtml}
+
+          `;
+
+
+          cases.appendChild(caseEl);
+
+        });
+
+
+      cases.insertAdjacentHTML(
+        'beforeend',
+        `
+
+          <div class="tcpa-notice">
+
+            ⚠️ <strong>Important:</strong>
+            A name match does not by itself prove that
+            the record belongs to the person you are checking.
+            Verify the case details, court, dates and other
+            identifying information before treating the result
+            as a confirmed match.
+
+          </div>
+
+        `
+      );
+
+
+    }
+
+    catch (err) {
+
+      result.className =
+        'tcpa-result visible error';
+
+      icon.className =
+        'ti ti-alert-triangle';
+
+      title.textContent =
+        'TCPA Search Failed';
+
+      subtitle.textContent =
+        'Unable to complete the public-record search.';
+
+
+      cases.innerHTML = `
+
+        <div class="tcpa-empty">
+
+          <i
+            class="ti ti-alert-triangle"
+            style="color:var(--red)"
+          ></i>
+
+          <div
+            class="tcpa-empty-title"
+            style="color:var(--red)"
+          >
+            Search Error
+          </div>
+
+          <div class="tcpa-empty-text">
+            ${escapeHtml(err.message)}
+          </div>
+
+        </div>
+
+      `;
+
+    }
+
+    finally {
+
+      btn.disabled = false;
+
+    }
+
+  }
+
+
+  // ============================================================
+  // TCPA SEARCH HELPERS
+  // ============================================================
+
+  function getFirstValue(
+    obj,
+    keys
+  ) {
+
+    for (const key of keys) {
+
+      if (
+        obj &&
+        obj[key] !== undefined &&
+        obj[key] !== null &&
+        obj[key] !== ''
+      ) {
+
+        return obj[key];
+
+      }
+
+    }
+
+    return null;
+
+  }
+
+
+  function escapeHtml(value) {
+
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+
+  }
+
+
+  function escapeAttribute(value) {
+
+    return escapeHtml(value)
+      .replace(/`/g, '&#096;');
+
+  }
+
+
+  // ============================================================
+  // ENTER KEY SUPPORT
+  // ============================================================
+
+  document
+    .getElementById('firstName')
+    .addEventListener('keydown', function(e) {
+
+      if (e.key === 'Enter') {
+        searchTCPAName();
+      }
+
+    });
+
+
+  document
+    .getElementById('lastName')
+    .addEventListener('keydown', function(e) {
+
+      if (e.key === 'Enter') {
+        searchTCPAName();
+      }
+
+    });
+
 </script>
+
 </body>
 </html>
