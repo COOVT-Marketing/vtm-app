@@ -1,783 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1.0"
->
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>VTM DNC Portal</title>
 
-<link
-  href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap"
-  rel="stylesheet"
->
-
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css"
->
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
 
 <style>
 
 :root {
-
   --bg:#0b0f19;
-
   --card:#111827;
-
   --card2:#1f2937;
-
   --border:#374151;
-
   --txt:#f9fafb;
-
   --txt2:#9ca3af;
-
   --txt3:#6b7280;
-
   --teal:#1a9e75;
-
   --teal-glow:rgba(26,158,117,.15);
-
   --green:#22c55e;
-
   --green-glow:rgba(34,197,94,.12);
-
   --red:#ef4444;
-
   --red-glow:rgba(239,68,68,.12);
-
   --yellow:#eab308;
-
   --yellow-glow:rgba(234,179,8,.12);
-
 }
 
-* {
-
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-
-}
+* { box-sizing:border-box; margin:0; padding:0; }
 
 body {
-
   font-family:'DM Sans',sans-serif;
-
   background:var(--bg);
-
   color:var(--txt);
-
   min-height:100vh;
-
   display:flex;
-
   justify-content:center;
-
   padding:30px 15px;
-
 }
 
 .card {
-
   width:100%;
-
-  max-width:650px;
-
+  max-width:560px;
   background:var(--card);
-
   border:1px solid var(--border);
-
   border-radius:18px;
-
   overflow:hidden;
-
   box-shadow:0 25px 60px rgba(0,0,0,.55);
-
 }
 
 .header {
-
   background:#090d16;
-
   padding:20px;
-
   display:flex;
-
   align-items:center;
-
   gap:12px;
-
   border-bottom:1px solid var(--border);
-
 }
 
 .logo {
-
   width:42px;
-
   height:42px;
-
   background:var(--teal);
-
   border-radius:11px;
-
   display:flex;
-
   align-items:center;
-
   justify-content:center;
-
 }
 
-.logo i {
+.logo i { font-size:23px; }
 
-  font-size:23px;
+.header-text h1 { font-size:17px; font-weight:600; }
 
-}
-
-.header-text h1 {
-
-  font-size:17px;
-
-  font-weight:600;
-
-}
-
-.header-text p {
-
-  font-size:12px;
-
-  color:var(--txt2);
-
-  margin-top:2px;
-
-}
+.header-text p { font-size:12px; color:var(--txt2); margin-top:2px; }
 
 .badge-company {
-
   margin-left:auto;
-
   padding:5px 11px;
-
   border-radius:20px;
-
   background:var(--teal-glow);
-
   color:var(--teal);
-
   font-size:12px;
-
   border:1px solid rgba(26,158,117,.35);
-
 }
 
-.body {
-
-  padding:22px;
-
-}
-
-.section {
-
-  margin-bottom:25px;
-
-}
+.body { padding:22px; }
 
 .section-title {
-
   display:flex;
-
   align-items:center;
-
   gap:8px;
-
   font-size:15px;
-
   font-weight:600;
-
   margin-bottom:6px;
-
 }
 
-.section-title i {
-
-  color:var(--teal);
-
-  font-size:19px;
-
-}
+.section-title i { color:var(--teal); font-size:19px; }
 
 .description {
-
   color:var(--txt3);
-
   font-size:12px;
-
   line-height:1.5;
-
   margin-bottom:14px;
-
 }
 
-.input-row {
-
-  display:flex;
-
-  gap:10px;
-
-}
+.phone-row { display:flex; gap:10px; }
 
 input {
-
   width:100%;
-
   background:#090d16;
-
   border:1px solid var(--border);
-
   border-radius:10px;
-
   color:white;
-
   padding:13px 14px;
-
   font-size:14px;
-
   outline:none;
-
 }
 
-input:focus {
-
-  border-color:var(--teal);
-
-}
+input:focus { border-color:var(--teal); }
 
 button {
-
   border:0;
-
   border-radius:10px;
-
   padding:13px 16px;
-
   background:var(--teal);
-
   color:white;
-
   font-size:14px;
-
   font-weight:500;
-
   cursor:pointer;
-
-}
-
-button:disabled {
-
-  opacity:.5;
-
-  cursor:not-allowed;
-
-}
-
-.phone-row {
-
-  display:flex;
-
-  gap:10px;
-
-}
-
-.phone-row button {
-
   white-space:nowrap;
-
-}
-
-.divider {
-
-  height:1px;
-
-  background:var(--border);
-
-  margin:28px 0;
-
-}
-
-.name-grid {
-
-  display:grid;
-
-  grid-template-columns:1fr 1fr;
-
-  gap:10px;
-
-  margin-bottom:10px;
-
-}
-
-.search-btn {
-
-  width:100%;
-
   display:flex;
-
-  justify-content:center;
-
   align-items:center;
-
   gap:8px;
-
 }
+
+button:disabled { opacity:.5; cursor:not-allowed; }
 
 .result {
-
   display:none;
-
   margin-top:15px;
-
   border:1px solid var(--border);
-
   border-radius:14px;
-
   overflow:hidden;
-
   background:var(--card2);
-
 }
 
-.result.show {
-
-  display:block;
-
-}
+.result.show { display:block; }
 
 .result-header {
-
   padding:15px 17px;
-
   border-bottom:1px solid var(--border);
-
   display:flex;
-
   align-items:center;
-
   gap:10px;
-
 }
 
-.result-header i {
+.result-header i { font-size:21px; }
 
-  font-size:21px;
+.result-title { font-size:14px; font-weight:600; }
 
-}
+.result-sub { font-size:11px; color:var(--txt2); margin-top:3px; }
 
-.result-title {
+.loading { border-color:rgba(26,158,117,.45); }
+.loading .result-header i { color:var(--teal); animation:spin .8s linear infinite; }
 
-  font-size:14px;
+.success { border-color:rgba(34,197,94,.4); }
+.success .result-header i { color:var(--green); }
 
-  font-weight:600;
+.danger { border-color:rgba(239,68,68,.55); }
+.danger .result-header i { color:var(--red); }
 
-}
-
-.result-sub {
-
-  font-size:11px;
-
-  color:var(--txt2);
-
-  margin-top:3px;
-
-}
-
-.loading {
-
-  border-color:rgba(26,158,117,.45);
-
-}
-
-.loading .result-header i {
-
-  color:var(--teal);
-
-  animation:spin .8s linear infinite;
-
-}
-
-.success {
-
-  border-color:rgba(34,197,94,.4);
-
-}
-
-.success .result-header i {
-
-  color:var(--green);
-
-}
-
-.warning {
-
-  border-color:rgba(234,179,8,.45);
-
-}
-
-.warning .result-header i {
-
-  color:var(--yellow);
-
-}
-
-.danger {
-
-  border-color:rgba(239,68,68,.55);
-
-}
-
-.danger .result-header i {
-
-  color:var(--red);
-
-}
-
-.result-body {
-
-  padding:15px;
-
-}
-
-.validation-box {
-
-  padding:13px;
-
-  border-radius:10px;
-
-  margin-bottom:14px;
-
-  font-size:12px;
-
-  line-height:1.5;
-
-}
-
-.validation-box.green {
-
-  background:var(--green-glow);
-
-  color:var(--green);
-
-}
-
-.validation-box.yellow {
-
-  background:var(--yellow-glow);
-
-  color:#facc15;
-
-}
-
-.validation-box.red {
-
-  background:var(--red-glow);
-
-  color:#f87171;
-
-}
-
-.case {
-
-  padding:15px;
-
-  border-bottom:1px solid rgba(255,255,255,.06);
-
-}
-
-.case:last-child {
-
-  border-bottom:0;
-
-}
-
-.case.tcpa {
-
-  border-left:4px solid var(--red);
-
-  background:rgba(239,68,68,.06);
-
-}
-
-.case-name {
-
-  font-size:14px;
-
-  font-weight:600;
-
-  line-height:1.4;
-
-  margin-bottom:10px;
-
-}
-
-.tcpa-label {
-
-  display:inline-flex;
-
-  align-items:center;
-
-  gap:5px;
-
-  padding:4px 9px;
-
-  border-radius:20px;
-
-  background:rgba(239,68,68,.15);
-
-  color:#f87171;
-
-  font-size:10px;
-
-  font-weight:700;
-
-  margin-bottom:10px;
-
-}
-
-.meta {
-
-  display:grid;
-
-  grid-template-columns:105px 1fr;
-
-  gap:7px 10px;
-
-}
-
-.label {
-
-  color:var(--txt3);
-
-  font-size:10px;
-
-  text-transform:uppercase;
-
-}
-
-.value {
-
-  color:var(--txt2);
-
-  font-size:12px;
-
-  word-break:break-word;
-
-}
-
-.exact {
-
-  color:var(--green);
-
-}
-
-.possible {
-
-  color:#facc15;
-
-}
-
-.case-link {
-
-  display:inline-flex;
-
-  align-items:center;
-
-  gap:5px;
-
-  color:var(--teal);
-
-  font-size:12px;
-
-  text-decoration:none;
-
-  margin-top:11px;
-
-}
-
-.case-link:hover {
-
-  text-decoration:underline;
-
-}
-
-.empty {
-
-  padding:20px;
-
-  text-align:center;
-
-}
-
-.empty i {
-
-  display:block;
-
-  font-size:30px;
-
-  margin-bottom:8px;
-
-}
-
-.empty-title {
-
-  font-size:14px;
-
-  font-weight:600;
-
-}
-
-.empty-text {
-
-  color:var(--txt3);
-
-  font-size:12px;
-
-  line-height:1.5;
-
-  margin-top:5px;
-
-}
-
-.phone-result {
-
-  margin-top:12px;
-
-}
+.result-body { padding:6px 0; }
 
 .kv {
-
   display:grid;
-
-  grid-template-columns:110px 1fr;
-
+  grid-template-columns:130px 1fr;
   gap:8px;
-
-  padding:10px 14px;
-
+  padding:11px 17px;
   border-bottom:1px solid rgba(255,255,255,.05);
-
 }
 
-.kv:last-child {
-
-  border-bottom:0;
-
-}
+.kv:last-child { border-bottom:0; }
 
 .k {
-
   color:var(--txt3);
-
   font-size:10px;
-
   text-transform:uppercase;
-
+  letter-spacing:.03em;
+  padding-top:1px;
 }
 
 .v {
-
-  font-size:12px;
-
+  font-size:12.5px;
   color:var(--txt2);
-
   word-break:break-word;
-
+  font-family:'DM Mono',monospace;
 }
 
-.good {
-
-  color:var(--green);
-
-}
-
-.bad {
-
-  color:var(--red);
-
-}
-
-.notice {
-
-  margin-top:14px;
-
-  padding:11px;
-
-  border-radius:9px;
-
-  background:var(--yellow-glow);
-
-  color:#facc15;
-
+.v.mono-json {
+  white-space:pre-wrap;
   font-size:11px;
-
   line-height:1.5;
-
 }
 
-@keyframes spin {
-
-  to {
-    transform:rotate(360deg);
-  }
-
+.log-note {
+  padding:11px 17px;
+  font-size:11px;
+  color:var(--txt3);
+  display:flex;
+  align-items:center;
+  gap:6px;
+  border-top:1px solid var(--border);
 }
+
+.log-note i { font-size:13px; }
+
+.log-note.ok { color:var(--green); }
+.log-note.fail { color:var(--yellow); }
+
+@keyframes spin { to { transform:rotate(360deg); } }
 
 @media(max-width:520px) {
-
-  .name-grid {
-
-    grid-template-columns:1fr;
-
-  }
-
-  .phone-row {
-
-    flex-direction:column;
-
-  }
-
-  .meta {
-
-    grid-template-columns:1fr;
-
-    gap:3px;
-
-  }
-
-  .kv {
-
-    grid-template-columns:1fr;
-
-    gap:3px;
-
-  }
-
-  .badge-company {
-
-    display:none;
-
-  }
-
+  .phone-row { flex-direction:column; }
+  .kv { grid-template-columns:1fr; gap:3px; }
+  .badge-company { display:none; }
 }
 
 </style>
-
 </head>
 
 <body>
@@ -785,138 +235,34 @@ button:disabled {
 <div class="card">
 
   <div class="header">
-
-    <div class="logo">
-      <i class="ti ti-shield-check"></i>
-    </div>
-
+    <div class="logo"><i class="ti ti-shield-check"></i></div>
     <div class="header-text">
-
       <h1>DNC Checker</h1>
-
-      <p>Vocal Tech Marketing · Compliance Portal</p>
-
+      <p>Vocal Tech Marketing &middot; Compliance Portal</p>
     </div>
-
-    <div
-      class="badge-company"
-      id="companyBadge"
-    ></div>
-
+    <div class="badge-company" id="companyBadge"></div>
   </div>
 
   <div class="body">
 
-    <!-- =====================================================
-         PHONE CHECK
-         ===================================================== -->
-
-    <div class="section">
-
-      <div class="section-title">
-
-        <i class="ti ti-phone"></i>
-
-        Phone / DNC Check
-
-      </div>
-
-      <div class="description">
-
-        Check the phone number through the existing DNC lookup.
-
-      </div>
-
-      <div class="phone-row">
-
-        <input
-          id="phoneNumber"
-          type="tel"
-          placeholder="Enter phone number..."
-          autocomplete="off"
-        >
-
-        <button
-          id="phoneBtn"
-          onclick="checkPhone()"
-        >
-
-          <i class="ti ti-search"></i>
-          Check
-
-        </button>
-
-      </div>
-
-      <div
-        id="phoneResult"
-        class="result phone-result"
-      ></div>
-
+    <div class="section-title">
+      <i class="ti ti-phone"></i>
+      Phone / DNC Check
     </div>
 
+    <div class="description">
+      Check the phone number through the DNC lookup service.
+    </div>
 
-    <div class="divider"></div>
-
-
-    <!-- =====================================================
-         TCPA NAME SEARCH
-         ===================================================== -->
-
-    <div class="section">
-
-      <div class="section-title">
-
-        <i class="ti ti-gavel"></i>
-
-        TCPA Name Search
-
-      </div>
-
-      <div class="description">
-
-        First validates the entered name, then searches
-        public federal legal records for matching cases.
-
-      </div>
-
-      <div class="name-grid">
-
-        <input
-          id="firstName"
-          type="text"
-          placeholder="First name"
-          autocomplete="off"
-        >
-
-        <input
-          id="lastName"
-          type="text"
-          placeholder="Last name"
-          autocomplete="off"
-        >
-
-      </div>
-
-      <button
-        id="nameBtn"
-        class="search-btn"
-        onclick="searchName()"
-      >
-
+    <div class="phone-row">
+      <input id="phoneNumber" type="tel" placeholder="Enter phone number..." autocomplete="off">
+      <button id="phoneBtn" onclick="checkPhone()">
         <i class="ti ti-search"></i>
-
-        Search Legal Records
-
+        Check
       </button>
-
-
-      <div
-        id="nameResult"
-        class="result"
-      ></div>
-
     </div>
+
+    <div id="phoneResult" class="result"></div>
 
   </div>
 
@@ -924,7 +270,6 @@ button:disabled {
 
 
 <script>
-
 
 // ============================================================
 // CONFIG
@@ -934,70 +279,33 @@ button:disabled {
 const PHONE_WORKER =
   'https://dnc-portal.syedshayanabbasr15121472.workers.dev';
 
-// NEW TCPA NAME WORKER
-const TCPA_WORKER =
-  'https://vtm-tcpa-search.syedshayanabbasr15121472.workers.dev';
+// GOOGLE APPS SCRIPT LOGGER (writes each search to the Sheet)
+const SHEET_LOGGER_URL =
+  'PASTE-YOUR-APPS-SCRIPT-WEB-APP-URL-HERE';
 
 
 // ============================================================
 // COMPANY ACCESS
 // ============================================================
 
-const params =
-  new URLSearchParams(
-    window.location.search
-  );
+const params = new URLSearchParams(window.location.search);
+const company = (params.get('company') || '').trim();
+const allowed = ['echolink','vtm'];
 
-const company =
-  (
-    params.get('company') ||
-    ''
-  ).trim();
-
-const allowed =
-  ['echolink','vtm'];
-
-if (
-  !allowed.includes(
-    company.toLowerCase()
-  )
-) {
+if (!allowed.includes(company.toLowerCase())) {
 
   document.body.innerHTML = `
-
-    <div style="
-      color:#f9fafb;
-      text-align:center;
-      font-family:DM Sans,sans-serif;
-      padding:80px 20px;
-    ">
-
+    <div style="color:#f9fafb;text-align:center;font-family:DM Sans,sans-serif;padding:80px 20px;">
       <h2>Access Restricted</h2>
-
-      <p style="
-        color:#6b7280;
-        margin-top:8px;
-      ">
-
-        This portal requires an authorized
-        company link.
-
-      </p>
-
+      <p style="color:#6b7280;margin-top:8px;">This portal requires an authorized company link.</p>
     </div>
-
   `;
 
-  throw new Error(
-    'Access blocked'
-  );
+  throw new Error('Access blocked');
 
 }
 
-document.getElementById(
-  'companyBadge'
-).textContent =
-  company;
+document.getElementById('companyBadge').textContent = company;
 
 
 // ============================================================
@@ -1006,880 +314,209 @@ document.getElementById(
 
 async function checkPhone() {
 
-  const input =
-    document.getElementById(
-      'phoneNumber'
-    );
+  const input = document.getElementById('phoneNumber');
+  const btn = document.getElementById('phoneBtn');
+  const box = document.getElementById('phoneResult');
 
-  const btn =
-    document.getElementById(
-      'phoneBtn'
-    );
+  const rawInput = input.value.trim();
+  const phone = rawInput.replace(/\D/g,'');
 
-  const box =
-    document.getElementById(
-      'phoneResult'
-    );
-
-  const phone =
-    input.value.trim()
-      .replace(/\D/g,'');
-
-  if (
-    phone.length < 7 ||
-    phone.length > 15
-  ) {
-
-    alert(
-      'Please enter a valid phone number.'
-    );
-
+  if (phone.length < 7 || phone.length > 15) {
+    alert('Please enter a valid phone number.');
     return;
-
   }
 
   btn.disabled = true;
 
-  box.className =
-    'result show loading';
-
+  box.className = 'result show loading';
   box.innerHTML = `
-
     <div class="result-header">
-
       <i class="ti ti-loader-2"></i>
-
       <div>
-
-        <div class="result-title">
-          Checking phone…
-        </div>
-
-        <div class="result-sub">
-          ${escapeHtml(phone)}
-        </div>
-
+        <div class="result-title">Checking phone&hellip;</div>
+        <div class="result-sub">${escapeHtml(phone)}</div>
       </div>
-
     </div>
-
   `;
+
+  let data = null;
+  let fetchError = null;
 
   try {
 
-    const response =
-      await fetch(
-        `${PHONE_WORKER}?phone=${encodeURIComponent(phone)}`
-      );
+    const response = await fetch(`${PHONE_WORKER}?phone=${encodeURIComponent(phone)}`);
 
     if (!response.ok) {
-
-      throw new Error(
-        `Phone Worker HTTP ${response.status}`
-      );
-
+      throw new Error(`Phone Worker HTTP ${response.status}`);
     }
 
-    const data =
-      await response.json();
+    data = await response.json();
 
-    const status =
-      String(
-        data.status || ''
-      );
-
-    const message =
-      String(
-        data.message || ''
-      );
-
-    box.className =
-      'result show success';
-
+    box.className = 'result show success';
     box.innerHTML = `
-
       <div class="result-header">
-
         <i class="ti ti-circle-check"></i>
-
         <div>
-
-          <div class="result-title">
-            Phone Lookup Complete
-          </div>
-
-          <div class="result-sub">
-            ${escapeHtml(phone)}
-          </div>
-
+          <div class="result-title">Phone Lookup Complete</div>
+          <div class="result-sub">${escapeHtml(phone)}</div>
         </div>
-
       </div>
-
       <div class="result-body">
-
-        <div class="kv">
-
-          <div class="k">Status</div>
-
-          <div class="v">
-            ${escapeHtml(status || '—')}
-          </div>
-
-        </div>
-
-        <div class="kv">
-
-          <div class="k">Message</div>
-
-          <div class="v">
-            ${escapeHtml(message || '—')}
-          </div>
-
-        </div>
-
-        <div class="kv">
-
-          <div class="k">Code</div>
-
-          <div class="v">
-            ${escapeHtml(data.code || '—')}
-          </div>
-
-        </div>
-
-        <div class="kv">
-
-          <div class="k">Phone</div>
-
-          <div class="v">
-            ${escapeHtml(data.phone || phone)}
-          </div>
-
-        </div>
-
+        ${renderRawKv(data)}
       </div>
-
+      <div class="log-note" id="logNote">
+        <i class="ti ti-loader-2"></i>
+        Logging to sheet&hellip;
+      </div>
     `;
 
   }
 
   catch(error) {
 
-    box.className =
-      'result show danger';
+    fetchError = error;
 
+    box.className = 'result show danger';
     box.innerHTML = `
-
       <div class="result-header">
-
         <i class="ti ti-alert-triangle"></i>
-
         <div>
-
-          <div class="result-title">
-            Phone Lookup Failed
-          </div>
-
-          <div class="result-sub">
-            ${escapeHtml(error.message)}
-          </div>
-
+          <div class="result-title">Phone Lookup Failed</div>
+          <div class="result-sub">${escapeHtml(error.message)}</div>
         </div>
-
       </div>
-
     `;
 
   }
 
   finally {
-
     btn.disabled = false;
+  }
 
+  // Fire-and-forget: log every completed search (success only, matching
+  // the existing sheet schema) without blocking the UI.
+  if (data) {
+    logToSheet(phone, data);
   }
 
 }
 
 
 // ============================================================
-// NAME SEARCH
+// RENDER RAW API RESPONSE (themed key/value rows)
 // ============================================================
 
-async function searchName() {
+function renderRawKv(data) {
 
-  const first =
-    document.getElementById(
-      'firstName'
-    ).value.trim();
-
-  const last =
-    document.getElementById(
-      'lastName'
-    ).value.trim();
-
-  const btn =
-    document.getElementById(
-      'nameBtn'
-    );
-
-  const box =
-    document.getElementById(
-      'nameResult'
-    );
-
-  if (!first || !last) {
-
-    alert(
-      'Please enter both first and last name.'
-    );
-
-    return;
-
-  }
-
-  if (
-    TCPA_WORKER.includes(
-      'PASTE-YOUR'
-    )
-  ) {
-
-    alert(
-      'Please add your TCPA Worker URL in the HTML CONFIG section.'
-    );
-
-    return;
-
-  }
-
-  btn.disabled = true;
-
-  box.className =
-    'result show loading';
-
-  box.innerHTML = `
-
-    <div class="result-header">
-
-      <i class="ti ti-loader-2"></i>
-
-      <div>
-
-        <div class="result-title">
-          Validating name…
-        </div>
-
-        <div class="result-sub">
-          ${escapeHtml(first + ' ' + last)}
-        </div>
-
+  if (data === null || typeof data !== 'object') {
+    return `
+      <div class="kv">
+        <div class="k">Response</div>
+        <div class="v mono-json">${escapeHtml(String(data))}</div>
       </div>
+    `;
+  }
 
-    </div>
+  const entries = Object.entries(data);
 
-  `;
+  if (entries.length === 0) {
+    return `
+      <div class="kv">
+        <div class="k">Response</div>
+        <div class="v">Empty response from Worker.</div>
+      </div>
+    `;
+  }
+
+  return entries.map(([key, value]) => {
+
+    const label = formatKey(key);
+    const isObject = value !== null && typeof value === 'object';
+
+    const displayValue = isObject
+      ? JSON.stringify(value, null, 2)
+      : String(value ?? '—');
+
+    return `
+      <div class="kv">
+        <div class="k">${escapeHtml(label)}</div>
+        <div class="v${isObject ? ' mono-json' : ''}">${escapeHtml(displayValue)}</div>
+      </div>
+    `;
+
+  }).join('');
+
+}
+
+
+function formatKey(key) {
+
+  return String(key)
+    .replace(/_/g,' ')
+    .replace(/([a-z0-9])([A-Z])/g,'$1 $2')
+    .replace(/\s+/g,' ')
+    .trim()
+    .replace(/\b\w/g, c => c.toUpperCase());
+
+}
+
+
+// ============================================================
+// LOG SEARCH TO GOOGLE SHEET (Apps Script Web App)
+// ============================================================
+
+async function logToSheet(phone, data) {
+
+  const noteEl = document.getElementById('logNote');
 
   try {
 
-    const endpoint =
-      `${TCPA_WORKER}` +
-      `?firstName=${encodeURIComponent(first)}` +
-      `&lastName=${encodeURIComponent(last)}`;
-
-    const response =
-      await fetch(endpoint);
-
-    if (!response.ok) {
-
-      throw new Error(
-        `TCPA Worker HTTP ${response.status}`
-      );
-
+    if (!SHEET_LOGGER_URL || SHEET_LOGGER_URL.includes('PASTE-YOUR')) {
+      throw new Error('Logger URL not configured');
     }
 
-    const data =
-      await response.json();
-
-    renderNameResult(
-      data,
-      first,
-      last
-    );
-
-  }
-
-  catch(error) {
-
-    box.className =
-      'result show danger';
-
-    box.innerHTML = `
-
-      <div class="result-header">
-
-        <i class="ti ti-alert-triangle"></i>
-
-        <div>
-
-          <div class="result-title">
-            Search Failed
-          </div>
-
-          <div class="result-sub">
-            ${escapeHtml(error.message)}
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="result-body">
-
-        <div class="validation-box red">
-
-          The legal-record Worker could not complete
-          the search. Check the Worker URL, deployment
-          and CourtListener token.
-
-        </div>
-
-      </div>
-
-    `;
-
-  }
-
-  finally {
-
-    btn.disabled = false;
-
-  }
-
-}
-
-
-// ============================================================
-// RENDER NAME RESULT
-// ============================================================
-
-function renderNameResult(
-  data,
-  first,
-  last
-) {
-
-  const box =
-    document.getElementById(
-      'nameResult'
-    );
-
-  const name =
-    data.searchedName ||
-    `${first} ${last}`;
-
-  // ----------------------------------------------------------
-  // Suspicious
-  // ----------------------------------------------------------
-
-  if (
-    data.validation?.status ===
-    'suspicious'
-  ) {
-
-    const reasons =
-      Array.isArray(
-        data.validation.reasons
-      )
-        ? data.validation.reasons
-        : [];
-
-    box.className =
-      'result show warning';
-
-    box.innerHTML = `
-
-      <div class="result-header">
-
-        <i class="ti ti-alert-triangle"></i>
-
-        <div>
-
-          <div class="result-title">
-            Suspicious Name
-          </div>
-
-          <div class="result-sub">
-            ${escapeHtml(name)}
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="result-body">
-
-        <div class="validation-box yellow">
-
-          <strong>
-            Name Validation: SUSPICIOUS
-          </strong>
-
-          <br><br>
-
-          ${reasons
-            .map(
-              r => '• ' +
-                escapeHtml(r)
-            )
-            .join('<br>')}
-
-          <br><br>
-
-          Legal-record search was not performed.
-
-        </div>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  // ----------------------------------------------------------
-  // Validated but no records
-  // ----------------------------------------------------------
-
-  const results =
-    Array.isArray(
-      data.results
-    )
-      ? data.results
-      : [];
-
-  const summary =
-    data.summary || {};
-
-  if (
-    results.length === 0
-  ) {
-
-    box.className =
-      'result show success';
-
-    box.innerHTML = `
-
-      <div class="result-header">
-
-        <i class="ti ti-circle-check"></i>
-
-        <div>
-
-          <div class="result-title">
-            No Matching Legal Records Found
-          </div>
-
-          <div class="result-sub">
-            ${escapeHtml(name)}
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="result-body">
-
-        <div class="validation-box green">
-
-          <strong>
-            Name Validation Passed
-          </strong>
-
-          <br><br>
-
-          No sufficient matching public
-          legal record was returned from
-          the searched source.
-
-        </div>
-
-        <div class="notice">
-
-          This does not prove that the person has
-          never been involved in litigation.
-          Public-record coverage and name-only
-          matching are not complete identity verification.
-
-        </div>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  // ----------------------------------------------------------
-  // Determine overall status
-  // ----------------------------------------------------------
-
-  const hasTCPA =
-    summary.tcpaFound === true ||
-    summary.tcpaCases > 0;
-
-  box.className =
-    hasTCPA
-      ? 'result show danger'
-      : 'result show success';
-
-
-  let html = `
-
-    <div class="result-header">
-
-      <i class="${
-        hasTCPA
-          ? 'ti ti-alert-circle'
-          : 'ti ti-circle-check'
-      }"></i>
-
-      <div>
-
-        <div class="result-title">
-
-          ${
-            hasTCPA
-              ? 'TCPA CASE FOUND'
-              : 'Legal Records Found'
-          }
-
-        </div>
-
-        <div class="result-sub">
-
-          ${escapeHtml(name)}
-
-          ·
-
-          ${summary.totalCases || results.length}
-          record(s)
-
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="result-body">
-
-  `;
-
-
-  // ----------------------------------------------------------
-  // Validation summary
-  // ----------------------------------------------------------
-
-  if (
-    data.validation?.status ===
-    'strong-match'
-  ) {
-
-    html += `
-
-      <div class="validation-box green">
-
-        <strong>
-          ✓ Strong Public-Record Match
-        </strong>
-
-        <br>
-
-        The searched name matched a party
-        name in the returned legal record.
-
-      </div>
-
-    `;
-
-  }
-
-  else {
-
-    html += `
-
-      <div class="validation-box yellow">
-
-        <strong>
-          ⚠ Possible Public-Record Match
-        </strong>
-
-        <br>
-
-        Review the state, court, case details
-        and party information before treating
-        this as the same individual.
-
-      </div>
-
-    `;
-
-  }
-
-
-  // ----------------------------------------------------------
-  // Cases
-  // ----------------------------------------------------------
-
-  results.forEach(
-    (item) => {
-
-      html += renderCase(item);
-
+    let ip = 'Unknown';
+
+    try {
+      const ipRes = await fetch('https://api.ipify.org?format=json');
+      const ipData = await ipRes.json();
+      ip = ipData.ip || 'Unknown';
+    } catch (ipErr) {
+      // Non-fatal — log without IP rather than failing the whole request.
     }
-  );
 
+    const code = data.code ?? data.responseCode ?? data.status ?? 'Unknown';
+    const msg = data.message ?? data.msg ?? data.status ?? 'Unknown';
 
-  html += `
+    const query =
+      `?phone=${encodeURIComponent(phone)}` +
+      `&company=${encodeURIComponent(company)}` +
+      `&code=${encodeURIComponent(code)}` +
+      `&msg=${encodeURIComponent(msg)}` +
+      `&raw=${encodeURIComponent(JSON.stringify(data))}` +
+      `&ip=${encodeURIComponent(ip)}`;
 
-      <div class="notice">
+    const res = await fetch(`${SHEET_LOGGER_URL}${query}`);
 
-        <strong>Important:</strong>
-        A name match alone does not establish
-        identity. Verify the party, state, court,
-        dates and other identifying information.
-        TCPA status is based on the legal-record
-        information returned by the searched source.
+    if (!res.ok) {
+      throw new Error(`Logger HTTP ${res.status}`);
+    }
 
-      </div>
-
-    </div>
-
-  `;
-
-
-  box.innerHTML =
-    html;
-
-}
-
-
-// ============================================================
-// CASE RENDER
-// ============================================================
-
-function renderCase(
-  item
-) {
-
-  const isTCPA =
-    item.isTCPA === true;
-
-  const role =
-    item.role ||
-    'Unknown';
-
-  const matchClass =
-    item.exactNameMatch
-      ? 'exact'
-      : 'possible';
-
-  const matchText =
-    item.exactNameMatch
-      ? 'Exact party-name match'
-      : 'Possible name match';
-
-  let html = `
-
-    <div class="case ${
-      isTCPA ? 'tcpa' : ''
-    }">
-
-  `;
-
-
-  if (isTCPA) {
-
-    html += `
-
-      <div class="tcpa-label">
-
-        <i class="ti ti-gavel"></i>
-
-        TCPA CASE
-
-      </div>
-
-    `;
+    if (noteEl) {
+      noteEl.className = 'log-note ok';
+      noteEl.innerHTML = `<i class="ti ti-check"></i> Saved to sheet`;
+    }
 
   }
 
+  catch (err) {
 
-  html += `
-
-      <div class="case-name">
-
-        ${escapeHtml(
-          item.caseName ||
-          'Case name unavailable'
-        )}
-
-      </div>
-
-      <div class="meta">
-
-        <div class="label">
-          Match
-        </div>
-
-        <div class="value ${matchClass}">
-          ${escapeHtml(matchText)}
-        </div>
-
-        <div class="label">
-          Role
-        </div>
-
-        <div class="value">
-          ${escapeHtml(role)}
-        </div>
-
-        <div class="label">
-          State
-        </div>
-
-        <div class="value">
-          ${escapeHtml(
-            item.state ||
-            'Not available'
-          )}
-        </div>
-
-        <div class="label">
-          Court
-        </div>
-
-        <div class="value">
-          ${escapeHtml(
-            item.court ||
-            'Not available'
-          )}
-        </div>
-
-        <div class="label">
-          Case No.
-        </div>
-
-        <div class="value">
-          ${escapeHtml(
-            item.docket ||
-            'Not available'
-          )}
-        </div>
-
-        <div class="label">
-          Filed
-        </div>
-
-        <div class="value">
-          ${escapeHtml(
-            item.dateFiled ||
-            'Not available'
-          )}
-        </div>
-
-        <div class="label">
-          Status
-        </div>
-
-        <div class="value">
-          ${escapeHtml(
-            item.status ||
-            'Not available'
-          )}
-        </div>
-
-        <div class="label">
-          TCPA
-        </div>
-
-        <div class="value ${
-          isTCPA
-            ? 'bad'
-            : ''
-        }">
-
-          ${
-            isTCPA
-              ? 'YES'
-              : 'NO'
-          }
-
-        </div>
-
-      </div>
-
-  `;
-
-
-  if (
-    item.url
-  ) {
-
-    html += `
-
-      <a
-        class="case-link"
-        href="${escapeAttribute(item.url)}"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-
-        <i class="ti ti-external-link"></i>
-
-        View Public Record
-
-      </a>
-
-    `;
+    if (noteEl) {
+      noteEl.className = 'log-note fail';
+      noteEl.innerHTML = `<i class="ti ti-alert-triangle"></i> Not logged (${escapeHtml(err.message)})`;
+    }
 
   }
-
-
-  if (
-    item.snippet
-  ) {
-
-    html += `
-
-      <div
-        style="
-          margin-top:10px;
-          color:#6b7280;
-          font-size:11px;
-          line-height:1.5;
-        "
-      >
-
-        ${escapeHtml(item.snippet)}
-
-      </div>
-
-    `;
-
-  }
-
-
-  html += `
-
-    </div>
-
-  `;
-
-  return html;
 
 }
 
@@ -1888,27 +525,13 @@ function renderCase(
 // SECURITY HELPERS
 // ============================================================
 
-function escapeHtml(
-  value
-) {
-
+function escapeHtml(value) {
   return String(value ?? '')
     .replace(/&/g,'&amp;')
     .replace(/</g,'&lt;')
     .replace(/>/g,'&gt;')
     .replace(/"/g,'&quot;')
     .replace(/'/g,'&#039;');
-
-}
-
-
-function escapeAttribute(
-  value
-) {
-
-  return escapeHtml(value)
-    .replace(/`/g,'&#096;');
-
 }
 
 
@@ -1916,40 +539,11 @@ function escapeAttribute(
 // ENTER KEY
 // ============================================================
 
-document
-  .getElementById('firstName')
-  .addEventListener(
-    'keydown',
-    function(e) {
-
-      if (
-        e.key === 'Enter'
-      ) {
-
-        searchName();
-
-      }
-
-    }
-  );
-
-
-document
-  .getElementById('lastName')
-  .addEventListener(
-    'keydown',
-    function(e) {
-
-      if (
-        e.key === 'Enter'
-      ) {
-
-        searchName();
-
-      }
-
-    }
-  );
+document.getElementById('phoneNumber').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    checkPhone();
+  }
+});
 
 </script>
 
