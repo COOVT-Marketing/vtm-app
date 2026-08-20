@@ -167,7 +167,10 @@ button:disabled { opacity:.5; cursor:not-allowed; }
 .success { border-color:rgba(34,197,94,.4); }
 .success .result-header i { color:var(--green); }
 
-.danger { border-color:rgba(239,68,68,.55); }
+.warning { border-color:rgba(234,179,8,.4); } /* YELLOW/WARNING */
+.warning .result-header i { color:var(--yellow); }
+
+.danger { border-color:rgba(239,68,68,.55); } /* RED/DANGER */
 .danger .result-header i { color:var(--red); }
 
 .result-body { padding:6px 0; }
@@ -302,11 +305,37 @@ async function checkPhone() {
 
     data = await response.json();
 
-    setResult(box, 'success', `
+    // Determine Status Class and Icon
+    let statusClass = 'success';
+    let iconClass = 'ti ti-circle-check';
+    let statusText = 'Clean / Compliance Passed';
+
+    // Helper to check nested objects or direct values
+    const checkStatus = (val) => String(val ?? '').toLowerCase();
+    
+    // Check main data fields (adjust these based on your specific worker response structure)
+    const isFederal = checkStatus(data.federal) === 'y' || checkStatus(data.status) === 'federal';
+    const isState = checkStatus(data.state) === 'y' || checkStatus(data.status) === 'state';
+    
+    const isBlacklist = checkStatus(data.blacklist) === 'y' || checkStatus(data.status) === 'blacklist';
+    const isComplainer = checkStatus(data.complainer) === 'y' || checkStatus(data.status) === 'complainer';
+    const isRedFlag = checkStatus(data.redflag) === 'y' || checkStatus(data.status) === 'redflag';
+
+    if (isBlacklist || isComplainer || isRedFlag) {
+      statusClass = 'danger';
+      iconClass = 'ti ti-alert-circle';
+      statusText = 'DNC Blocked / High Risk';
+    } else if (isFederal || isState) {
+      statusClass = 'warning';
+      iconClass = 'ti ti-alert-triangle';
+      statusText = 'DNC List Warning';
+    }
+
+    setResult(box, statusClass, `
       <div class="result-header">
-        <i class="ti ti-circle-check"></i>
+        <i class="${iconClass}"></i>
         <div>
-          <div class="result-title">Phone Lookup Complete</div>
+          <div class="result-title">${statusText}</div>
           <div class="result-sub">${escapeHtml(phone)}</div>
         </div>
       </div>
@@ -317,7 +346,7 @@ async function checkPhone() {
   } catch (error) {
     setResult(box, 'danger', `
       <div class="result-header">
-        <i class="ti ti-alert-triangle"></i>
+        <i class="ti ti-ban"></i>
         <div>
           <div class="result-title">Phone Lookup Failed</div>
           <div class="result-sub">${escapeHtml(error.message)}</div>
