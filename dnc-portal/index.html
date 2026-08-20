@@ -167,10 +167,10 @@ button:disabled { opacity:.5; cursor:not-allowed; }
 .success { border-color:rgba(34,197,94,.4); }
 .success .result-header i { color:var(--green); }
 
-.warning { border-color:rgba(234,179,8,.4); } /* YELLOW/WARNING */
+.warning { border-color:rgba(234,179,8,.4); }
 .warning .result-header i { color:var(--yellow); }
 
-.danger { border-color:rgba(239,68,68,.55); } /* RED/DANGER */
+.danger { border-color:rgba(239,68,68,.55); }
 .danger .result-header i { color:var(--red); }
 
 .result-body { padding:6px 0; }
@@ -305,30 +305,38 @@ async function checkPhone() {
 
     data = await response.json();
 
-    // Determine Status Class and Icon
+    // Deep evaluation of the payload
+    const jsonStr = JSON.stringify(data).toLowerCase();
+
     let statusClass = 'success';
     let iconClass = 'ti ti-circle-check';
     let statusText = 'Clean / Compliance Passed';
 
-    // Helper to check nested objects or direct values
-    const checkStatus = (val) => String(val ?? '').toLowerCase();
-    
-    // Check main data fields (adjust these based on your specific worker response structure)
-    const isFederal = checkStatus(data.federal) === 'y' || checkStatus(data.status) === 'federal';
-    const isState = checkStatus(data.state) === 'y' || checkStatus(data.status) === 'state';
-    
-    const isBlacklist = checkStatus(data.blacklist) === 'y' || checkStatus(data.status) === 'blacklist';
-    const isComplainer = checkStatus(data.complainer) === 'y' || checkStatus(data.status) === 'complainer';
-    const isRedFlag = checkStatus(data.redflag) === 'y' || checkStatus(data.status) === 'redflag';
+    // Danger triggers (Blacklisted, Litigator, Complainer, Redflag, Prelitigation)
+    const isDanger = 
+      jsonStr.includes('blacklisted') || 
+      jsonStr.includes('prelitigation') || 
+      jsonStr.includes('litigator') || 
+      jsonStr.includes('complainer') || 
+      jsonStr.includes('redflag') ||
+      jsonStr.includes('blocked') ||
+      (data.blacklist && String(data.blacklist).toLowerCase() === 'y');
 
-    if (isBlacklist || isComplainer || isRedFlag) {
+    // Warning triggers (Federal, State DNC)
+    const isWarning = 
+      jsonStr.includes('federal') || 
+      jsonStr.includes('state') ||
+      (data.federal && String(data.federal).toLowerCase() === 'y') ||
+      (data.state && String(data.state).toLowerCase() === 'y');
+
+    if (isDanger) {
       statusClass = 'danger';
       iconClass = 'ti ti-alert-circle';
-      statusText = 'DNC Blocked / High Risk';
-    } else if (isFederal || isState) {
+      statusText = 'DNC Blocked / Blacklisted Number';
+    } else if (isWarning) {
       statusClass = 'warning';
       iconClass = 'ti ti-alert-triangle';
-      statusText = 'DNC List Warning';
+      statusText = 'DNC List Warning (Federal / State)';
     }
 
     setResult(box, statusClass, `
@@ -425,7 +433,7 @@ async function logToSheet(phone, data) {
     let ip = 'Unknown';
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 sec timeout
+      const timeoutId = setTimeout(() => controller.abort(), 2000);
       const ipRes = await fetch('https://api.ipify.org?format=json', { signal: controller.signal });
       const ipData = await ipRes.json();
       ip = ipData.ip || 'Unknown';
@@ -445,7 +453,6 @@ async function logToSheet(phone, data) {
       `&raw=${encodeURIComponent(JSON.stringify(data))}` +
       `&ip=${encodeURIComponent(ip)}`;
 
-    // mode: 'no-cors' prevents browser blocking Google Apps Script redirects
     await fetch(`${SHEET_LOGGER_URL}${query}`, { mode: 'no-cors' });
   } catch (err) {
     console.warn('DNC portal: sheet logging failed —', err.message);
