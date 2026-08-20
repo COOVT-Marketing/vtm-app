@@ -36,7 +36,8 @@ body {
   min-height:100vh;
   display:flex;
   justify-content:center;
-  padding:30px 15px;
+  align-items:flex-start; /* FIX: Prevents vertical stretching */
+  padding:50px 15px;
 }
 
 .card {
@@ -47,6 +48,7 @@ body {
   border-radius:18px;
   overflow:hidden;
   box-shadow:0 25px 60px rgba(0,0,0,.55);
+  height: auto; /* FIX: Grows dynamically with content */
 }
 
 .header {
@@ -305,14 +307,12 @@ async function checkPhone() {
 
     data = await response.json();
 
-    // Deep evaluation of the payload
     const jsonStr = JSON.stringify(data).toLowerCase();
 
     let statusClass = 'success';
     let iconClass = 'ti ti-circle-check';
     let statusText = 'Clean / Compliance Passed';
 
-    // Danger triggers (Blacklisted, Litigator, Complainer, Redflag, Prelitigation)
     const isDanger = 
       jsonStr.includes('blacklisted') || 
       jsonStr.includes('prelitigation') || 
@@ -322,7 +322,6 @@ async function checkPhone() {
       jsonStr.includes('blocked') ||
       (data.blacklist && String(data.blacklist).toLowerCase() === 'y');
 
-    // Warning triggers (Federal, State DNC)
     const isWarning = 
       jsonStr.includes('federal') || 
       jsonStr.includes('state') ||
@@ -439,7 +438,7 @@ async function logToSheet(phone, data) {
       ip = ipData.ip || 'Unknown';
       clearTimeout(timeoutId);
     } catch (ipErr) {
-      // IP fetch failure non-fatal
+      // Non-fatal
     }
 
     const code = data.code ?? data.responseCode ?? data.status ?? 'Unknown';
