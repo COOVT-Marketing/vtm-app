@@ -9,7 +9,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
 
 <style>
-
 :root {
   --bg:#0b0f19;
   --card:#111827;
@@ -83,27 +82,22 @@ body {
   color:var(--teal);
   font-size:12px;
   border:1px solid rgba(26,158,117,.35);
+  text-transform: uppercase;
 }
 
-.body { padding:22px; }
+.body { padding:18px 22px 22px; }
 
 .section-title {
   display:flex;
   align-items:center;
-  gap:8px;
-  font-size:15px;
+  gap:7px;
+  font-size:13px;
   font-weight:600;
-  margin-bottom:6px;
+  color:var(--txt2);
+  margin-bottom:10px;
 }
 
-.section-title i { color:var(--teal); font-size:19px; }
-
-.description {
-  color:var(--txt3);
-  font-size:12px;
-  line-height:1.5;
-  margin-bottom:14px;
-}
+.section-title i { color:var(--teal); font-size:15px; }
 
 .phone-row { display:flex; gap:10px; }
 
@@ -139,14 +133,19 @@ button:disabled { opacity:.5; cursor:not-allowed; }
 
 .result {
   display:none;
-  margin-top:15px;
+  margin-top:0;
   border:1px solid var(--border);
   border-radius:14px;
   overflow:hidden;
   background:var(--card2);
+  max-height:0;
+  opacity:0;
+  transition:max-height .35s ease, opacity .3s ease, margin-top .35s ease;
 }
 
 .result.show { display:block; }
+
+.result.expanded { opacity:1; margin-top:15px; }
 
 .result-header {
   padding:15px 17px;
@@ -204,21 +203,6 @@ button:disabled { opacity:.5; cursor:not-allowed; }
   line-height:1.5;
 }
 
-.log-note {
-  padding:11px 17px;
-  font-size:11px;
-  color:var(--txt3);
-  display:flex;
-  align-items:center;
-  gap:6px;
-  border-top:1px solid var(--border);
-}
-
-.log-note i { font-size:13px; }
-
-.log-note.ok { color:var(--green); }
-.log-note.fail { color:var(--yellow); }
-
 @keyframes spin { to { transform:rotate(360deg); } }
 
 @media(max-width:520px) {
@@ -226,7 +210,6 @@ button:disabled { opacity:.5; cursor:not-allowed; }
   .kv { grid-template-columns:1fr; gap:3px; }
   .badge-company { display:none; }
 }
-
 </style>
 </head>
 
@@ -247,11 +230,7 @@ button:disabled { opacity:.5; cursor:not-allowed; }
 
     <div class="section-title">
       <i class="ti ti-phone"></i>
-      Phone / DNC Check
-    </div>
-
-    <div class="description">
-      Check the phone number through the DNC lookup service.
+      Enter a number to check DNC / compliance status
     </div>
 
     <div class="phone-row">
@@ -268,58 +247,35 @@ button:disabled { opacity:.5; cursor:not-allowed; }
 
 </div>
 
-
 <script>
+const PHONE_WORKER = 'https://dnc-portal.syedshayanabbasr15121472.workers.dev';
+const SHEET_LOGGER_URL = 'https://script.google.com/macros/s/AKfycby8j6erDfX9E6j8Y03uv4JdLzLykAYY4dzvYJRj94QEl4LBBSR0uc2THu_sTXg97n5wIw/exec';
 
-// ============================================================
-// CONFIG
-// ============================================================
-
-// EXISTING PHONE WORKER
-const PHONE_WORKER =
-  'https://dnc-portal.syedshayanabbasr15121472.workers.dev';
-
-// GOOGLE APPS SCRIPT LOGGER (writes each search to the Sheet)
-const SHEET_LOGGER_URL =
-  'https://script.google.com/macros/s/AKfycby8j6erDfX9E6j8Y03uv4JdLzLykAYY4dzvYJRj94QEl4LBBSR0uc2THu_sTXg97n5wIw/exec';
-
-
-// ============================================================
-// COMPANY ACCESS
-// ============================================================
-
+// Company Access Guard
 const params = new URLSearchParams(window.location.search);
 const company = (params.get('company') || '').trim();
-const allowed = ['echolink','vtm'];
+const allowed = ['echolink', 'vtm'];
 
 if (!allowed.includes(company.toLowerCase())) {
-
   document.body.innerHTML = `
-    <div style="color:#f9fafb;text-align:center;font-family:DM Sans,sans-serif;padding:80px 20px;">
+    <div style="color:#f9fafb;text-align:center;font-family:'DM Sans',sans-serif;padding:80px 20px;">
       <h2>Access Restricted</h2>
       <p style="color:#6b7280;margin-top:8px;">This portal requires an authorized company link.</p>
     </div>
   `;
-
   throw new Error('Access blocked');
-
 }
 
 document.getElementById('companyBadge').textContent = company;
 
-
-// ============================================================
-// PHONE CHECK
-// ============================================================
-
+// Phone Check
 async function checkPhone() {
-
   const input = document.getElementById('phoneNumber');
   const btn = document.getElementById('phoneBtn');
   const box = document.getElementById('phoneResult');
 
   const rawInput = input.value.trim();
-  const phone = rawInput.replace(/\D/g,'');
+  const phone = rawInput.replace(/\D/g, '');
 
   if (phone.length < 7 || phone.length > 15) {
     alert('Please enter a valid phone number.');
@@ -328,8 +284,7 @@ async function checkPhone() {
 
   btn.disabled = true;
 
-  box.className = 'result show loading';
-  box.innerHTML = `
+  setResult(box, 'loading', `
     <div class="result-header">
       <i class="ti ti-loader-2"></i>
       <div>
@@ -337,23 +292,17 @@ async function checkPhone() {
         <div class="result-sub">${escapeHtml(phone)}</div>
       </div>
     </div>
-  `;
+  `);
 
   let data = null;
-  let fetchError = null;
 
   try {
-
     const response = await fetch(`${PHONE_WORKER}?phone=${encodeURIComponent(phone)}`);
-
-    if (!response.ok) {
-      throw new Error(`Phone Worker HTTP ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`Phone Worker HTTP ${response.status}`);
 
     data = await response.json();
 
-    box.className = 'result show success';
-    box.innerHTML = `
+    setResult(box, 'success', `
       <div class="result-header">
         <i class="ti ti-circle-check"></i>
         <div>
@@ -364,20 +313,9 @@ async function checkPhone() {
       <div class="result-body">
         ${renderRawKv(data)}
       </div>
-      <div class="log-note" id="logNote">
-        <i class="ti ti-loader-2"></i>
-        Logging to sheet&hellip;
-      </div>
-    `;
-
-  }
-
-  catch(error) {
-
-    fetchError = error;
-
-    box.className = 'result show danger';
-    box.innerHTML = `
+    `);
+  } catch (error) {
+    setResult(box, 'danger', `
       <div class="result-header">
         <i class="ti ti-alert-triangle"></i>
         <div>
@@ -385,29 +323,30 @@ async function checkPhone() {
           <div class="result-sub">${escapeHtml(error.message)}</div>
         </div>
       </div>
-    `;
-
-  }
-
-  finally {
+    `);
+  } finally {
     btn.disabled = false;
   }
 
-  // Fire-and-forget: log every completed search (success only, matching
-  // the existing sheet schema) without blocking the UI.
   if (data) {
     logToSheet(phone, data);
   }
-
 }
 
+function setResult(box, statusClass, html) {
+  box.className = `result show ${statusClass}`;
+  box.innerHTML = html;
 
-// ============================================================
-// RENDER RAW API RESPONSE (themed key/value rows)
-// ============================================================
+  box.style.maxHeight = box.classList.contains('expanded') ? box.scrollHeight + 'px' : '0px';
+  void box.offsetHeight;
+
+  requestAnimationFrame(() => {
+    box.classList.add('expanded');
+    box.style.maxHeight = box.scrollHeight + 'px';
+  });
+}
 
 function renderRawKv(data) {
-
   if (data === null || typeof data !== 'object') {
     return `
       <div class="kv">
@@ -418,7 +357,6 @@ function renderRawKv(data) {
   }
 
   const entries = Object.entries(data);
-
   if (entries.length === 0) {
     return `
       <div class="kv">
@@ -429,13 +367,9 @@ function renderRawKv(data) {
   }
 
   return entries.map(([key, value]) => {
-
     const label = formatKey(key);
     const isObject = value !== null && typeof value === 'object';
-
-    const displayValue = isObject
-      ? JSON.stringify(value, null, 2)
-      : String(value ?? '—');
+    const displayValue = isObject ? JSON.stringify(value, null, 2) : String(value ?? '—');
 
     return `
       <div class="kv">
@@ -443,46 +377,32 @@ function renderRawKv(data) {
         <div class="v${isObject ? ' mono-json' : ''}">${escapeHtml(displayValue)}</div>
       </div>
     `;
-
   }).join('');
-
 }
-
 
 function formatKey(key) {
-
   return String(key)
-    .replace(/_/g,' ')
-    .replace(/([a-z0-9])([A-Z])/g,'$1 $2')
-    .replace(/\s+/g,' ')
+    .replace(/_/g, ' ')
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+    .replace(/\s+/g, ' ')
     .trim()
     .replace(/\b\w/g, c => c.toUpperCase());
-
 }
 
-
-// ============================================================
-// LOG SEARCH TO GOOGLE SHEET (Apps Script Web App)
-// ============================================================
-
 async function logToSheet(phone, data) {
-
-  const noteEl = document.getElementById('logNote');
-
   try {
-
-    if (!SHEET_LOGGER_URL || SHEET_LOGGER_URL.includes('PASTE-YOUR')) {
-      throw new Error('Logger URL not configured');
-    }
+    if (!SHEET_LOGGER_URL || SHEET_LOGGER_URL.includes('PASTE-YOUR')) return;
 
     let ip = 'Unknown';
-
     try {
-      const ipRes = await fetch('https://api.ipify.org?format=json');
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 sec timeout
+      const ipRes = await fetch('https://api.ipify.org?format=json', { signal: controller.signal });
       const ipData = await ipRes.json();
       ip = ipData.ip || 'Unknown';
+      clearTimeout(timeoutId);
     } catch (ipErr) {
-      // Non-fatal — log without IP rather than failing the whole request.
+      // IP fetch failure non-fatal
     }
 
     const code = data.code ?? data.responseCode ?? data.status ?? 'Unknown';
@@ -496,55 +416,25 @@ async function logToSheet(phone, data) {
       `&raw=${encodeURIComponent(JSON.stringify(data))}` +
       `&ip=${encodeURIComponent(ip)}`;
 
-    const res = await fetch(`${SHEET_LOGGER_URL}${query}`);
-
-    if (!res.ok) {
-      throw new Error(`Logger HTTP ${res.status}`);
-    }
-
-    if (noteEl) {
-      noteEl.className = 'log-note ok';
-      noteEl.innerHTML = `<i class="ti ti-check"></i> Saved to sheet`;
-    }
-
+    // mode: 'no-cors' prevents browser blocking Google Apps Script redirects
+    await fetch(`${SHEET_LOGGER_URL}${query}`, { mode: 'no-cors' });
+  } catch (err) {
+    console.warn('DNC portal: sheet logging failed —', err.message);
   }
-
-  catch (err) {
-
-    if (noteEl) {
-      noteEl.className = 'log-note fail';
-      noteEl.innerHTML = `<i class="ti ti-alert-triangle"></i> Not logged (${escapeHtml(err.message)})`;
-    }
-
-  }
-
 }
-
-
-// ============================================================
-// SECURITY HELPERS
-// ============================================================
 
 function escapeHtml(value) {
   return String(value ?? '')
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;')
-    .replace(/'/g,'&#039;');
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
-
-// ============================================================
-// ENTER KEY
-// ============================================================
-
 document.getElementById('phoneNumber').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') {
-    checkPhone();
-  }
+  if (e.key === 'Enter') checkPhone();
 });
-
 </script>
 
 </body>
