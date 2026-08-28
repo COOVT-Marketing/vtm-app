@@ -19,6 +19,11 @@ from config import Config
 app = Flask(__name__)
 app.config.from_object(Config)
 
+# Middleware to automatically handle the /scrub-portal path prefix via Cloudflare Worker
+@app.before_request
+def fix_script_name():
+    request.script_root = '/scrub-portal'
+
 os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 os.makedirs("temp_downloads", exist_ok=True)
 
