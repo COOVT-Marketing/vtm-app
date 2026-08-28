@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login – Vocaltech Data Scrubbing Portal</title>
+  <link rel="icon" href="https://vocaltechmarketing.com/images/logo.png" type="image/png">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="login-page">
+  <div class="login-card">
+    <div class="logo">
+      <img src="https://vocaltechmarketing.com/images/logo.png" alt="Vocaltech Marketing" class="logo-img">
+      <h1>Vocaltech Marketing</h1>
+      <p>Data Scrubbing Portal</p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('login') }}">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+    </form>
+  </div>
+
+  <footer>
+    Vocaltech Marketing – Data Services
+  </footer>
+</body>
+</html>

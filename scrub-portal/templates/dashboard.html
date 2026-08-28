@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Scrubbing Portal – Vocaltech</title>
+  <link rel="icon" href="https://vocaltechmarketing.com/images/logo.png" type="image/png">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header class="top-bar">
+    <div class="brand">
+      <img src="https://vocaltechmarketing.com/images/logo.png" alt="Vocaltech" class="header-logo">
+      <span>Vocaltech Marketing – Data Scrubbing</span>
+    </div>
+    <a href="{{ url_for('logout') }}" class="btn btn-outline">Logout</a>
+  </header>
+
+  <main class="container">
+    <section class="card upload-card">
+      <h2>Upload Lead File</h2>
+      <p class="helper">Ensure your file contains a phone column (Phone, Phone Number, phone_number, Mobile, etc.). Supported formats: CSV, XLSX.</p>
+
+      <div id="drop-zone" class="drop-zone">
+        <div class="drop-content">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#548888" stroke-width="1.5">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          <p>Drag & drop your CSV / Excel file here</p>
+          <p class="or">— or —</p>
+          <label class="btn btn-primary">
+            Select File from Computer
+            <input type="file" id="file-input" accept=".csv,.xlsx,.xls" hidden>
+          </label>
+        </div>
+        <p id="file-name" class="file-name"></p>
+      </div>
+
+      <button id="process-btn" class="btn btn-primary btn-lg" disabled>
+        Process File
+      </button>
+    </section>
+
+    <section id="results-section" class="card results-card hidden">
+      <div class="success-banner">
+        <h3>Scrubbing Complete!</h3>
+        <div class="results-stats">
+          <div class="stat good">
+            <span class="label">GOOD</span>
+            <span class="number" id="good-count">0</span>
+          </div>
+          <div class="stat bad">
+            <span class="label">BAD</span>
+            <span class="number" id="bad-count">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="download-actions">
+        <a id="download-good" href="{{ url_for('download', kind='good') }}" class="btn btn-primary">
+          Download Good Data (CSV)
+        </a>
+        <a id="download-bad" href="{{ url_for('download', kind='bad') }}" class="btn btn-primary">
+          Download Bad Data (CSV)
+        </a>
+      </div>
+    </section>
+
+    <div id="loading" class="loading hidden">
+      <div class="spinner"></div>
+      <p>Processing… this can take 30–90 seconds for large files. Please wait.</p>
+    </div>
+  </main>
+
+  <footer>
+    Vocaltech Marketing – Data Services
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
