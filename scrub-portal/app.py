@@ -99,7 +99,6 @@ def fetch_sold_phones(service, sheet_id: str) -> set:
 
 def create_log_tab(service, sheet_id: str, title: str, df: pd.DataFrame):
     """Create a new tab and write the full uploaded file into it."""
-    # 1. Create the new sheet
     body = {
         "requests": [{
             "addSheet": {
@@ -114,7 +113,6 @@ def create_log_tab(service, sheet_id: str, title: str, df: pd.DataFrame):
         body=body
     ).execute()
 
-    # 2. Prepare data (header + all rows)
     values = [df.columns.tolist()]
     for row in df.values.tolist():
         clean_row = []
@@ -125,13 +123,47 @@ def create_log_tab(service, sheet_id: str, title: str, df: pd.DataFrame):
                 clean_row.append(str(cell))
         values.append(clean_row)
 
-    # 3. Write the data
     safe_title = title.replace("'", "''")
     service.spreadsheets().values().update(
         spreadsheetId=sheet_id,
         range=f"'{safe_title}'!A1",
         valueInputOption="RAW",
         body={"values": values}
+    ).execute()
+
+
+def log_result_to_sheet(service, sheet_id: str, filename: str, good_count: int, bad_count: int, total: int, tab_title: str):
+    """Append a summary row to the permanent 'Results' tab."""
+    meta = service.spreadsheets().get(spreadsheetId=sheet_id).execute()
+    existing_titles = [s["properties"]["title"] for s in meta.get("sheets", [])]
+
+    if "Results" not in existing_titles:
+        body = {
+            "requests": [{
+                "addSheet": {
+                    "properties": {"title": "Results"}
+                }
+            }]
+        }
+        service.spreadsheets().batchUpdate(spreadsheetId=sheet_id, body=body).execute()
+
+        # Header row
+        service.spreadsheets().values().update(
+            spreadsheetId=sheet_id,
+            range="'Results'!A1",
+            valueInputOption="RAW",
+            body={"values": [["Timestamp", "Filename", "Good", "Bad", "Total", "History Tab"]]}
+        ).execute()
+
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    row = [[timestamp, filename, good_count, bad_count, total, tab_title]]
+
+    service.spreadsheets().values().append(
+        spreadsheetId=sheet_id,
+        range="'Results'!A:F",
+        valueInputOption="RAW",
+        insertDataOption="INSERT_ROWS",
+        body={"values": row}
     ).execute()
 
 
@@ -209,11 +241,22 @@ def process_file():
         good_df = df[mask_good].drop(columns=["_normalized_phone"])
         bad_df = df[~mask_good].drop(columns=["_normalized_phone"])
 
-        # Create new tab with full file (only this, nothing is written to first sheet)
+        # 1. Create new tab with full file
         tab_title = sanitize_sheet_title(filename)
         create_log_tab(service, sheet_id, tab_title, df.drop(columns=["_normalized_phone"]))
 
-        # Save temporary CSV files for download
+        # 2. Log summary into permanent Results tab
+        log_result_to_sheet(
+            service,
+            sheet_id,
+            filename,
+            len(good_df),
+            len(bad_df),
+            len(df),
+            tab_title
+        )
+
+        # 3. Save temporary CSV files for download
         unique_id = str(uuid.uuid4())[:8]
         good_path = os.path.join("temp_downloads", f"good_{unique_id}.csv")
         bad_path = os.path.join("temp_downloads", f"bad_{unique_id}.csv")
