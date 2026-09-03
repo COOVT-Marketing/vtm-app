@@ -118,19 +118,33 @@ def append_phones_to_database(service, sheet_id: str, phones: set):
     ).execute()
 
 def fetch_sold_phones(service, sheet_id: str) -> set:
-    try:
-        result = service.spreadsheets().values().get(
-            spreadsheetId=sheet_id,
-            range="'Database'!A:A"
-        ).execute()
-    except HttpError:
+    """Fetch phone numbers from the FIRST sheet only."""
+    result = service.spreadsheets().values().get(
+        spreadsheetId=sheet_id,
+        range="A:Z"          # first sheet
+    ).execute()
+    values = result.get("values", [])
+    if not values:
         return set()
 
-    values = result.get("values", [])
+    # Try to find a phone-like header
+    header = [str(h).strip().lower() for h in values[0]]
+    phone_idx = None
+    possible = ["phone", "phone number", "phone_number", "mobile", "cell", "telephone", "contact"]
+
+    for i, h in enumerate(header):
+        if any(p in h for p in possible):
+            phone_idx = i
+            break
+
+    # If no header found, assume first column is phone
+    if phone_idx is None:
+        phone_idx = 0
+
     phones = set()
     for row in values[1:]:
-        if row and str(row[0]).strip():
-            cleaned = re.sub(r"\D", "", str(row[0]))
+        if len(row) > phone_idx and str(row[phone_idx]).strip():
+            cleaned = re.sub(r"\D", "", str(row[phone_idx]))
             if cleaned:
                 phones.add(cleaned)
     return phones
@@ -226,15 +240,11 @@ def process_file():
         good_df = df[mask_good].drop(columns=["_normalized_phone"])
         bad_df = df[~mask_good].drop(columns=["_normalized_phone"])
 
-        # 1. Create history tab
+        # 1. Create history tab only
         tab_title = sanitize_sheet_title(filename)
         create_log_tab(service, sheet_id, tab_title, df.drop(columns=["_normalized_phone"]))
 
-        # 2. Add phones to Database tab
-        get_or_create_database_tab(service, sheet_id)
-        append_phones_to_database(service, sheet_id, set(df["_normalized_phone"].dropna()))
-
-        # 3. Save temporary CSV files for download
+        # 2. Save temporary CSV files for download
         unique_id = str(uuid.uuid4())[:8]
         good_path = os.path.join("temp_downloads", f"good_{unique_id}.csv")
         bad_path = os.path.join("temp_downloads", f"bad_{unique_id}.csv")
