@@ -22,6 +22,7 @@ app.config.from_object(Config)
 os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 os.makedirs("temp_downloads", exist_ok=True)
 
+
 # ---------- Auth ----------
 def login_required(f):
     @wraps(f)
@@ -30,6 +31,7 @@ def login_required(f):
             return redirect(url_for("login"))
         return f(*args, **kwargs)
     return decorated
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -44,10 +46,12 @@ def login():
         flash("Invalid username or password", "error")
     return render_template("login.html")
 
+
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("login"))
+
 
 # ---------- Google Sheets Helpers ----------
 def get_sheets_service():
@@ -57,89 +61,32 @@ def get_sheets_service():
     )
     return build("sheets", "v4", credentials=creds)
 
+
 def sanitize_sheet_title(filename: str) -> str:
     name = os.path.splitext(filename)[0]
     name = re.sub(r"[^\w\s\-]", "", name)[:80].strip()
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     return f"{name}_{timestamp}"[:100]
 
-def get_or_create_database_tab(service, sheet_id: str) -> str:
-    meta = service.spreadsheets().get(spreadsheetId=sheet_id).execute()
-    existing_titles = [s["properties"]["title"] for s in meta.get("sheets", [])]
-
-    if "Database" in existing_titles:
-        return "Database"
-
-    body = {
-        "requests": [{
-            "addSheet": {
-                "properties": {"title": "Database"}
-            }
-        }]
-    }
-    service.spreadsheets().batchUpdate(spreadsheetId=sheet_id, body=body).execute()
-
-    service.spreadsheets().values().update(
-        spreadsheetId=sheet_id,
-        range="'Database'!A1",
-        valueInputOption="RAW",
-        body={"values": [["Phone"]]}
-    ).execute()
-    return "Database"
-
-def append_phones_to_database(service, sheet_id: str, phones: set):
-    if not phones:
-        return
-
-    result = service.spreadsheets().values().get(
-        spreadsheetId=sheet_id,
-        range="'Database'!A:A"
-    ).execute()
-    values = result.get("values", [])
-
-    existing = set()
-    for row in values[1:]:
-        if row and str(row[0]).strip():
-            cleaned = re.sub(r"\D", "", str(row[0]))
-            if cleaned:
-                existing.add(cleaned)
-
-    new_phones = sorted(phones - existing)
-    if not new_phones:
-        return
-
-    body = {"values": [[p] for p in new_phones]}
-    service.spreadsheets().values().append(
-        spreadsheetId=sheet_id,
-        range="'Database'!A:A",
-        valueInputOption="RAW",
-        insertDataOption="INSERT_ROWS",
-        body=body
-    ).execute()
 
 def fetch_sold_phones(service, sheet_id: str) -> set:
     """Fetch phone numbers from the FIRST sheet only."""
     result = service.spreadsheets().values().get(
         spreadsheetId=sheet_id,
-        range="A:Z"          # first sheet
+        range="A:Z"
     ).execute()
     values = result.get("values", [])
     if not values:
         return set()
 
-    # Try to find a phone-like header
     header = [str(h).strip().lower() for h in values[0]]
-    phone_idx = None
-    possible = ["phone", "phone number", "phone_number", "mobile", "cell", "telephone", "contact"]
+    phone_idx = 0
 
+    possible = ["phone", "phone number", "phone_number", "mobile", "cell", "telephone", "contact"]
     for i, h in enumerate(header):
         if any(p in h for p in possible):
             phone_idx = i
             break
-
-    # If no header found, assume first column is phone
-    if phone_idx is None:
-        phone_idx = 0
 
     phones = set()
     for row in values[1:]:
@@ -149,29 +96,51 @@ def fetch_sold_phones(service, sheet_id: str) -> set:
                 phones.add(cleaned)
     return phones
 
+
 def create_log_tab(service, sheet_id: str, title: str, df: pd.DataFrame):
+    """Create a new tab and write the full uploaded file into it."""
+    # 1. Create the new sheet
     body = {
         "requests": [{
             "addSheet": {
-                "properties": {"title": title}
+                "properties": {
+                    "title": title
+                }
             }
         }]
     }
-    service.spreadsheets().batchUpdate(spreadsheetId=sheet_id, body=body).execute()
+    service.spreadsheets().batchUpdate(
+        spreadsheetId=sheet_id,
+        body=body
+    ).execute()
 
-    values = [df.columns.tolist()] + df.astype(str).fillna("").values.tolist()
+    # 2. Prepare data (header + all rows)
+    values = [df.columns.tolist()]
+    for row in df.values.tolist():
+        clean_row = []
+        for cell in row:
+            if pd.isna(cell):
+                clean_row.append("")
+            else:
+                clean_row.append(str(cell))
+        values.append(clean_row)
+
+    # 3. Write the data
+    safe_title = title.replace("'", "''")
     service.spreadsheets().values().update(
         spreadsheetId=sheet_id,
-        range=f"'{title}'!A1",
+        range=f"'{safe_title}'!A1",
         valueInputOption="RAW",
         body={"values": values}
     ).execute()
+
 
 # ---------- Main Routes ----------
 @app.route("/")
 @login_required
 def dashboard():
     return render_template("dashboard.html")
+
 
 @app.route("/process", methods=["POST"])
 @login_required
@@ -240,11 +209,11 @@ def process_file():
         good_df = df[mask_good].drop(columns=["_normalized_phone"])
         bad_df = df[~mask_good].drop(columns=["_normalized_phone"])
 
-        # 1. Create history tab only
+        # Create new tab with full file (only this, nothing is written to first sheet)
         tab_title = sanitize_sheet_title(filename)
         create_log_tab(service, sheet_id, tab_title, df.drop(columns=["_normalized_phone"]))
 
-        # 2. Save temporary CSV files for download
+        # Save temporary CSV files for download
         unique_id = str(uuid.uuid4())[:8]
         good_path = os.path.join("temp_downloads", f"good_{unique_id}.csv")
         bad_path = os.path.join("temp_downloads", f"bad_{unique_id}.csv")
@@ -267,6 +236,7 @@ def process_file():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
+
 @app.route("/download/<kind>")
 @login_required
 def download(kind):
@@ -285,6 +255,7 @@ def download(kind):
         as_attachment=True,
         download_name=filename
     )
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
