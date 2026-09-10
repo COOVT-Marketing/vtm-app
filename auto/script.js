@@ -1,128 +1,359 @@
-const _0x4f2a=['APPS_SCRIPT_URL','https://script.google.com/macros/s/AKfycbwZo2WecH8AbJ2rx6-YM7nVzO6D7l7Qn8tMmYQdVMopnIyuCy3SkfZibVS5ibHFtces-w/exec','COMPANY_MAP','CAMPAIGN_A','SecureDrive Insurance','CAMPAIGN_B','Vocal Tech Marketing','DEFAULT','','US_STATES','AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','ALIASES','agentName','fullname','agent_name','agent','user','phone','phone_number','phonenumber','phone_code','first','first_name','fname','last','last_name','lname','age','state','zip','postal','postal_code','zipcode','dob','birthdate','d_o_b','company','vendor','campaign','campaign_id','did','did_id','inbound_number','comments','notes','comment','getParam','URLSearchParams','location','search','trim','isLiveCall','some','get','boot','renderNoCall','renderPage','normalizePhone','replace','slice','runComplianceCheck','showStatusBanner','loading','Running DNC / Duplicate / BLA checks…','fetch','POST','Content-Type','text/plain;charset=utf-8','stringify','action','checkCompliance','json','success','blocked','reason','Do Not Transfer — ','fillFormBtn','classList','add','hidden','clean','Lead verified — Clean (Internal DNC, Duplicate & BLA clear)','remove','error','Network error during compliance check. Do not proceed without manual verification.','getElementById','statusBanner','className','status-banner\x20','innerHTML','status-icon','ti\x20ti-circle-check','ti\x20ti-ban','ti\x20ti-loader','ti\x20ti-alert-triangle','status-text','display','flex','showSaleForm','saleFormSection','no-call-screen','no-call-icon','ti\x20ti-phone-off','No\x20webform\x20found','vtm-card','vtm-header','vtm-logo','ti\x20ti-headset','vtm-header-txt','Sale\x20Form','Vocal\x20Tech\x20Marketing\x20·\x20Auto','live-badge','live-dot','Live\x20call','btn-fill-form','ti\x20ti-forms','Fill\x20the\x20Sale\x20Form','onclick','section-label','Agent\x20Information','field-grid','full','field-group','label','for','Agent\x20Name','input-wrap','ti\x20ti-id','type','text','id','placeholder','Agent\x20Name\x20/\x20ID','DID','ti\x20ti-hash','e.g.\x20D1','Customer\x20Information','First\x20name','ti\x20ti-user','Last\x20name','Phone\x20number','ti\x20ti-phone','tel','10-digit\x20number','State','ti\x20ti-map-pin','select','option','value','Select\x20state','Age','ti\x20ti-calendar-event','number','min','0','max','120','Agent\x20Notes','Comments','textarea-wrap','ti\x20ti-notes','textarea','Comments…','btn-row','btn-secondary','clearSaleForm','ti\x20ti-refresh','Clear','btn-primary','submitBtn','submitSaleForm','ti\x20ti-device-floppy','Submit\x20Sale','success-toast','successToast','ti\x20ti-circle-check','Sale\x20submitted\x20successfully!','error-toast','errorToast','ti\x20ti-alert-circle','Submission\x20failed.\x20Check\x20your\x20connection\x20and\x20try\x20again.','autoFill','setStateByValue','toLowerCase','options','text','classList','auto-filled','clearSaleForm','forEach','value','remove','none','innerHTML','ti\x20ti-loader','Submitting…','disabled','true','payload','submissionType','AUTO_SALE_FORM','agentName','firstName','lastName','phone','age','state','zip','dob','company','campaign','did','comments','then','history','replaceState','pathname','modal-overlay','show','successModal','modal-box','modal-icon','modal-title','Sale\x20Submitted','modal-sub','Successfully\x20recorded.','modal-close','closeSaleAndExit','Okay','catch','insertAdjacentHTML','beforeend','querySelector','span','remove','insertAdjacentHTML','beforeend','closeSaleAndExit','remove','renderNoCall'];
-(function(_0x2e8c1f,_0x4f2a4e){const _0x3b7d=function(_0x5a1b2c){while(--_0x5a1b2c){_0x2e8c1f['push'](_0x2e8c1f['shift']());}};_0x3b7d(++_0x4f2a4e);}(_0x4f2a,0x1a3));
-const _0x3b7d=function(_0x2e8c1f,_0x4f2a4e){_0x2e8c1f=_0x2e8c1f-0x0;let _0x3b7d8a=_0x4f2a[_0x2e8c1f];return _0x3b7d8a;};
-const APPS_SCRIPT_URL=_0x3b7d('0x0');
-const COMPANY_MAP={[_0x3b7d('0x3')]:_0x3b7d('0x4'),[_0x3b7d('0x5')]:_0x3b7d('0x6'),[_0x3b7d('0x7')]:_0x3b7d('0x8')};
-const US_STATES=[_0x3b7d('0xa'),_0x3b7d('0xb'),_0x3b7d('0xc'),_0x3b7d('0xd'),_0x3b7d('0xe'),_0x3b7d('0xf'),_0x3b7d('0x10'),_0x3b7d('0x11'),_0x3b7d('0x12'),_0x3b7d('0x13'),_0x3b7d('0x14'),_0x3b7d('0x15'),_0x3b7d('0x16'),_0x3b7d('0x17'),_0x3b7d('0x18'),_0x3b7d('0x19'),_0x3b7d('0x1a'),_0x3b7d('0x1b'),_0x3b7d('0x1c'),_0x3b7d('0x1d'),_0x3b7d('0x1e'),_0x3b7d('0x1f'),_0x3b7d('0x20'),_0x3b7d('0x21'),_0x3b7d('0x22'),_0x3b7d('0x23'),_0x3b7d('0x24'),_0x3b7d('0x25'),_0x3b7d('0x26'),_0x3b7d('0x27'),_0x3b7d('0x28'),_0x3b7d('0x29'),_0x3b7d('0x2a'),_0x3b7d('0x2b'),_0x3b7d('0x2c'),_0x3b7d('0x2d'),_0x3b7d('0x2e'),_0x3b7d('0x2f'),_0x3b7d('0x30'),_0x3b7d('0x31'),_0x3b7d('0x32'),_0x3b7d('0x33'),_0x3b7d('0x34'),_0x3b7d('0x35'),_0x3b7d('0x36'),_0x3b7d('0x37'),_0x3b7d('0x38'),_0x3b7d('0x39'),_0x3b7d('0x3a'),_0x3b7d('0x3b')];
-const ALIASES={[_0x3b7d('0x3d')]:[_0x3b7d('0x3e'),_0x3b7d('0x3d'),_0x3b7d('0x3f'),_0x3b7d('0x40'),_0x3b7d('0x41')],[_0x3b7d('0x42')]:[_0x3b7d('0x42'),_0x3b7d('0x43'),_0x3b7d('0x44'),_0x3b7d('0x45')],[_0x3b7d('0x46')]:[_0x3b7d('0x46'),_0x3b7d('0x47'),_0x3b7d('0x48')],[_0x3b7d('0x49')]:[_0x3b7d('0x49'),_0x3b7d('0x4a'),_0x3b7d('0x4b')],[_0x3b7d('0x4c')]:[_0x3b7d('0x4c')],[_0x3b7d('0x4d')]:[_0x3b7d('0x4d')],[_0x3b7d('0x4e')]:[_0x3b7d('0x4e'),_0x3b7d('0x4f'),_0x3b7d('0x50'),_0x3b7d('0x51')],[_0x3b7d('0x52')]:[_0x3b7d('0x52'),_0x3b7d('0x53'),_0x3b7d('0x54')],[_0x3b7d('0x55')]:[_0x3b7d('0x55'),_0x3b7d('0x56')],[_0x3b7d('0x57')]:[_0x3b7d('0x57'),_0x3b7d('0x58')],[_0x3b7d('0x59')]:[_0x3b7d('0x59'),_0x3b7d('0x5a'),_0x3b7d('0x5b')],[_0x3b7d('0x5c')]:[_0x3b7d('0x5c'),_0x3b7d('0x5d'),_0x3b7d('0x5e')]};
-function getParam(_0x1a2b3c){const _0x4d5e6f=new URLSearchParams(window[_0x3b7d('0x61')][_0x3b7d('0x62')]);for(const _0x7g8h9i of(ALIASES[_0x1a2b3c]||[_0x1a2b3c])){const _0x0j1k2l=_0x4d5e6f[_0x3b7d('0x66')](_0x7g8h9i);if(_0x0j1k2l&&_0x0j1k2l[_0x3b7d('0x63')]())return _0x0j1k2l[_0x3b7d('0x63')]();}return'';}
-function isLiveCall(){const _0x4d5e6f=new URLSearchParams(window[_0x3b7d('0x61')][_0x3b7d('0x62')]);return[_0x3b7d('0x42'),_0x3b7d('0x43'),_0x3b7d('0x44'),_0x3b7d('0x46'),_0x3b7d('0x47'),_0x3b7d('0x49'),_0x3b7d('0x4a'),_0x3b7d('0x57')][_0x3b7d('0x65')](_0x1m2n3o=>_0x4d5e6f[_0x3b7d('0x66')](_0x1m2n3o));}
-function normalizePhone(_0x2p3q4r){if(!_0x2p3q4r)return'';return String(_0x2p3q4r)[_0x3b7d('0x6b')](/\D/g,'')[_0x3b7d('0x6c')](-0xa);}
-function boot(){if(!isLiveCall()){renderNoCall();return;}renderPage();const _0x5s6t7u=normalizePhone(getParam(_0x3b7d('0x42')));if(_0x5s6t7u&&_0x5s6t7u['length']===0xa){runComplianceCheck(_0x5s6t7u);}else{showStatusBanner(_0x3b7d('0x85'),'No valid phone number detected in URL. Manual check required.');}}
-async function runComplianceCheck(_0x8v9w0x){showStatusBanner(_0x3b7d('0x6e'),_0x3b7d('0x6f'));try{const _0x1y2z3a=await fetch(APPS_SCRIPT_URL,{method:_0x3b7d('0x71'),headers:{[_0x3b7d('0x72')]:_0x3b7d('0x73')},body:JSON[_0x3b7d('0x74')]({[_0x3b7d('0x75')]:_0x3b7d('0x76'),[_0x3b7d('0x42')]:_0x8v9w0x})});const _0x4b5c6d=await _0x1y2z3a[_0x3b7d('0x77')]();if(!_0x4b5c6d[_0x3b7d('0x78')]){showStatusBanner(_0x3b7d('0x85'),_0x4b5c6d['message']||'Compliance check failed');return;}if(_0x4b5c6d[_0x3b7d('0x79')]){const _0x7e8f9g=_0x4b5c6d[_0x3b7d('0x7a')]||'Restricted';showStatusBanner('blocked',_0x3b7d('0x7b')+_0x7e8f9g);document[_0x3b7d('0x86')](_0x3b7d('0x7c'))?.[_0x3b7d('0x7d')][_0x3b7d('0x7e')](_0x3b7d('0x7f'));}else{showStatusBanner(_0x3b7d('0x80'),_0x3b7d('0x81'));document[_0x3b7d('0x86')](_0x3b7d('0x7c'))?.[_0x3b7d('0x7d')][_0x3b7d('0x82')](_0x3b7d('0x7f'));}}catch(_0x0h1i2j){console['error'](_0x0h1i2j);showStatusBanner(_0x3b7d('0x85'),_0x3b7d('0x84'));}}
-function showStatusBanner(_0x3k4l5m,_0x6n7o8p){const _0x9q0r1s=document[_0x3b7d('0x86')](_0x3b7d('0x87'));if(!_0x9q0r1s)return;_0x9q0r1s[_0x3b7d('0x88')]=_0x3b7d('0x89')+_0x3k4l5m;_0x9q0r1s[_0x3b7d('0x8a')]=`<div class="${_0x3b7d('0x8b')}"><i class="${_0x3k4l5m===_0x3b7d('0x80')?_0x3b7d('0x8c'):_0x3k4l5m==='blocked'?_0x3b7d('0x8d'):_0x3k4l5m===_0x3b7d('0x6e')?_0x3b7d('0x8e'):_0x3b7d('0x8f')}"></i></div><div class="${_0x3b7d('0x90')}">${_0x6n7o8p}</div>`;_0x9q0r1s['style'][_0x3b7d('0x91')]=_0x3b7d('0x92');}
-function showSaleForm(){const _0x2t3u4v=document[_0x3b7d('0x86')](_0x3b7d('0x94'));const _0x5w6x7y=document[_0x3b7d('0x86')](_0x3b7d('0x7c'));if(_0x2t3u4v)_0x2t3u4v[_0x3b7d('0x7d')][_0x3b7d('0x82')](_0x3b7d('0x7f'));if(_0x5w6x7y)_0x5w6x7y[_0x3b7d('0x7d')][_0x3b7d('0x7e')](_0x3b7d('0x7f'));}
-function renderNoCall(){document[_0x3b7d('0x86')]('app')[_0x3b7d('0x8a')]=`<div class="${_0x3b7d('0x95')}"><div class="${_0x3b7d('0x96')}"><i class="${_0x3b7d('0x97')}"></i></div><h2>${_0x3b7d('0x98')}</h2></div>`;}
-function renderPage(){const _0x8z9a0b=getParam(_0x3b7d('0x42'));const _0x1c2d3e=getParam(_0x3b7d('0x57'));const _0x4f5g6h=getParam(_0x3b7d('0x55'));const _0x7i8j9k=_0x4f5g6h||COMPANY_MAP[_0x1c2d3e]||COMPANY_MAP[_0x3b7d('0x7')];const _0x0l1m2n=US_STATES['map'](_0x3o4p5q=>`<option>${_0x3o4p5q}</option>`)['join']('');document[_0x3b7d('0x86')]('app')[_0x3b7d('0x8a')]=`
-<div class="${_0x3b7d('0x99')}">
-  <div class="${_0x3b7d('0x9a')}">
-    <div class="${_0x3b7d('0x9b')}"><i class="${_0x3b7d('0x9c')}"></i></div>
-    <div class="${_0x3b7d('0x9d')}"><h1>${_0x3b7d('0x9e')}</h1><p>${_0x3b7d('0x9f')}</p></div>
-    <div class="${_0x3b7d('0xa0')}"><div class="${_0x3b7d('0xa1')}"></div>${_0x3b7d('0xa2')}</div>
-  </div>
-  <div id="statusBanner" class="status-banner loading" style="display:none;"></div>
-  <div class="sale-form-inner">
-    <button id="${_0x3b7d('0x7c')}" class="${_0x3b7d('0xa3')} ${_0x3b7d('0x7f')}" onclick="showSaleForm()">
-      <i class="${_0x3b7d('0xa4')}"></i> ${_0x3b7d('0xa5')}
-    </button>
-    <div id="${_0x3b7d('0x94')}" class="${_0x3b7d('0x7f')}">
-      <input type="hidden" id="campaign" />
-      <input type="hidden" id="company" value="${_0x7i8j9k}" />
-      <input type="hidden" id="zip" />
-      <input type="hidden" id="dob" />
-      <div class="${_0x3b7d('0xa7')}">${_0x3b7d('0xa8')}</div>
-      <div class="${_0x3b7d('0xa9')} ${_0x3b7d('0xaa')}">
-        <div class="${_0x3b7d('0xab')}">
-          <label for="${_0x3b7d('0x3d')}">${_0x3b7d('0xad')}</label>
-          <div class="${_0x3b7d('0xae')}"><i class="${_0x3b7d('0xaf')}"></i>
-            <input type="${_0x3b7d('0xb0')}" id="${_0x3b7d('0x3d')}" placeholder="${_0x3b7d('0xb3')}" />
-          </div>
-        </div>
-      </div>
-      <div class="${_0x3b7d('0xa9')} ${_0x3b7d('0xaa')}">
-        <div class="${_0x3b7d('0xab')}">
-          <label for="${_0x3b7d('0x59')}">${_0x3b7d('0xb4')}</label>
-          <div class="${_0x3b7d('0xae')}"><i class="${_0x3b7d('0xb5')}"></i>
-            <input type="${_0x3b7d('0xb0')}" id="${_0x3b7d('0x59')}" placeholder="${_0x3b7d('0xb6')}" />
-          </div>
-        </div>
-      </div>
-      <div class="${_0x3b7d('0xa7')}">${_0x3b7d('0xb7')}</div>
-      <div class="${_0x3b7d('0xa9')}">
-        <div class="${_0x3b7d('0xab')}">
-          <label for="firstName">${_0x3b7d('0xb8')}</label>
-          <div class="${_0x3b7d('0xae')}"><i class="${_0x3b7d('0xb9')}"></i>
-            <input type="${_0x3b7d('0xb0')}" id="firstName" placeholder="${_0x3b7d('0xb8')}" />
-          </div>
-        </div>
-        <div class="${_0x3b7d('0xab')}">
-          <label for="lastName">${_0x3b7d('0xba')}</label>
-          <div class="${_0x3b7d('0xae')}"><i class="${_0x3b7d('0xb9')}"></i>
-            <input type="${_0x3b7d('0xb0')}" id="lastName" placeholder="${_0x3b7d('0xba')}" />
-          </div>
-        </div>
-      </div>
-      <div class="${_0x3b7d('0xa9')}">
-        <div class="${_0x3b7d('0xab')}">
-          <label for="${_0x3b7d('0x42')}">${_0x3b7d('0xbb')}</label>
-          <div class="${_0x3b7d('0xae')}"><i class="${_0x3b7d('0xbc')}"></i>
-            <input type="${_0x3b7d('0xbd')}" id="${_0x3b7d('0x42')}" placeholder="${_0x3b7d('0xbe')}" />
-          </div>
-        </div>
-        <div class="${_0x3b7d('0xab')}">
-          <label for="${_0x3b7d('0x4d')}">${_0x3b7d('0xbf')}</label>
-          <div class="${_0x3b7d('0xae')}"><i class="${_0x3b7d('0xc0')}"></i>
-            <select id="${_0x3b7d('0x4d')}"><option value="">${_0x3b7d('0xc3')}</option>${_0x0l1m2n}</select>
-          </div>
-        </div>
-      </div>
-      <div class="${_0x3b7d('0xa9')} ${_0x3b7d('0xaa')}">
-        <div class="${_0x3b7d('0xab')}">
-          <label for="${_0x3b7d('0x4c')}">${_0x3b7d('0xc4')}</label>
-          <div class="${_0x3b7d('0xae')}"><i class="${_0x3b7d('0xc5')}"></i>
-            <input type="${_0x3b7d('0xc6')}" id="${_0x3b7d('0x4c')}" placeholder="${_0x3b7d('0xc4')}" min="${_0x3b7d('0xc8')}" max="${_0x3b7d('0xca')}" />
-          </div>
-        </div>
-      </div>
-      <div class="${_0x3b7d('0xa7')}">${_0x3b7d('0xcb')}</div>
-      <div class="${_0x3b7d('0xab')}" style="margin-bottom:0">
-        <label for="${_0x3b7d('0x5c')}">${_0x3b7d('0xcc')}</label>
-        <div class="${_0x3b7d('0xcd')}"><i class="${_0x3b7d('0xce')}"></i>
-          <textarea id="${_0x3b7d('0x5c')}" placeholder="${_0x3b7d('0xd0')}"></textarea>
-        </div>
-      </div>
-      <div class="${_0x3b7d('0xd1')}">
-        <button class="${_0x3b7d('0xd2')}" onclick="${_0x3b7d('0xd3')}()">
-          <i class="${_0x3b7d('0xd4')}"></i> ${_0x3b7d('0xd5')}
-        </button>
-        <button class="${_0x3b7d('0xd6')}" id="${_0x3b7d('0xd7')}" onclick="${_0x3b7d('0xd8')}()">
-          <i class="${_0x3b7d('0xd9')}"></i> ${_0x3b7d('0xda')}
-        </button>
-      </div>
-      <div class="${_0x3b7d('0xdb')}" id="${_0x3b7d('0xdc')}">
-        <i class="${_0x3b7d('0xdd')}"></i> ${_0x3b7d('0xde')}
-      </div>
-      <div class="${_0x3b7d('0xdf')}" id="${_0x3b7d('0xe0')}">
-        <i class="${_0x3b7d('0xe1')}"></i> ${_0x3b7d('0xe2')}
-      </div>
-    </div>
-  </div>
-</div>`;
-  autoFill(_0x3b7d('0x3d'),getParam(_0x3b7d('0x3d')));
-  autoFill(_0x3b7d('0x42'),_0x8z9a0b);
-  autoFill('firstName',getParam(_0x3b7d('0x46')));
-  autoFill('lastName',getParam(_0x3b7d('0x49')));
-  autoFill(_0x3b7d('0x4c'),getParam(_0x3b7d('0x4c')));
-  autoFill(_0x3b7d('0x4e'),getParam(_0x3b7d('0x4e')));
-  autoFill(_0x3b7d('0x52'),getParam(_0x3b7d('0x52')));
-  autoFill(_0x3b7d('0x57'),_0x1c2d3e);
-  autoFill(_0x3b7d('0x59'),getParam(_0x3b7d('0x59')));
-  autoFill(_0x3b7d('0x5c'),getParam(_0x3b7d('0x5c')));
-  setStateByValue(getParam(_0x3b7d('0x4d')));
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZo2WecH8AbJ2rx6-YM7nVzO6D7l7Qn8tMmYQdVMopnIyuCy3SkfZibVS5ibHFtces-w/exec';
+
+const COMPANY_MAP = {
+  'CAMPAIGN_A': 'SecureDrive Insurance',
+  'CAMPAIGN_B': 'Vocal Tech Marketing',
+  'DEFAULT': ''
+};
+
+const US_STATES = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"];
+
+const ALIASES = {
+  agentName: ['fullname','agentName','agent_name','agent','user'],
+  phone: ['phone','phone_number','phonenumber','phone_code'],
+  first: ['first','first_name','fname'],
+  last: ['last','last_name','lname'],
+  age: ['age'],
+  state: ['state'],
+  zip: ['zip','postal','postal_code','zipcode'],
+  dob: ['dob','birthdate','d_o_b'],
+  company: ['company','vendor'],
+  campaign: ['campaign','campaign_id'],
+  did: ['did','did_id','inbound_number'],
+  comments: ['comments','notes','comment'],
+};
+
+function getParam(name) {
+  const params = new URLSearchParams(window.location.search);
+  for (const k of (ALIASES[name] || [name])) {
+    const v = params.get(k);
+    if (v && v.trim()) return v.trim();
+  }
+  return '';
 }
-function autoFill(_0x3r4s5t,_0x6u7v8w){const _0x9x0y1z=document[_0x3b7d('0x86')](_0x3r4s5t);if(!_0x9x0y1z||!_0x6u7v8w)return;_0x9x0y1z[_0x3b7d('0xe7')]=_0x6u7v8w;if(_0x9x0y1z[_0x3b7d('0xb1')]!=='hidden')_0x9x0y1z[_0x3b7d('0x7d')][_0x3b7d('0x7e')](_0x3b7d('0xe6'));}
-function setStateByValue(_0x2a3b4c){if(!_0x2a3b4c)return;const _0x5d6e7f=document[_0x3b7d('0x86')](_0x3b7d('0x4d'));if(!_0x5d6e7f)return;for(const _0x8g9h0i of _0x5d6e7f[_0x3b7d('0xe4')]){if(_0x8g9h0i[_0x3b7d('0xc2')][_0x3b7d('0xe3')]()===_0x2a3b4c[_0x3b7d('0xe3')]()||_0x8g9h0i[_0x3b7d('0xe5')][_0x3b7d('0xe3')]()===_0x2a3b4c[_0x3b7d('0xe3')]()){_0x5d6e7f[_0x3b7d('0xe7')]=_0x8g9h0i[_0x3b7d('0xc2')];_0x5d6e7f[_0x3b7d('0x7d')][_0x3b7d('0x7e')](_0x3b7d('0xe6'));break;}}}
-function clearSaleForm(){[_0x3b7d('0x3d'),'firstName','lastName',_0x3b7d('0x42'),_0x3b7d('0x4c'),_0x3b7d('0x4d'),_0x3b7d('0x4e'),_0x3b7d('0x52'),_0x3b7d('0x55'),_0x3b7d('0x57'),_0x3b7d('0x59'),_0x3b7d('0x5c')][_0x3b7d('0xe8')](_0x1j2k3l=>{const _0x4m5n6o=document[_0x3b7d('0x86')](_0x1j2k3l);if(_0x4m5n6o){_0x4m5n6o[_0x3b7d('0xe7')]='';_0x4m5n6o[_0x3b7d('0x7d')][_0x3b7d('0xe9')](_0x3b7d('0xe6'));}});document[_0x3b7d('0x86')](_0x3b7d('0xdc'))['style'][_0x3b7d('0x91')]=_0x3b7d('0xea');document[_0x3b7d('0x86')](_0x3b7d('0xe0'))['style'][_0x3b7d('0x91')]=_0x3b7d('0xea');}
-async function submitSaleForm(){const _0x7p8q9r=document[_0x3b7d('0x86')](_0x3b7d('0xd7'));const _0x0s1t2u=document[_0x3b7d('0x86')](_0x3b7d('0xdc'));const _0x3v4w5x=document[_0x3b7d('0x86')](_0x3b7d('0xe0'));_0x0s1t2u['style'][_0x3b7d('0x91')]=_0x3b7d('0xea');_0x3v4w5x['style'][_0x3b7d('0x91')]=_0x3b7d('0xea');_0x7p8q9r[_0x3b7d('0x8a')]=`<i class="${_0x3b7d('0xeb')}"></i> ${_0x3b7d('0xec')}`;_0x7p8q9r[_0x3b7d('0xed')]=true;const _0x6y7z8a={[_0x3b7d('0xef')]:_0x3b7d('0xf0'),[_0x3b7d('0x3d')]:document[_0x3b7d('0x86')](_0x3b7d('0x3d'))[_0x3b7d('0xe7')],[_0x3b7d('0x42')]:document[_0x3b7d('0x86')](_0x3b7d('0x42'))[_0x3b7d('0xe7')],[_0x3b7d('0xf1')]:document[_0x3b7d('0x86')]('firstName')[_0x3b7d('0xe7')],[_0x3b7d('0xf2')]:document[_0x3b7d('0x86')]('lastName')[_0x3b7d('0xe7')],[_0x3b7d('0x4c')]:document[_0x3b7d('0x86')](_0x3b7d('0x4c'))[_0x3b7d('0xe7')],[_0x3b7d('0x4d')]:document[_0x3b7d('0x86')](_0x3b7d('0x4d'))[_0x3b7d('0xe7')],[_0x3b7d('0x4e')]:document[_0x3b7d('0x86')](_0x3b7d('0x4e'))[_0x3b7d('0xe7')],[_0x3b7d('0x52')]:document[_0x3b7d('0x86')](_0x3b7d('0x52'))[_0x3b7d('0xe7')],[_0x3b7d('0x55')]:document[_0x3b7d('0x86')](_0x3b7d('0x55'))[_0x3b7d('0xe7')],[_0x3b7d('0x57')]:document[_0x3b7d('0x86')](_0x3b7d('0x57'))[_0x3b7d('0xe7')],[_0x3b7d('0x59')]:document[_0x3b7d('0x86')](_0x3b7d('0x59'))[_0x3b7d('0xe7')],[_0x3b7d('0x5c')]:document[_0x3b7d('0x86')](_0x3b7d('0x5c'))[_0x3b7d('0xe7')]};try{const _0x9b0c1d=await fetch(APPS_SCRIPT_URL,{method:_0x3b7d('0x71'),headers:{[_0x3b7d('0x72')]:_0x3b7d('0x73')},body:JSON[_0x3b7d('0x74')](_0x6y7z8a)});const _0x2e3f4g=await _0x9b0c1d[_0x3b7d('0x77')]();if(_0x2e3f4g['status']===_0x3b7d('0x78')||_0x2e3f4g[_0x3b7d('0x78')]){window[_0x3b7d('0xf4')][_0x3b7d('0xf5')]({},'',window[_0x3b7d('0x61')][_0x3b7d('0xf6')]);const _0x5h6i7j=`<div class="${_0x3b7d('0xf7')} ${_0x3b7d('0xf8')}" id="${_0x3b7d('0xf9')}"><div class="${_0x3b7d('0xfa')}"><div class="${_0x3b7d('0xfb')}"><i class="${_0x3b7d('0x8c')}"></i></div><h2 class="${_0x3b7d('0xfc')}">${_0x3b7d('0xfd')}</h2><p class="${_0x3b7d('0xfe')}">${_0x3b7d('0xff')}</p><button class="${_0x3b7d('0x100')}" onclick="${_0x3b7d('0x101')}()">${_0x3b7d('0x102')}</button></div></div>`;document['body'][_0x3b7d('0x104')](_0x3b7d('0x105'),_0x5h6i7j);}else{throw new Error(_0x2e3f4g['message']||'Submission failed');}}catch(_0x8k9l0m){_0x7p8q9r[_0x3b7d('0x8a')]=`<i class="${_0x3b7d('0xd9')}"></i> ${_0x3b7d('0xda')}`;_0x7p8q9r[_0x3b7d('0xed')]=false;_0x3v4w5x['style'][_0x3b7d('0x91')]=_0x3b7d('0x92');}}
-function closeSaleAndExit(){const _0x1n2o3p=document[_0x3b7d('0x86')](_0x3b7d('0xf9'));if(_0x1n2o3p)_0x1n2o3p[_0x3b7d('0x107')]();renderNoCall();}
+
+function isLiveCall() {
+  const params = new URLSearchParams(window.location.search);
+  return ['phone','phone_number','phonenumber','first','first_name','last','last_name','campaign']
+    .some(p => params.get(p));
+}
+
+function normalizePhone(raw) {
+  if (!raw) return '';
+  return String(raw).replace(/\D/g, '').slice(-10);
+}
+
+/* ---------- Boot ---------- */
+function boot() {
+  if (!isLiveCall()) {
+    renderNoCall();
+    return;
+  }
+  renderPage();
+  const phone = normalizePhone(getParam('phone'));
+  if (phone && phone.length === 10) {
+    runComplianceCheck(phone);
+  } else {
+    showStatusBanner('warning', 'No valid phone number detected in URL. Manual check required.');
+  }
+}
+
+/* ---------- Compliance Check ---------- */
+async function runComplianceCheck(phone) {
+  showStatusBanner('loading', 'Running DNC / Duplicate / BLA checks…');
+
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        action: 'checkCompliance',
+        phone: phone
+      })
+    });
+
+    const data = await res.json();
+
+    if (!data.success) {
+      showStatusBanner('error', data.message || data.reason || 'Compliance check failed');
+      return;
+    }
+
+    if (data.blocked) {
+      const reason = data.reason || 'Restricted';
+      showStatusBanner('blocked', `Do Not Transfer — ${reason}`);
+      // Keep the Fill Form button hidden
+      const btn = document.getElementById('fillFormBtn');
+      if (btn) btn.classList.add('hidden');
+    } else {
+      showStatusBanner('clean', 'Lead verified — Clean (Internal DNC, Duplicate & BLA clear)');
+      const btn = document.getElementById('fillFormBtn');
+      if (btn) btn.classList.remove('hidden');
+    }
+  } catch (err) {
+    console.error(err);
+    showStatusBanner('error', 'Network error during compliance check. Do not proceed without manual verification.');
+  }
+}
+
+/* ---------- UI Helpers ---------- */
+function showStatusBanner(type, message) {
+  const banner = document.getElementById('statusBanner');
+  if (!banner) return;
+
+  banner.className = 'status-banner ' + type;
+  banner.innerHTML = `
+    <div class="status-icon">
+      ${type === 'clean' ? '<i class="ti ti-circle-check"></i>' :
+        type === 'blocked' ? '<i class="ti ti-ban"></i>' :
+        type === 'loading' ? '<i class="ti ti-loader"></i>' :
+        '<i class="ti ti-alert-triangle"></i>'}
+    </div>
+    <div class="status-text">${message}</div>
+  `;
+  banner.style.display = 'flex';
+}
+
+function showSaleForm() {
+  const form = document.getElementById('saleFormSection');
+  const btn = document.getElementById('fillFormBtn');
+  if (form) form.classList.remove('hidden');
+  if (btn) btn.classList.add('hidden');
+}
+
+/* ---------- Render ---------- */
+function renderNoCall() {
+  document.getElementById('app').innerHTML = `
+    <div class="no-call-screen">
+      <div class="no-call-icon"><i class="ti ti-phone-off"></i></div>
+      <h2>No webform found</h2>
+    </div>`;
+}
+
+function renderPage() {
+  const phone = getParam('phone');
+  const campaignParam = getParam('campaign');
+  const urlCompany = getParam('company');
+  const detectedCompany = urlCompany || COMPANY_MAP[campaignParam] || COMPANY_MAP['DEFAULT'];
+  const stateOptions = US_STATES.map(s => `<option>${s}</option>`).join('');
+
+  document.getElementById('app').innerHTML = `
+    <div class="vtm-card">
+      <div class="vtm-header">
+        <div class="vtm-logo"><i class="ti ti-headset"></i></div>
+        <div class="vtm-header-txt">
+          <h1>Sale Form</h1>
+          <p>Vocal Tech Marketing · Auto</p>
+        </div>
+        <div class="live-badge"><div class="live-dot"></div>Live call</div>
+      </div>
+
+      <!-- STATUS BANNER -->
+      <div id="statusBanner" class="status-banner loading" style="display:none;"></div>
+
+      <div class="sale-form-inner">
+        <!-- Single Toggle Button -->
+        <button id="fillFormBtn" class="btn-fill-form hidden" onclick="showSaleForm()">
+          <i class="ti ti-forms"></i> Fill the Sale Form
+        </button>
+
+        <!-- HIDDEN SALE FORM -->
+        <div id="saleFormSection" class="hidden">
+          <input type="hidden" id="campaign" />
+          <input type="hidden" id="company" value="${detectedCompany}" />
+          <input type="hidden" id="zip" />
+          <input type="hidden" id="dob" />
+
+          <div class="section-label">Agent Information</div>
+          <div class="field-grid full">
+            <div class="field-group">
+              <label for="agentName">Agent Name</label>
+              <div class="input-wrap"><i class="ti ti-id"></i>
+                <input type="text" id="agentName" placeholder="Agent Name / ID" />
+              </div>
+            </div>
+          </div>
+          <div class="field-grid full">
+            <div class="field-group">
+              <label for="did">DID</label>
+              <div class="input-wrap"><i class="ti ti-hash"></i>
+                <input type="text" id="did" placeholder="e.g. D1" />
+              </div>
+            </div>
+          </div>
+
+          <div class="section-label">Customer Information</div>
+          <div class="field-grid">
+            <div class="field-group">
+              <label for="firstName">First name</label>
+              <div class="input-wrap"><i class="ti ti-user"></i>
+                <input type="text" id="firstName" placeholder="First name" />
+              </div>
+            </div>
+            <div class="field-group">
+              <label for="lastName">Last name</label>
+              <div class="input-wrap"><i class="ti ti-user"></i>
+                <input type="text" id="lastName" placeholder="Last name" />
+              </div>
+            </div>
+          </div>
+          <div class="field-grid">
+            <div class="field-group">
+              <label for="phone">Phone number</label>
+              <div class="input-wrap"><i class="ti ti-phone"></i>
+                <input type="tel" id="phone" placeholder="10-digit number" />
+              </div>
+            </div>
+            <div class="field-group">
+              <label for="state">State</label>
+              <div class="input-wrap"><i class="ti ti-map-pin"></i>
+                <select id="state"><option value="">Select state</option>${stateOptions}</select>
+              </div>
+            </div>
+          </div>
+          <div class="field-grid full">
+            <div class="field-group">
+              <label for="age">Age</label>
+              <div class="input-wrap"><i class="ti ti-calendar-event"></i>
+                <input type="number" id="age" placeholder="Age" min="0" max="120" />
+              </div>
+            </div>
+          </div>
+
+          <div class="section-label">Agent Notes</div>
+          <div class="field-group" style="margin-bottom:0">
+            <label for="comments">Comments</label>
+            <div class="textarea-wrap"><i class="ti ti-notes"></i>
+              <textarea id="comments" placeholder="Comments…"></textarea>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn-secondary" onclick="clearSaleForm()">
+              <i class="ti ti-refresh"></i> Clear
+            </button>
+            <button class="btn-primary" id="submitBtn" onclick="submitSaleForm()">
+              <i class="ti ti-device-floppy"></i> Submit Sale
+            </button>
+          </div>
+
+          <div class="success-toast" id="successToast">
+            <i class="ti ti-circle-check"></i> Sale submitted successfully!
+          </div>
+          <div class="error-toast" id="errorToast">
+            <i class="ti ti-alert-circle"></i> Submission failed. Check your connection and try again.
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  // Auto-fill
+  autoFill('agentName', getParam('agentName'));
+  autoFill('phone', phone);
+  autoFill('firstName', getParam('first'));
+  autoFill('lastName', getParam('last'));
+  autoFill('age', getParam('age'));
+  autoFill('zip', getParam('zip'));
+  autoFill('dob', getParam('dob'));
+  autoFill('campaign', campaignParam);
+  autoFill('did', getParam('did'));
+  autoFill('comments', getParam('comments'));
+  setStateByValue(getParam('state'));
+}
+
+function autoFill(id, value) {
+  const el = document.getElementById(id);
+  if (!el || !value) return;
+  el.value = value;
+  if (el.type !== 'hidden') el.classList.add('auto-filled');
+}
+
+function setStateByValue(value) {
+  if (!value) return;
+  const sel = document.getElementById('state');
+  if (!sel) return;
+  for (const opt of sel.options) {
+    if (opt.value.toLowerCase() === value.toLowerCase() || opt.text.toLowerCase() === value.toLowerCase()) {
+      sel.value = opt.value;
+      sel.classList.add('auto-filled');
+      break;
+    }
+  }
+}
+
+function clearSaleForm() {
+  ['agentName','firstName','lastName','phone','age','state','zip','dob','company','campaign','did','comments']
+    .forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.value = '';
+        el.classList.remove('auto-filled');
+      }
+    });
+  document.getElementById('successToast').style.display = 'none';
+  document.getElementById('errorToast').style.display = 'none';
+}
+
+async function submitSaleForm() {
+  const btn = document.getElementById('submitBtn');
+  const successToast = document.getElementById('successToast');
+  const errorToast = document.getElementById('errorToast');
+
+  successToast.style.display = 'none';
+  errorToast.style.display = 'none';
+  btn.innerHTML = '<i class="ti ti-loader"></i> Submitting…';
+  btn.disabled = true;
+
+  const payload = {
+    submissionType: 'AUTO_SALE_FORM',
+    agentName: document.getElementById('agentName').value,
+    phone: document.getElementById('phone').value,
+    firstName: document.getElementById('firstName').value,
+    lastName: document.getElementById('lastName').value,
+    age: document.getElementById('age').value,
+    state: document.getElementById('state').value,
+    zip: document.getElementById('zip').value,
+    dob: document.getElementById('dob').value,
+    company: document.getElementById('company').value,
+    campaign: document.getElementById('campaign').value,
+    did: document.getElementById('did').value,
+    comments: document.getElementById('comments').value,
+  };
+
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+
+    if (data.status === 'success' || data.success) {
+      window.history.replaceState({}, '', window.location.pathname);
+      const modalHtml = `
+        <div class="modal-overlay show" id="successModal">
+          <div class="modal-box">
+            <div class="modal-icon"><i class="ti ti-circle-check"></i></div>
+            <h2 class="modal-title">Sale Submitted</h2>
+            <p class="modal-sub">Successfully recorded.</p>
+            <button class="modal-close" onclick="closeSaleAndExit()">Okay</button>
+          </div>
+        </div>`;
+      document.body.insertAdjacentHTML('beforeend', modalHtml);
+    } else {
+      throw new Error(data.message || 'Submission failed');
+    }
+  } catch (err) {
+    btn.innerHTML = '<i class="ti ti-device-floppy"></i> Submit Sale';
+    btn.disabled = false;
+    errorToast.style.display = 'flex';
+  }
+}
+
+function closeSaleAndExit() {
+  const modal = document.getElementById('successModal');
+  if (modal) modal.remove();
+  renderNoCall();
+}
+
 boot();
