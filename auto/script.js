@@ -127,7 +127,7 @@ function showDetailedResponse(data) {
 }
 
 async function runComplianceCheck(phone) {
-  showStatusBanner('loading', 'Please wait… Searching…');
+  showStatusBanner('loading', 'Searching…');
 
   // Collect extra fields from URL (Vicidial)
   const extraData = {
