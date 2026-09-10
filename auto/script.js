@@ -74,7 +74,7 @@ function showSaleForm() {
 }
 
 async function runComplianceCheck(phone) {
-  showStatusBanner('loading', 'Please wait… Searching…');
+  showStatusBanner('loading', 'Please wait…');
 
   try {
     const res = await fetch(APPS_SCRIPT_URL, {
