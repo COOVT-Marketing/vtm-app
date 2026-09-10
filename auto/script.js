@@ -129,14 +129,22 @@ function showDetailedResponse(data) {
 async function runComplianceCheck(phone) {
   showStatusBanner('loading', 'Please wait… Searching…');
 
+  // Collect extra fields from URL (Vicidial)
+  const extraData = {
+    action: 'checkCompliance',
+    phone: phone,
+    firstName: getParam('first') || getParam('first_name') || '',
+    lastName: getParam('last') || getParam('last_name') || '',
+    city: getParam('city') || '',
+    state: getParam('state') || '',
+    zip: getParam('zip') || getParam('postal') || ''
+  };
+
   try {
     const res = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({
-        action: 'checkCompliance',
-        phone: phone
-      })
+      body: JSON.stringify(extraData)
     });
 
     const text = await res.text();
