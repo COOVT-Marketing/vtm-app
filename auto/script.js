@@ -74,7 +74,7 @@ function showSaleForm() {
 }
 
 async function runComplianceCheck(phone) {
-  showStatusBanner('loading', 'Running DNC / Duplicate / BLA checks…');
+  showStatusBanner('loading', 'Please wait… Searching…');
 
   try {
     const res = await fetch(APPS_SCRIPT_URL, {
@@ -86,7 +86,18 @@ async function runComplianceCheck(phone) {
       })
     });
 
-    const data = await res.json();
+    const text = await res.text();
+    console.log('Raw response:', text);
+
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      console.error('Not valid JSON. Server returned HTML or error page.');
+      showStatusBanner('error', 'Server error – please try again');
+      document.getElementById('fillFormBtn').classList.remove('hidden');
+      return;
+    }
 
     if (data.blocked) {
       showStatusBanner('blocked', 'Do Not Transfer — ' + (data.reason || 'Restricted'));
@@ -95,6 +106,7 @@ async function runComplianceCheck(phone) {
       showStatusBanner('clean', 'Lead verified — Clean');
       document.getElementById('fillFormBtn').classList.remove('hidden');
     }
+
   } catch (err) {
     console.error(err);
     showStatusBanner('error', 'Network error during check. Proceed with caution.');
@@ -220,7 +232,7 @@ function renderPage() {
     </div>
   `;
 
-  // Auto-fill fields
+  // Auto-fill
   document.getElementById('agentName').value = getParam('agentName') || '';
   document.getElementById('phone').value = phone || '';
   document.getElementById('firstName').value = getParam('first') || '';
@@ -309,5 +321,5 @@ async function submitSaleForm() {
   }
 }
 
-// Start the form
+// Start
 boot();
