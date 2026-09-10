@@ -73,6 +73,38 @@ function showSaleForm() {
   document.getElementById('fillFormBtn').classList.add('hidden');
 }
 
+function showDetailedResponse(data) {
+  const container = document.getElementById('detailedResponse');
+  if (!container) return;
+
+  const isClean = !data.blocked;
+  const title = isClean ? 'Lead Verified — Clean' : `DNC List Warning (${data.reason || 'Restricted'})`;
+  const titleClass = isClean ? 'clean-title' : 'blocked-title';
+
+  // Try to get the raw BLA response
+  const raw = data.raw || {};
+
+  container.innerHTML = `
+    <div class="detail-card ${isClean ? 'clean' : 'blocked'}">
+      <div class="detail-header ${titleClass}">
+        <i class="ti ${isClean ? 'ti-circle-check' : 'ti-alert-triangle'}"></i>
+        <span>${title}</span>
+      </div>
+      <div class="detail-body">
+        <div class="detail-row"><span class="label">PHONE</span><span class="value">${data.phone || '-'}</span></div>
+        <div class="detail-row"><span class="label">STATUS</span><span class="value">${raw.status || (isClean ? 'success' : 'blacklisted')}</span></div>
+        <div class="detail-row"><span class="label">MESSAGE</span><span class="value">${raw.message || data.reason || '-'}</span></div>
+        <div class="detail-row"><span class="label">CODE</span><span class="value">${raw.code || data.blaCode || 'none'}</span></div>
+        <div class="detail-row"><span class="label">SID</span><span class="value">${raw.sid || '-'}</span></div>
+        <div class="detail-row"><span class="label">WIRELESS</span><span class="value">${raw.wireless !== undefined ? raw.wireless : '-'}</span></div>
+        <div class="detail-row"><span class="label">RESULTS</span><span class="value">${raw.results !== undefined ? raw.results : '-'}</span></div>
+        <div class="detail-row"><span class="label">SCRUBS</span><span class="value">${raw.scrubs !== undefined ? raw.scrubs : '-'}</span></div>
+      </div>
+    </div>
+  `;
+  container.style.display = 'block';
+}
+
 async function runComplianceCheck(phone) {
   showStatusBanner('loading', 'Please wait…');
 
@@ -93,17 +125,20 @@ async function runComplianceCheck(phone) {
     try {
       data = JSON.parse(text);
     } catch (e) {
-      console.error('Not valid JSON. Server returned HTML or error page.');
       showStatusBanner('error', 'Server error – please try again');
       document.getElementById('fillFormBtn').classList.remove('hidden');
       return;
     }
 
+    // Hide loading banner
+    document.getElementById('statusBanner').style.display = 'none';
+
+    // Show detailed response card
+    showDetailedResponse(data);
+
     if (data.blocked) {
-      showStatusBanner('blocked', 'Do Not Transfer — ' + (data.reason || 'Restricted'));
       document.getElementById('fillFormBtn').classList.add('hidden');
     } else {
-      showStatusBanner('clean', 'Lead verified — Clean');
       document.getElementById('fillFormBtn').classList.remove('hidden');
     }
 
@@ -133,6 +168,9 @@ function renderPage() {
       </div>
 
       <div id="statusBanner" class="status-banner loading" style="display:none;"></div>
+
+      <!-- Detailed API Response Card -->
+      <div id="detailedResponse" style="display:none; padding: 0 1.5rem 1rem;"></div>
 
       <div class="sale-form-inner">
         <button id="fillFormBtn" class="btn-fill-form hidden" onclick="showSaleForm()">
