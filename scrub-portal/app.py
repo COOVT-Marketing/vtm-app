@@ -1,6 +1,7 @@
 import os
 import re
 import uuid
+import io
 from datetime import datetime
 from functools import wraps
 
@@ -11,6 +12,7 @@ from flask import (
 )
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
+from googleapiclient.http import MediaIoBaseUpload
 from googleapiclient.errors import HttpError
 from werkzeug.utils import secure_filename
 
@@ -21,6 +23,12 @@ app.config.from_object(Config)
 
 os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 os.makedirs("temp_downloads", exist_ok=True)
+
+# Google scopes needed
+SCOPES = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive.file"
+]
 
 
 # ---------- Auth ----------
@@ -53,20 +61,20 @@ def logout():
     return redirect(url_for("login"))
 
 
-# ---------- Google Sheets Helpers ----------
-def get_sheets_service():
-    creds = service_account.Credentials.from_service_account_file(
+# ---------- Google Services ----------
+def get_credentials():
+    return service_account.Credentials.from_service_account_file(
         app.config["GOOGLE_CREDENTIALS_PATH"],
-        scopes=["https://www.googleapis.com/auth/spreadsheets"]
+        scopes=SCOPES
     )
-    return build("sheets", "v4", credentials=creds)
 
 
-def sanitize_sheet_title(filename: str) -> str:
-    name = os.path.splitext(filename)[0]
-    name = re.sub(r"[^\w\s\-]", "", name)[:80].strip()
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    return f"{name}_{timestamp}"[:100]
+def get_sheets_service():
+    return build("sheets", "v4", credentials=get_credentials())
+
+
+def get_drive_service():
+    return build("drive", "v3", credentials=get_credentials())
 
 
 def fetch_sold_phones(service, sheet_id: str) -> set:
@@ -97,42 +105,40 @@ def fetch_sold_phones(service, sheet_id: str) -> set:
     return phones
 
 
-def create_log_tab(service, sheet_id: str, title: str, df: pd.DataFrame):
-    """Create a new tab and write the full uploaded file into it."""
-    body = {
-        "requests": [{
-            "addSheet": {
-                "properties": {
-                    "title": title
-                }
-            }
-        }]
+def upload_file_to_drive(drive_service, file_bytes: bytes, filename: str) -> str:
+    """Upload file to Google Drive and return a shareable link."""
+    file_metadata = {
+        "name": filename,
+        "mimeType": "application/octet-stream"
     }
-    service.spreadsheets().batchUpdate(
-        spreadsheetId=sheet_id,
-        body=body
+
+    media = MediaIoBaseUpload(
+        io.BytesIO(file_bytes),
+        mimetype="application/octet-stream",
+        resumable=True
+    )
+
+    uploaded = drive_service.files().create(
+        body=file_metadata,
+        media_body=media,
+        fields="id, webViewLink"
     ).execute()
 
-    values = [df.columns.tolist()]
-    for row in df.values.tolist():
-        clean_row = []
-        for cell in row:
-            if pd.isna(cell):
-                clean_row.append("")
-            else:
-                clean_row.append(str(cell))
-        values.append(clean_row)
+    file_id = uploaded.get("id")
 
-    safe_title = title.replace("'", "''")
-    service.spreadsheets().values().update(
-        spreadsheetId=sheet_id,
-        range=f"'{safe_title}'!A1",
-        valueInputOption="RAW",
-        body={"values": values}
+    # Make the file accessible with the link
+    drive_service.permissions().create(
+        fileId=file_id,
+        body={
+            "type": "anyone",
+            "role": "reader"
+        }
     ).execute()
 
+    return uploaded.get("webViewLink")
 
-def log_result_to_sheet(service, sheet_id: str, filename: str, good_count: int, bad_count: int, total: int, tab_title: str):
+
+def log_result_to_sheet(service, sheet_id: str, filename: str, good_count: int, bad_count: int, total: int, drive_link: str):
     """Append a summary row to the permanent 'Results' tab."""
     meta = service.spreadsheets().get(spreadsheetId=sheet_id).execute()
     existing_titles = [s["properties"]["title"] for s in meta.get("sheets", [])]
@@ -147,16 +153,15 @@ def log_result_to_sheet(service, sheet_id: str, filename: str, good_count: int, 
         }
         service.spreadsheets().batchUpdate(spreadsheetId=sheet_id, body=body).execute()
 
-        # Header row
         service.spreadsheets().values().update(
             spreadsheetId=sheet_id,
             range="'Results'!A1",
             valueInputOption="RAW",
-            body={"values": [["Timestamp", "Filename", "Good", "Bad", "Total", "History Tab"]]}
+            body={"values": [["Timestamp", "Filename", "Good", "Bad", "Total", "Drive Link"]]}
         ).execute()
 
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    row = [[timestamp, filename, good_count, bad_count, total, tab_title]]
+    row = [[timestamp, filename, good_count, bad_count, total, drive_link]]
 
     service.spreadsheets().values().append(
         spreadsheetId=sheet_id,
@@ -189,13 +194,17 @@ def process_file():
         return jsonify({"success": False, "error": "Master Sheet ID is not configured on the server"}), 500
 
     try:
+        # Keep original file bytes for Drive upload
+        original_bytes = file.read()
+        file.seek(0)  # reset for pandas
+
         filename = secure_filename(file.filename)
         ext = filename.rsplit(".", 1)[-1].lower()
 
         if ext == "csv":
-            df = pd.read_csv(file)
+            df = pd.read_csv(io.BytesIO(original_bytes))
         elif ext in ("xlsx", "xls"):
-            df = pd.read_excel(file)
+            df = pd.read_excel(io.BytesIO(original_bytes))
         else:
             return jsonify({"success": False, "error": "Only CSV or Excel files are supported"}), 400
 
@@ -234,29 +243,30 @@ def process_file():
             .str.replace(r"\D", "", regex=True)
         )
 
-        service = get_sheets_service()
-        sold_phones = fetch_sold_phones(service, sheet_id)
+        sheets_service = get_sheets_service()
+        drive_service = get_drive_service()
+
+        sold_phones = fetch_sold_phones(sheets_service, sheet_id)
 
         mask_good = ~df["_normalized_phone"].isin(sold_phones) & (df["_normalized_phone"] != "")
         good_df = df[mask_good].drop(columns=["_normalized_phone"])
         bad_df = df[~mask_good].drop(columns=["_normalized_phone"])
 
-        # 1. Create new tab with full file
-        tab_title = sanitize_sheet_title(filename)
-        create_log_tab(service, sheet_id, tab_title, df.drop(columns=["_normalized_phone"]))
+        # Upload original file to Google Drive
+        drive_link = upload_file_to_drive(drive_service, original_bytes, filename)
 
-        # 2. Log summary into permanent Results tab
+        # Log summary + Drive link into Results tab
         log_result_to_sheet(
-            service,
+            sheets_service,
             sheet_id,
             filename,
             len(good_df),
             len(bad_df),
             len(df),
-            tab_title
+            drive_link
         )
 
-        # 3. Save temporary CSV files for download
+        # Save temporary CSV files for download
         unique_id = str(uuid.uuid4())[:8]
         good_path = os.path.join("temp_downloads", f"good_{unique_id}.csv")
         bad_path = os.path.join("temp_downloads", f"bad_{unique_id}.csv")
@@ -275,7 +285,7 @@ def process_file():
         })
 
     except HttpError as e:
-        return jsonify({"success": False, "error": f"Google Sheets API error: {e}"}), 500
+        return jsonify({"success": False, "error": f"Google API error: {e}"}), 500
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
