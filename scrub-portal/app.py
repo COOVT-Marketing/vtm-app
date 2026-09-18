@@ -105,24 +105,24 @@ def fetch_sold_phones(service, sheet_id: str) -> set:
 
 def create_new_spreadsheet(sheets_service, drive_service, title: str, df: pd.DataFrame) -> str:
     """
-    Create a brand new Google Spreadsheet, write the full data into it,
-    make it accessible via link, and return the shareable URL.
+    Create a brand new Google Spreadsheet using Drive API,
+    write the full data into it, make it shareable, and return the link.
     """
-    # 1. Create empty spreadsheet
-    spreadsheet_body = {
-        "properties": {
-            "title": title
-        }
+    # 1. Create a new Google Spreadsheet via Drive API
+    file_metadata = {
+        "name": title,
+        "mimeType": "application/vnd.google-apps.spreadsheet"
     }
-    spreadsheet = sheets_service.spreadsheets().create(
-        body=spreadsheet_body,
-        fields="spreadsheetId,spreadsheetUrl"
+
+    created_file = drive_service.files().create(
+        body=file_metadata,
+        fields="id, webViewLink"
     ).execute()
 
-    spreadsheet_id = spreadsheet.get("spreadsheetId")
-    spreadsheet_url = spreadsheet.get("spreadsheetUrl")
+    spreadsheet_id = created_file.get("id")
+    spreadsheet_url = created_file.get("webViewLink")
 
-    # 2. Prepare data
+    # 2. Prepare the data
     values = [df.columns.tolist()]
     for row in df.values.tolist():
         clean_row = []
@@ -133,7 +133,7 @@ def create_new_spreadsheet(sheets_service, drive_service, title: str, df: pd.Dat
                 clean_row.append(str(cell))
         values.append(clean_row)
 
-    # 3. Write data
+    # 3. Write the data into the new spreadsheet
     sheets_service.spreadsheets().values().update(
         spreadsheetId=spreadsheet_id,
         range="A1",
@@ -141,7 +141,7 @@ def create_new_spreadsheet(sheets_service, drive_service, title: str, df: pd.Dat
         body={"values": values}
     ).execute()
 
-    # 4. Make the file accessible to anyone with the link
+    # 4. Make the spreadsheet accessible to anyone with the link
     drive_service.permissions().create(
         fileId=spreadsheet_id,
         body={
@@ -151,7 +151,6 @@ def create_new_spreadsheet(sheets_service, drive_service, title: str, df: pd.Dat
     ).execute()
 
     return spreadsheet_url
-
 
 def log_result_to_sheet(service, sheet_id: str, filename: str, good_count: int, bad_count: int, total: int, new_sheet_url: str):
     """Append a summary row to the permanent 'Results' tab."""
