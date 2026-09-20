@@ -289,7 +289,7 @@ function renderPage() {
     </div>
   `;
 
-  // Auto-fill fields from URL
+  // Auto-fill
   document.getElementById('agentName').value = getParam('agentName') || '';
   document.getElementById('phone').value = phone || '';
   document.getElementById('firstName').value = getParam('first') || '';
@@ -359,6 +359,7 @@ async function submitSaleForm() {
     const data = await res.json();
 
     if (data.status === 'success' || data.success) {
+      // Success modal – forces clean URL
       document.body.insertAdjacentHTML('beforeend', `
         <div class="modal-overlay show" id="successModal">
           <div class="modal-box">
@@ -367,7 +368,7 @@ async function submitSaleForm() {
             <p class="modal-sub">Successfully recorded.</p>
             <button class="modal-close" onclick="
               document.getElementById('successModal').remove();
-              window.location.replace('https://app.vocaltechmarketing.com/auto');
+              window.location.replace('https://app.vocaltechmarketing.com/auto/');
             ">Okay</button>
           </div>
         </div>
@@ -383,5 +384,5 @@ async function submitSaleForm() {
   }
 }
 
-// Start the app
+// Start
 boot();
