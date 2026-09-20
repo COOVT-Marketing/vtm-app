@@ -53,14 +53,11 @@ function boot() {
 function showStatusBanner(type, message) {
   const banner = document.getElementById('statusBanner');
   if (!banner) return;
-
   banner.className = 'status-banner ' + type;
-
   let icon = 'ti ti-alert-triangle';
   if (type === 'clean') icon = 'ti ti-circle-check';
   if (type === 'blocked') icon = 'ti ti-ban';
   if (type === 'loading') icon = 'ti ti-loader';
-
   banner.innerHTML = `
     <div class="status-icon"><i class="${icon}"></i></div>
     <div class="status-text">${message}</div>
@@ -76,11 +73,9 @@ function showSaleForm() {
 function showDetailedResponse(data) {
   const container = document.getElementById('detailedResponse');
   if (!container) return;
-
   const isClean = !data.blocked;
   const title = isClean ? 'Lead Verified — Clean' : `DNC List Warning (${data.reason || 'Restricted'})`;
   const raw = data.raw || {};
-
   container.innerHTML = `
     <div class="detail-card ${isClean ? 'clean' : 'blocked'}">
       <div class="detail-header ${isClean ? 'clean-title' : 'blocked-title'}">
@@ -129,7 +124,6 @@ function showDetailedResponse(data) {
 async function runComplianceCheck(phone) {
   showStatusBanner('loading', 'Searching…');
 
-  // Collect extra fields from URL (Vicidial)
   const extraData = {
     action: 'checkCompliance',
     phone: phone,
@@ -146,7 +140,6 @@ async function runComplianceCheck(phone) {
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(extraData)
     });
-
     const text = await res.text();
     console.log('Raw response:', text);
 
@@ -159,10 +152,7 @@ async function runComplianceCheck(phone) {
       return;
     }
 
-    // Hide loading banner
     document.getElementById('statusBanner').style.display = 'none';
-
-    // Show detailed response card
     showDetailedResponse(data);
 
     if (data.blocked) {
@@ -170,7 +160,6 @@ async function runComplianceCheck(phone) {
     } else {
       document.getElementById('fillFormBtn').classList.remove('hidden');
     }
-
   } catch (err) {
     console.error(err);
     showStatusBanner('error', 'Network error during check. Proceed with caution.');
@@ -197,8 +186,6 @@ function renderPage() {
       </div>
 
       <div id="statusBanner" class="status-banner loading" style="display:none;"></div>
-
-      <!-- Detailed API Response Card -->
       <div id="detailedResponse" style="display:none;"></div>
 
       <div class="sale-form-inner">
@@ -221,6 +208,7 @@ function renderPage() {
               </div>
             </div>
           </div>
+
           <div class="field-grid full">
             <div class="field-group">
               <label>DID</label>
@@ -245,6 +233,7 @@ function renderPage() {
               </div>
             </div>
           </div>
+
           <div class="field-grid">
             <div class="field-group">
               <label>Phone number</label>
@@ -262,6 +251,7 @@ function renderPage() {
               </div>
             </div>
           </div>
+
           <div class="field-grid full">
             <div class="field-group">
               <label>Age</label>
@@ -299,7 +289,7 @@ function renderPage() {
     </div>
   `;
 
-  // Auto-fill
+  // Auto-fill fields from URL
   document.getElementById('agentName').value = getParam('agentName') || '';
   document.getElementById('phone').value = phone || '';
   document.getElementById('firstName').value = getParam('first') || '';
@@ -342,6 +332,7 @@ async function submitSaleForm() {
   const btn = document.getElementById('submitBtn');
   btn.innerHTML = '<i class="ti ti-loader"></i> Submitting…';
   btn.disabled = true;
+
   const payload = {
     submissionType: 'AUTO_SALE_FORM',
     agentName: document.getElementById('agentName').value,
@@ -357,13 +348,16 @@ async function submitSaleForm() {
     did: document.getElementById('did').value,
     comments: document.getElementById('comments').value
   };
+
   try {
     const res = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload)
     });
+
     const data = await res.json();
+
     if (data.status === 'success' || data.success) {
       document.body.insertAdjacentHTML('beforeend', `
         <div class="modal-overlay show" id="successModal">
@@ -371,7 +365,10 @@ async function submitSaleForm() {
             <div class="modal-icon"><i class="ti ti-circle-check"></i></div>
             <h2 class="modal-title">Sale Submitted</h2>
             <p class="modal-sub">Successfully recorded.</p>
-            <button class="modal-close" onclick="document.getElementById('successModal').remove(); location.href = 'https://app.vocaltechmarketing.com/auto';">Okay</button>
+            <button class="modal-close" onclick="
+              document.getElementById('successModal').remove();
+              window.location.replace('https://app.vocaltechmarketing.com/auto');
+            ">Okay</button>
           </div>
         </div>
       `);
@@ -379,11 +376,12 @@ async function submitSaleForm() {
       throw new Error('Failed');
     }
   } catch (err) {
+    console.error(err);
     btn.innerHTML = '<i class="ti ti-device-floppy"></i> Submit Sale';
     btn.disabled = false;
     document.getElementById('errorToast').style.display = 'flex';
   }
 }
 
-// Start
+// Start the app
 boot();
