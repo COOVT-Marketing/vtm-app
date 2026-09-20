@@ -342,7 +342,6 @@ async function submitSaleForm() {
   const btn = document.getElementById('submitBtn');
   btn.innerHTML = '<i class="ti ti-loader"></i> Submitting…';
   btn.disabled = true;
-
   const payload = {
     submissionType: 'AUTO_SALE_FORM',
     agentName: document.getElementById('agentName').value,
@@ -358,7 +357,6 @@ async function submitSaleForm() {
     did: document.getElementById('did').value,
     comments: document.getElementById('comments').value
   };
-
   try {
     const res = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
@@ -366,7 +364,6 @@ async function submitSaleForm() {
       body: JSON.stringify(payload)
     });
     const data = await res.json();
-
     if (data.status === 'success' || data.success) {
       document.body.insertAdjacentHTML('beforeend', `
         <div class="modal-overlay show" id="successModal">
@@ -374,7 +371,7 @@ async function submitSaleForm() {
             <div class="modal-icon"><i class="ti ti-circle-check"></i></div>
             <h2 class="modal-title">Sale Submitted</h2>
             <p class="modal-sub">Successfully recorded.</p>
-            <button class="modal-close" onclick="document.getElementById('successModal').remove(); location.reload();">Okay</button>
+            <button class="modal-close" onclick="document.getElementById('successModal').remove(); location.href = 'https://app.vocaltechmarketing.com/auto';">Okay</button>
           </div>
         </div>
       `);
