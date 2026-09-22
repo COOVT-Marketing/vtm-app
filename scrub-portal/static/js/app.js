@@ -19,64 +19,79 @@ function setFile(file) {
   processBtn.disabled = false;
 }
 
-dropZone.addEventListener("click", () => fileInput.click());
-fileInput.addEventListener("change", (e) => setFile(e.target.files[0]));
+if (dropZone && fileInput) {
+  dropZone.addEventListener("click", () => fileInput.click());
+  fileInput.addEventListener("change", (e) => setFile(e.target.files[0]));
 
-dropZone.addEventListener("dragover", (e) => {
-  e.preventDefault();
-  dropZone.classList.add("dragover");
-});
+  dropZone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    dropZone.classList.add("dragover");
+  });
 
-dropZone.addEventListener("dragleave", () => {
-  dropZone.classList.remove("dragover");
-});
+  dropZone.addEventListener("dragleave", () => {
+    dropZone.classList.remove("dragover");
+  });
 
-dropZone.addEventListener("drop", (e) => {
-  e.preventDefault();
-  dropZone.classList.remove("dragover");
-  setFile(e.dataTransfer.files[0]);
-});
+  dropZone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropZone.classList.remove("dragover");
+    setFile(e.dataTransfer.files[0]);
+  });
+}
 
-processBtn.addEventListener("click", async () => {
-  if (!selectedFile) return;
+if (processBtn) {
+  processBtn.addEventListener("click", async () => {
+    if (!selectedFile) return;
 
-  const formData = new FormData();
-  formData.append("file", selectedFile);
+    const formData = new FormData();
+    formData.append("file", selectedFile);
 
-  resultsSection.classList.add("hidden");
-  loading.classList.remove("hidden");
-  processBtn.disabled = true;
+    resultsSection.classList.add("hidden");
+    loading.classList.remove("hidden");
+    processBtn.disabled = true;
 
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 180000); // 3 minutes
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 180000); // 3 minutes
 
-    const res = await fetch("/process", {
-      method: "POST",
-      body: formData,
-      signal: controller.signal
-    });
+      const res = await fetch("/process", {
+        method: "POST",
+        body: formData,
+        signal: controller.signal
+      });
 
-    clearTimeout(timeoutId);
-    const data = await res.json();
+      clearTimeout(timeoutId);
+      const data = await res.json();
 
-    if (!data.success) {
-      alert("Error: " + (data.error || "Unknown error"));
-      return;
+      if (!data.success) {
+        alert("Error: " + (data.error || "Unknown error"));
+        return;
+      }
+
+      document.getElementById("good-count").textContent = data.good_count.toLocaleString();
+      document.getElementById("bad-count").textContent = data.bad_count.toLocaleString();
+
+      // Set unique download URLs so Good and Bad files are never mixed
+      const goodLink = document.getElementById("download-good");
+      const badLink = document.getElementById("download-bad");
+      if (goodLink && data.good_download) {
+        goodLink.href = data.good_download;
+      }
+      if (badLink && data.bad_download) {
+        badLink.href = data.bad_download;
+      }
+
+      resultsSection.classList.remove("hidden");
+
+    } catch (err) {
+      if (err.name === "AbortError") {
+        alert("The process is taking longer than expected. Please check the terminal and try again.");
+      } else {
+        alert("Network or server error: " + err.message);
+      }
+    } finally {
+      loading.classList.add("hidden");
+      processBtn.disabled = false;
     }
-
-    document.getElementById("good-count").textContent = data.good_count.toLocaleString();
-    document.getElementById("bad-count").textContent = data.bad_count.toLocaleString();
-    resultsSection.classList.remove("hidden");
-
-  } catch (err) {
-    if (err.name === "AbortError") {
-      alert("The process is taking longer than expected. Please check the terminal and try again.");
-    } else {
-      alert("Network or server error: " + err.message);
-    }
-  } finally {
-    loading.classList.add("hidden");
-    processBtn.disabled = false;
-  }
-});
+  });
+}

@@ -8,8 +8,8 @@ Secure web portal for scrubbing call center lead files against a master Google S
 - Drag & drop CSV / Excel upload
 - Flexible phone column detection (Phone, Phone Number, phone_number, Mobile, etc.)
 - Automatic creation of history tabs
-- Automatic update of permanent **Database** tab
-- Clean GOOD / BAD results with download buttons
+- Automatic update of permanent **Results** tab
+- Clean GOOD / BAD results with isolated download buttons (unique tokens so files never mix)
 - Modern UI with Vocaltech branding
 
 ## Local Setup (Windows)
@@ -37,6 +37,13 @@ Secure web portal for scrubbing call center lead files against a master Google S
    ```
 
 7. Open http://127.0.0.1:5000
+
+## How GOOD / BAD works
+
+- **GOOD**: Phone number is present and **not** found in the master sold list → clean leads.
+- **BAD**: Phone number **is** found in the master sold list, **or** the phone cell is empty.
+
+Each download uses a unique token so clicking “Download Good” can never return the Bad file (and vice versa).
 
 ## Production Notes
 

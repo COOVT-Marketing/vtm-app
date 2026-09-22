@@ -17,6 +17,14 @@
   </header>
 
   <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}" style="margin-bottom:1rem;">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
     <section class="card upload-card">
       <h2>Upload Lead File</h2>
       <p class="helper">Ensure your file contains a phone column (Phone, Phone Number, phone_number, Mobile, etc.). Supported formats: CSV, XLSX.</p>
@@ -59,10 +67,10 @@
       </div>
 
       <div class="download-actions">
-        <a id="download-good" href="{{ url_for('download', kind='good') }}" class="btn btn-primary">
+        <a id="download-good" href="#" class="btn btn-primary">
           Download Good Data (CSV)
         </a>
-        <a id="download-bad" href="{{ url_for('download', kind='bad') }}" class="btn btn-primary">
+        <a id="download-bad" href="#" class="btn btn-primary">
           Download Bad Data (CSV)
         </a>
       </div>
