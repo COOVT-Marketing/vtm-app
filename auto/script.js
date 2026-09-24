@@ -1,11 +1,9 @@
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZo2WecH8AbJ2rx6-YM7nVzO6D7l7Qn8tMmYQdVMopnIyuCy3SkfZibVS5ibHFtces-w/exec';
-
 const COMPANY_MAP = {
   'CAMPAIGN_A': 'SecureDrive Insurance',
   'CAMPAIGN_B': 'Vocal Tech Marketing',
   'DEFAULT': ''
 };
-
 const US_STATES = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"];
 
 function getParam(name) {
@@ -124,6 +122,9 @@ function showDetailedResponse(data) {
 async function runComplianceCheck(phone) {
   showStatusBanner('loading', 'Searching…');
 
+  // Get company from the hidden field
+  const companyValue = document.getElementById('company')?.value || getParam('company') || '';
+
   const extraData = {
     action: 'checkCompliance',
     phone: phone,
@@ -131,7 +132,8 @@ async function runComplianceCheck(phone) {
     lastName: getParam('last') || getParam('last_name') || '',
     city: getParam('city') || '',
     state: getParam('state') || '',
-    zip: getParam('zip') || getParam('postal') || ''
+    zip: getParam('zip') || getParam('postal') || '',
+    company: companyValue          // ← Company is now sent
   };
 
   try {
@@ -142,7 +144,6 @@ async function runComplianceCheck(phone) {
     });
     const text = await res.text();
     console.log('Raw response:', text);
-
     let data;
     try {
       data = JSON.parse(text);
@@ -151,10 +152,8 @@ async function runComplianceCheck(phone) {
       document.getElementById('fillFormBtn').classList.remove('hidden');
       return;
     }
-
     document.getElementById('statusBanner').style.display = 'none';
     showDetailedResponse(data);
-
     if (data.blocked) {
       document.getElementById('fillFormBtn').classList.add('hidden');
     } else {
@@ -173,7 +172,6 @@ function renderPage() {
   const urlCompany = getParam('company');
   const detectedCompany = urlCompany || COMPANY_MAP[campaignParam] || '';
   const stateOptions = US_STATES.map(s => `<option value="${s}">${s}</option>`).join('');
-
   document.getElementById('app').innerHTML = `
     <div class="vtm-card">
       <div class="vtm-header">
@@ -184,21 +182,17 @@ function renderPage() {
         </div>
         <div class="live-badge"><div class="live-dot"></div>Live call</div>
       </div>
-
       <div id="statusBanner" class="status-banner loading" style="display:none;"></div>
       <div id="detailedResponse" style="display:none;"></div>
-
       <div class="sale-form-inner">
         <button id="fillFormBtn" class="btn-fill-form hidden" onclick="showSaleForm()">
           <i class="ti ti-forms"></i> Fill the Sale Form
         </button>
-
         <div id="saleFormSection" class="hidden">
           <input type="hidden" id="campaign" value="${campaignParam}">
           <input type="hidden" id="company" value="${detectedCompany}">
           <input type="hidden" id="zip">
           <input type="hidden" id="dob">
-
           <div class="section-label">Agent Information</div>
           <div class="field-grid full">
             <div class="field-group">
@@ -208,7 +202,6 @@ function renderPage() {
               </div>
             </div>
           </div>
-
           <div class="field-grid full">
             <div class="field-group">
               <label>DID</label>
@@ -217,7 +210,6 @@ function renderPage() {
               </div>
             </div>
           </div>
-
           <div class="section-label">Customer Information</div>
           <div class="field-grid">
             <div class="field-group">
@@ -233,7 +225,6 @@ function renderPage() {
               </div>
             </div>
           </div>
-
           <div class="field-grid">
             <div class="field-group">
               <label>Phone number</label>
@@ -251,7 +242,6 @@ function renderPage() {
               </div>
             </div>
           </div>
-
           <div class="field-grid full">
             <div class="field-group">
               <label>Age</label>
@@ -260,7 +250,6 @@ function renderPage() {
               </div>
             </div>
           </div>
-
           <div class="section-label">Agent Notes</div>
           <div class="field-group">
             <label>Comments</label>
@@ -268,7 +257,6 @@ function renderPage() {
               <textarea id="comments" placeholder="Comments…"></textarea>
             </div>
           </div>
-
           <div class="btn-row">
             <button class="btn-secondary" onclick="clearSaleForm()">
               <i class="ti ti-refresh"></i> Clear
@@ -277,7 +265,6 @@ function renderPage() {
               <i class="ti ti-device-floppy"></i> Submit Sale
             </button>
           </div>
-
           <div class="success-toast" id="successToast">
             <i class="ti ti-circle-check"></i> Sale submitted successfully!
           </div>
@@ -297,7 +284,6 @@ function renderPage() {
   document.getElementById('age').value = getParam('age') || '';
   document.getElementById('did').value = getParam('did') || '';
   document.getElementById('comments').value = getParam('comments') || '';
-
   const stateVal = getParam('state');
   if (stateVal) {
     const sel = document.getElementById('state');
@@ -332,7 +318,6 @@ async function submitSaleForm() {
   const btn = document.getElementById('submitBtn');
   btn.innerHTML = '<i class="ti ti-loader"></i> Submitting…';
   btn.disabled = true;
-
   const payload = {
     submissionType: 'AUTO_SALE_FORM',
     agentName: document.getElementById('agentName').value,
@@ -348,18 +333,14 @@ async function submitSaleForm() {
     did: document.getElementById('did').value,
     comments: document.getElementById('comments').value
   };
-
   try {
     const res = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload)
     });
-
     const data = await res.json();
-
     if (data.status === 'success' || data.success) {
-      // Success modal – forces clean URL
       document.body.insertAdjacentHTML('beforeend', `
         <div class="modal-overlay show" id="successModal">
           <div class="modal-box">
