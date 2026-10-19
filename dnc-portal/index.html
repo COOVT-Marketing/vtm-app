@@ -34,7 +34,7 @@
 
 <script>
 (function(){
-const _0x5a8c=['https://dnc-portal.syedshayanabbasr15121472.workers.dev','https://script.google.com/macros/s/AKfycby8j6erDfX9E6j8Y03uv4JdLzLykAYY4dzvYJRj94QEl4LBBSR0uc2THu_sTXg97n5wIw/exec','company','Access Restricted','This portal requires an authorized company link.','phoneNumber','phoneBtn','phoneResult','Please enter a valid phone number.','Checking phone\u2026','Phone Worker HTTP ','blacklisted','prelitigation','litigator','complainer','redflag','blocked','y','federal','state','Clean / Compliance Passed','DNC Blocked / Blacklisted Number','DNC List (Federal / State)','Phone Lookup Failed','Empty response','Response','Unknown','DNC portal: sheet logging failed \u2014 ','https://api.ipify.org?format=json','Internal DNC / Blacklisted','Duplicate Number Found','action','lookup','error','message','is_internal_dnc','is_duplicate','internal_dnc','duplicate','_internal','code','responseCode','status','msg','phone','companyBadge'];
+const _0x5a8c=['https://dnc-portal.syedshayanabbasr15121472.workers.dev','https://script.google.com/macros/s/AKfycby8j6erDfX9E6j8Y03uv4JdLzLykAYY4dzvYJRj94QEl4LBBSR0uc2THu_sTXg97n5wIw/exec','company','Access Restricted','This portal requires an authorized company link.','phoneNumber','phoneBtn','phoneResult','Please enter a valid phone number.','Checking phone\u2026','Phone Worker HTTP ','blacklisted','prelitigation','litigator','complainer','redflag','blocked','y','federal','state','Clean / Compliance Passed','DNC Blocked / Blacklisted Number','DNC List (Federal / State)','Phone Lookup Failed','Empty response','Response','Unknown','DNC portal: sheet logging failed \u2014 ','https://api.ipify.org?format=json','Internal DNC / Blacklisted','Duplicate Number Found','action','lookup','error','message','is_internal_dnc','is_duplicate','internal_dnc','duplicate','Bad','Clean','Internal DNC','Duplicate','companyBadge'];
 const _0x2f1e=_0x5a8c[0],_0x9b3d=_0x5a8c[1];
 const _0x7c4a=new URLSearchParams(window.location.search);
 const _0x1d9f=(_0x7c4a.get(_0x5a8c[2])||'').trim().toLowerCase();
@@ -43,7 +43,7 @@ if(!_0x1d9f){
   document.body.innerHTML=`<div style="color:#f9fafb;text-align:center;font-family:'DM Sans',sans-serif;padding:80px 20px;"><h2>${_0x5a8c[3]}</h2><p style="color:#6b7280;margin-top:8px;">${_0x5a8c[4]}</p></div>`;
   throw new Error('blocked');
 }
-document.getElementById(_0x5a8c[45]).textContent=_0x1d9f;
+document.getElementById(_0x5a8c[43]).textContent=_0x1d9f;
 
 function _0x4e2b(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
 function _0x8f3c(k){return String(k).replace(/_/g,' ').replace(/([a-z0-9])([A-Z])/g,'$1 $2').replace(/\s+/g,' ').trim().replace(/\b\w/g,c=>c.toUpperCase());}
@@ -102,18 +102,15 @@ async function _0x2b8a(){
     blaData=await blaRes.json();
     try{sheetData=await sheetRes.json();}catch(e){sheetData={error:'Sheet lookup failed',any_hit:false};}
 
-    // Backend access restriction
     if(sheetData&&sheetData[_0x5a8c[33]]===_0x5a8c[3]){
       document.body.innerHTML=`<div style="color:#f9fafb;text-align:center;font-family:'DM Sans',sans-serif;padding:80px 20px;"><h2>${_0x5a8c[3]}</h2><p style="color:#6b7280;margin-top:8px;">${sheetData[_0x5a8c[34]]||_0x5a8c[4]}</p></div>`;
       return;
     }
 
-    const merged={...blaData,[_0x5a8c[39]]:{
-      [_0x5a8c[37]]:sheetData?.[_0x5a8c[37]]||null,
-      [_0x5a8c[38]]:sheetData?.[_0x5a8c[38]]||null,
-      [_0x5a8c[35]]:!!sheetData?.[_0x5a8c[35]],
-      [_0x5a8c[36]]:!!sheetData?.[_0x5a8c[36]]
-    }};
+    // Clean flattened object
+    const clean = {...blaData};
+    clean[_0x5a8c[41]] = sheetData?.[_0x5a8c[35]] ? _0x5a8c[39] : _0x5a8c[40];  // Internal DNC : Bad / Clean
+    clean[_0x5a8c[42]] = sheetData?.[_0x5a8c[36]] ? _0x5a8c[39] : _0x5a8c[40];  // Duplicate : Bad / Clean
 
     const j=JSON.stringify(blaData).toLowerCase();
     let cls='success',ic='ti ti-circle-check',txt=_0x5a8c[20];
@@ -126,7 +123,7 @@ async function _0x2b8a(){
       (blaData.federal&&String(blaData.federal).toLowerCase()===_0x5a8c[17])||
       (blaData.state&&String(blaData.state).toLowerCase()===_0x5a8c[17]);
 
-    const isDangerFromSheet=sheetData?.[_0x5a8c[35]]||sheetData?.[_0x5a8c[36]];
+    const isDangerFromSheet = sheetData?.[_0x5a8c[35]] || sheetData?.[_0x5a8c[36]];
 
     if(isDangerFromBla||isDangerFromSheet){
       cls='danger';ic='ti ti-alert-circle';
@@ -139,7 +136,7 @@ async function _0x2b8a(){
       }else{txt=_0x5a8c[21];}
     }
 
-    _0x6a1d(box,cls,`<div class="result-header"><i class="${ic}"></i><div><div class="result-title">${txt}</div><div class="result-sub">${_0x4e2b(phone)}</div></div></div><div class="result-body">${_0x3c7e(merged)}</div>`);
+    _0x6a1d(box,cls,`<div class="result-header"><i class="${ic}"></i><div><div class="result-title">${txt}</div><div class="result-sub">${_0x4e2b(phone)}</div></div></div><div class="result-body">${_0x3c7e(clean)}</div>`);
   }catch(err){
     _0x6a1d(box,'danger',`<div class="result-header"><i class="ti ti-ban"></i><div><div class="result-title">${_0x5a8c[23]}</div><div class="result-sub">${_0x4e2b(err.message)}</div></div></div>`);
   }finally{btn.disabled=false;}
