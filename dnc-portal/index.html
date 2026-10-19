@@ -47,13 +47,29 @@ document.getElementById(_0x5a8c[43]).textContent=_0x1d9f;
 
 function _0x4e2b(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
 function _0x8f3c(k){return String(k).replace(/_/g,' ').replace(/([a-z0-9])([A-Z])/g,'$1 $2').replace(/\s+/g,' ').trim().replace(/\b\w/g,c=>c.toUpperCase());}
+
 function _0x6a1d(box,cls,html){
   box.className=`result show ${cls}`;
   box.innerHTML=html;
-  box.style.maxHeight=box.classList.contains('expanded')?box.scrollHeight+'px':'0px';
-  void box.offsetHeight;
-  requestAnimationFrame(()=>{box.classList.add('expanded');box.style.maxHeight=box.scrollHeight+'px';});
+  box.style.maxHeight='0px';
+  box.style.overflow='hidden';
+  void box.offsetHeight; // force reflow
+
+  requestAnimationFrame(()=>{
+    box.classList.add('expanded');
+    // Extra 40px buffer so last row is never cut off
+    box.style.maxHeight = (box.scrollHeight + 40) + 'px';
+  });
+
+  // After animation finishes, remove max-height limit completely
+  setTimeout(()=>{
+    if(box.classList.contains('expanded')){
+      box.style.maxHeight = 'none';
+      box.style.overflow = 'visible';
+    }
+  }, 400);
 }
+
 function _0x3c7e(data){
   if(data===null||typeof data!=='object')return`<div class="kv"><div class="k">${_0x5a8c[25]}</div><div class="v mono-json">${_0x4e2b(String(data))}</div></div>`;
   const entries=Object.entries(data);
@@ -65,6 +81,7 @@ function _0x3c7e(data){
     return`<div class="kv"><div class="k">${_0x4e2b(label)}</div><div class="v${isObj?' mono-json':''}">${_0x4e2b(disp)}</div></div>`;
   }).join('');
 }
+
 async function _0x9e4f(phone,data){
   try{
     if(!_0x9b3d||_0x9b3d.includes('PASTE-YOUR'))return;
@@ -83,6 +100,7 @@ async function _0x9e4f(phone,data){
     await fetch(_0x9b3d+q,{mode:'no-cors'});
   }catch(err){console.warn(_0x5a8c[27]+err.message);}
 }
+
 async function _0x2b8a(){
   const input=document.getElementById(_0x5a8c[5]);
   const btn=document.getElementById(_0x5a8c[6]);
@@ -107,10 +125,9 @@ async function _0x2b8a(){
       return;
     }
 
-    // Clean flattened object
     const clean = {...blaData};
-    clean[_0x5a8c[41]] = sheetData?.[_0x5a8c[35]] ? _0x5a8c[39] : _0x5a8c[40];  // Internal DNC : Bad / Clean
-    clean[_0x5a8c[42]] = sheetData?.[_0x5a8c[36]] ? _0x5a8c[39] : _0x5a8c[40];  // Duplicate : Bad / Clean
+    clean[_0x5a8c[41]] = sheetData?.[_0x5a8c[35]] ? _0x5a8c[39] : _0x5a8c[40];
+    clean[_0x5a8c[42]] = sheetData?.[_0x5a8c[36]] ? _0x5a8c[39] : _0x5a8c[40];
 
     const j=JSON.stringify(blaData).toLowerCase();
     let cls='success',ic='ti ti-circle-check',txt=_0x5a8c[20];
