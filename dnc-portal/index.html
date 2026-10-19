@@ -33,16 +33,26 @@
 </div>
 <script>
 (function(){
-const _0x4f2a=['https://dnc-portal.syedshayanabbasr15121472.workers.dev','https://script.google.com/macros/s/AKfycby8j6erDfX9E6j8Y03uv4JdLzLykAYY4dzvYJRj94QEl4LBBSR0uc2THu_sTXg97n5wIw/exec','echolink','vtm','aikron','company','Access Restricted','This portal requires an authorized company link.','phoneNumber','phoneBtn','phoneResult','Please enter a valid phone number.','Checking phone\u2026','Phone Worker HTTP ','blacklisted','prelitigation','litigator','complainer','redflag','blocked','y','federal','state','Clean / Compliance Passed','DNC Blocked / Blacklisted Number','DNC List Warning (Federal / State)','Phone Lookup Failed','Empty response from Worker.','Response','Unknown','DNC portal: sheet logging failed \u2014 ','https://api.ipify.org?format=json'];
+/* ========== ONLY EDIT THIS LIST TO ADD NEW COMPANIES ========== */
+const ALLOWED_COMPANIES = [
+  'echolink',
+  'vtm',
+  'aikron',
+];
+/* ============================================================= */
+
+const _0x4f2a=['https://dnc-portal.syedshayanabbasr15121472.workers.dev','https://script.google.com/macros/s/AKfycby8j6erDfX9E6j8Y03uv4JdLzLykAYY4dzvYJRj94QEl4LBBSR0uc2THu_sTXg97n5wIw/exec','company','Access Restricted','This portal requires an authorized company link.','phoneNumber','phoneBtn','phoneResult','Please enter a valid phone number.','Checking phone\u2026','Phone Worker HTTP ','blacklisted','prelitigation','litigator','complainer','redflag','blocked','y','federal','state','Clean / Compliance Passed','DNC Blocked / Blacklisted Number','DNC List Warning (Federal / State)','Phone Lookup Failed','Empty response from Worker.','Response','Unknown','DNC portal: sheet logging failed \u2014 ','https://api.ipify.org?format=json'];
+
 const PHONE_WORKER=_0x4f2a[0],SHEET_LOGGER_URL=_0x4f2a[1];
 const params=new URLSearchParams(window.location.search);
-const company=(params.get(_0x4f2a[4])||'').trim();
-const allowed=[_0x4f2a[2],_0x4f2a[3]];
-if(!allowed.includes(company.toLowerCase())){
-document.body.innerHTML=`<div style="color:#f9fafb;text-align:center;font-family:'DM Sans',sans-serif;padding:80px 20px;"><h2>${_0x4f2a[5]}</h2><p style="color:#6b7280;margin-top:8px;">${_0x4f2a[6]}</p></div>`;
+const company=(params.get(_0x4f2a[2])||'').trim().toLowerCase();
+
+if(!ALLOWED_COMPANIES.includes(company)){
+document.body.innerHTML=`<div style="color:#f9fafb;text-align:center;font-family:'DM Sans',sans-serif;padding:80px 20px;"><h2>${_0x4f2a[3]}</h2><p style="color:#6b7280;margin-top:8px;">${_0x4f2a[4]}</p></div>`;
 throw new Error('Access blocked');
 }
 document.getElementById('companyBadge').textContent=company;
+
 function escapeHtml(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
 function formatKey(k){return String(k).replace(/_/g,' ').replace(/([a-z0-9])([A-Z])/g,'$1 $2').replace(/\s+/g,' ').trim().replace(/\b\w/g,c=>c.toUpperCase());}
 function setResult(box,cls,html){
@@ -53,9 +63,9 @@ void box.offsetHeight;
 requestAnimationFrame(()=>{box.classList.add('expanded');box.style.maxHeight=box.scrollHeight+'px';});
 }
 function renderRawKv(data){
-if(data===null||typeof data!=='object')return`<div class="kv"><div class="k">${_0x4f2a[27]}</div><div class="v mono-json">${escapeHtml(String(data))}</div></div>`;
+if(data===null||typeof data!=='object')return`<div class="kv"><div class="k">${_0x4f2a[25]}</div><div class="v mono-json">${escapeHtml(String(data))}</div></div>`;
 const entries=Object.entries(data);
-if(entries.length===0)return`<div class="kv"><div class="k">${_0x4f2a[27]}</div><div class="v">${_0x4f2a[26]}</div></div>`;
+if(entries.length===0)return`<div class="kv"><div class="k">${_0x4f2a[25]}</div><div class="v">${_0x4f2a[24]}</div></div>`;
 return entries.map(([key,value])=>{
 const label=formatKey(key);
 const isObj=value!==null&&typeof value==='object';
@@ -66,49 +76,49 @@ return`<div class="kv"><div class="k">${escapeHtml(label)}</div><div class="v${i
 async function logToSheet(phone,data){
 try{
 if(!SHEET_LOGGER_URL||SHEET_LOGGER_URL.includes('PASTE-YOUR'))return;
-let ip=_0x4f2a[28];
+let ip=_0x4f2a[26];
 try{
 const ctrl=new AbortController();
 const tid=setTimeout(()=>ctrl.abort(),2000);
-const ipRes=await fetch(_0x4f2a[30],{signal:ctrl.signal});
+const ipRes=await fetch(_0x4f2a[28],{signal:ctrl.signal});
 const ipData=await ipRes.json();
-ip=ipData.ip||_0x4f2a[28];
+ip=ipData.ip||_0x4f2a[26];
 clearTimeout(tid);
 }catch(e){}
-const code=data.code??data.responseCode??data.status??_0x4f2a[28];
-const msg=data.message??data.msg??data.status??_0x4f2a[28];
+const code=data.code??data.responseCode??data.status??_0x4f2a[26];
+const msg=data.message??data.msg??data.status??_0x4f2a[26];
 const q=`?phone=${encodeURIComponent(phone)}&company=${encodeURIComponent(company)}&code=${encodeURIComponent(code)}&msg=${encodeURIComponent(msg)}&raw=${encodeURIComponent(JSON.stringify(data))}&ip=${encodeURIComponent(ip)}`;
 await fetch(SHEET_LOGGER_URL+q,{mode:'no-cors'});
-}catch(err){console.warn(_0x4f2a[29]+err.message);}
+}catch(err){console.warn(_0x4f2a[27]+err.message);}
 }
 async function checkPhone(){
-const input=document.getElementById(_0x4f2a[7]);
-const btn=document.getElementById(_0x4f2a[8]);
-const box=document.getElementById(_0x4f2a[9]);
+const input=document.getElementById(_0x4f2a[5]);
+const btn=document.getElementById(_0x4f2a[6]);
+const box=document.getElementById(_0x4f2a[7]);
 const raw=input.value.trim();
 const phone=raw.replace(/\D/g,'');
-if(phone.length<7||phone.length>15){alert(_0x4f2a[10]);return;}
+if(phone.length<7||phone.length>15){alert(_0x4f2a[8]);return;}
 btn.disabled=true;
-setResult(box,'loading',`<div class="result-header"><i class="ti ti-loader-2"></i><div><div class="result-title">${_0x4f2a[11]}</div><div class="result-sub">${escapeHtml(phone)}</div></div></div>`);
+setResult(box,'loading',`<div class="result-header"><i class="ti ti-loader-2"></i><div><div class="result-title">${_0x4f2a[9]}</div><div class="result-sub">${escapeHtml(phone)}</div></div></div>`);
 let data=null;
 try{
 const res=await fetch(`${PHONE_WORKER}?phone=${encodeURIComponent(phone)}`);
-if(!res.ok)throw new Error(_0x4f2a[12]+res.status);
+if(!res.ok)throw new Error(_0x4f2a[10]+res.status);
 data=await res.json();
 const j=JSON.stringify(data).toLowerCase();
-let cls='success',ic='ti ti-circle-check',txt=_0x4f2a[22];
-const isD=j.includes(_0x4f2a[13])||j.includes(_0x4f2a[14])||j.includes(_0x4f2a[15])||j.includes(_0x4f2a[16])||j.includes(_0x4f2a[17])||j.includes(_0x4f2a[18])||(data.blacklist&&String(data.blacklist).toLowerCase()===_0x4f2a[19]);
-const isW=j.includes(_0x4f2a[20])||j.includes(_0x4f2a[21])||(data.federal&&String(data.federal).toLowerCase()===_0x4f2a[19])||(data.state&&String(data.state).toLowerCase()===_0x4f2a[19]);
-if(isD){cls='danger';ic='ti ti-alert-circle';txt=_0x4f2a[23];}
-else if(isW){cls='warning';ic='ti ti-alert-triangle';txt=_0x4f2a[24];}
+let cls='success',ic='ti ti-circle-check',txt=_0x4f2a[20];
+const isD=j.includes(_0x4f2a[11])||j.includes(_0x4f2a[12])||j.includes(_0x4f2a[13])||j.includes(_0x4f2a[14])||j.includes(_0x4f2a[15])||j.includes(_0x4f2a[16])||(data.blacklist&&String(data.blacklist).toLowerCase()===_0x4f2a[17]);
+const isW=j.includes(_0x4f2a[18])||j.includes(_0x4f2a[19])||(data.federal&&String(data.federal).toLowerCase()===_0x4f2a[17])||(data.state&&String(data.state).toLowerCase()===_0x4f2a[17]);
+if(isD){cls='danger';ic='ti ti-alert-circle';txt=_0x4f2a[21];}
+else if(isW){cls='warning';ic='ti ti-alert-triangle';txt=_0x4f2a[22];}
 setResult(box,cls,`<div class="result-header"><i class="${ic}"></i><div><div class="result-title">${txt}</div><div class="result-sub">${escapeHtml(phone)}</div></div></div><div class="result-body">${renderRawKv(data)}</div>`);
 }catch(err){
-setResult(box,'danger',`<div class="result-header"><i class="ti ti-ban"></i><div><div class="result-title">${_0x4f2a[25]}</div><div class="result-sub">${escapeHtml(err.message)}</div></div></div>`);
+setResult(box,'danger',`<div class="result-header"><i class="ti ti-ban"></i><div><div class="result-title">${_0x4f2a[23]}</div><div class="result-sub">${escapeHtml(err.message)}</div></div></div>`);
 }finally{btn.disabled=false;}
 if(data)logToSheet(phone,data);
 }
-document.getElementById(_0x4f2a[8]).addEventListener('click',checkPhone);
-document.getElementById(_0x4f2a[7]).addEventListener('keydown',function(e){if(e.key==='Enter')checkPhone();});
+document.getElementById(_0x4f2a[6]).addEventListener('click',checkPhone);
+document.getElementById(_0x4f2a[5]).addEventListener('keydown',function(e){if(e.key==='Enter')checkPhone();});
 })();
 </script>
 </body>
