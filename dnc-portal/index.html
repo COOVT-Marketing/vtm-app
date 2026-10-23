@@ -49,13 +49,11 @@ function _0x6a1d(box,cls,html){
   box.innerHTML=html;
   box.style.maxHeight='0px';
   box.style.overflow='hidden';
-  void box.offsetHeight; // force reflow
+  void box.offsetHeight;
   requestAnimationFrame(()=>{
     box.classList.add('expanded');
-    // Extra 40px buffer so last row is never cut off
     box.style.maxHeight = (box.scrollHeight + 40) + 'px';
   });
-  // After animation finishes, remove max-height limit completely
   setTimeout(()=>{
     if(box.classList.contains('expanded')){
       box.style.maxHeight = 'none';
@@ -89,9 +87,9 @@ async function _0x9e4f(phone,data){
     const code=data.code??data.responseCode??data.status??_0x5a8c[26];
     const msg=data.message??data.msg??data.status??_0x5a8c[26];
 
-    // Separate columns ke liye
-    const internalDnc = data["Internal DNC"] || (data.internal_check?.is_internal_dnc ? "Bad" : "Clean") || "";
-    const duplicate   = data["Duplicate"] || (data.internal_check?.is_duplicate ? "Bad" : "Clean") || "";
+    // Separate columns
+    const internalDnc = data["Internal DNC"] || (data.internal_check?.is_internal_dnc === true ? "Bad" : "Clean");
+    const duplicate   = data["Duplicate"]   || (data.internal_check?.is_duplicate === true ? "Bad" : "Clean");
 
     const q=`?phone=${encodeURIComponent(phone)}&company=${encodeURIComponent(_0x1d9f)}&code=${encodeURIComponent(code)}&msg=${encodeURIComponent(msg)}&raw=${encodeURIComponent(JSON.stringify(data))}&ip=${encodeURIComponent(ip)}&internal_dnc=${encodeURIComponent(internalDnc)}&duplicate=${encodeURIComponent(duplicate)}`;
     await fetch(_0x9b3d+q,{mode:'no-cors'});
@@ -143,13 +141,19 @@ async function _0x2b8a(){
       }else{txt=_0x5a8c[21];}
     }
     _0x6a1d(box,cls,`<div class="result-header"><i class="${ic}"></i><div><div class="result-title">${txt}</div><div class="result-sub">${_0x4e2b(phone)}</div></div></div><div class="result-body">${_0x3c7e(clean)}</div>`);
+
+    // ===== FIXED LOGGING =====
+    if(blaData){
+      const logPayload = {
+        ...clean,                          // Internal DNC + Duplicate keys ab jayenge
+        internal_check: sheetData || null
+      };
+      _0x9e4f(phone, logPayload);
+    }
+
   }catch(err){
     _0x6a1d(box,'danger',`<div class="result-header"><i class="ti ti-ban"></i><div><div class="result-title">${_0x5a8c[23]}</div><div class="result-sub">${_0x4e2b(err.message)}</div></div></div>`);
   }finally{btn.disabled=false;}
-  if(blaData){
-    const logPayload={...blaData,internal_check:sheetData||null};
-    _0x9e4f(phone,logPayload);
-  }
 }
 document.getElementById(_0x5a8c[6]).addEventListener('click',_0x2b8a);
 document.getElementById(_0x5a8c[5]).addEventListener('keydown',function(e){if(e.key==='Enter')_0x2b8a();});
