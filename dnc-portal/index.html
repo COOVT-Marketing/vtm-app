@@ -31,36 +31,30 @@
     <div id="phoneResult" class="result"></div>
   </div>
 </div>
-
 <script>
 (function(){
 const _0x5a8c=['https://dnc-portal.syedshayanabbasr15121472.workers.dev','https://script.google.com/macros/s/AKfycby8j6erDfX9E6j8Y03uv4JdLzLykAYY4dzvYJRj94QEl4LBBSR0uc2THu_sTXg97n5wIw/exec','company','Access Restricted','This portal requires an authorized company link.','phoneNumber','phoneBtn','phoneResult','Please enter a valid phone number.','Checking phone\u2026','Phone Worker HTTP ','blacklisted','prelitigation','litigator','complainer','redflag','blocked','y','federal','state','Clean / Compliance Passed','DNC Blocked / Blacklisted Number','DNC List (Federal / State)','Phone Lookup Failed','Empty response','Response','Unknown','DNC portal: sheet logging failed \u2014 ','https://api.ipify.org?format=json','Internal DNC / Blacklisted','Duplicate Number Found','action','lookup','error','message','is_internal_dnc','is_duplicate','internal_dnc','duplicate','Bad','Clean','Internal DNC','Duplicate','companyBadge'];
 const _0x2f1e=_0x5a8c[0],_0x9b3d=_0x5a8c[1];
 const _0x7c4a=new URLSearchParams(window.location.search);
 const _0x1d9f=(_0x7c4a.get(_0x5a8c[2])||'').trim().toLowerCase();
-
 if(!_0x1d9f){
   document.body.innerHTML=`<div style="color:#f9fafb;text-align:center;font-family:'DM Sans',sans-serif;padding:80px 20px;"><h2>${_0x5a8c[3]}</h2><p style="color:#6b7280;margin-top:8px;">${_0x5a8c[4]}</p></div>`;
   throw new Error('blocked');
 }
 document.getElementById(_0x5a8c[43]).textContent=_0x1d9f;
-
 function _0x4e2b(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
 function _0x8f3c(k){return String(k).replace(/_/g,' ').replace(/([a-z0-9])([A-Z])/g,'$1 $2').replace(/\s+/g,' ').trim().replace(/\b\w/g,c=>c.toUpperCase());}
-
 function _0x6a1d(box,cls,html){
   box.className=`result show ${cls}`;
   box.innerHTML=html;
   box.style.maxHeight='0px';
   box.style.overflow='hidden';
   void box.offsetHeight; // force reflow
-
   requestAnimationFrame(()=>{
     box.classList.add('expanded');
     // Extra 40px buffer so last row is never cut off
     box.style.maxHeight = (box.scrollHeight + 40) + 'px';
   });
-
   // After animation finishes, remove max-height limit completely
   setTimeout(()=>{
     if(box.classList.contains('expanded')){
@@ -69,7 +63,6 @@ function _0x6a1d(box,cls,html){
     }
   }, 400);
 }
-
 function _0x3c7e(data){
   if(data===null||typeof data!=='object')return`<div class="kv"><div class="k">${_0x5a8c[25]}</div><div class="v mono-json">${_0x4e2b(String(data))}</div></div>`;
   const entries=Object.entries(data);
@@ -81,7 +74,6 @@ function _0x3c7e(data){
     return`<div class="kv"><div class="k">${_0x4e2b(label)}</div><div class="v${isObj?' mono-json':''}">${_0x4e2b(disp)}</div></div>`;
   }).join('');
 }
-
 async function _0x9e4f(phone,data){
   try{
     if(!_0x9b3d||_0x9b3d.includes('PASTE-YOUR'))return;
@@ -96,11 +88,15 @@ async function _0x9e4f(phone,data){
     }catch(e){}
     const code=data.code??data.responseCode??data.status??_0x5a8c[26];
     const msg=data.message??data.msg??data.status??_0x5a8c[26];
-    const q=`?phone=${encodeURIComponent(phone)}&company=${encodeURIComponent(_0x1d9f)}&code=${encodeURIComponent(code)}&msg=${encodeURIComponent(msg)}&raw=${encodeURIComponent(JSON.stringify(data))}&ip=${encodeURIComponent(ip)}`;
+
+    // Separate columns ke liye
+    const internalDnc = data["Internal DNC"] || (data.internal_check?.is_internal_dnc ? "Bad" : "Clean") || "";
+    const duplicate   = data["Duplicate"] || (data.internal_check?.is_duplicate ? "Bad" : "Clean") || "";
+
+    const q=`?phone=${encodeURIComponent(phone)}&company=${encodeURIComponent(_0x1d9f)}&code=${encodeURIComponent(code)}&msg=${encodeURIComponent(msg)}&raw=${encodeURIComponent(JSON.stringify(data))}&ip=${encodeURIComponent(ip)}&internal_dnc=${encodeURIComponent(internalDnc)}&duplicate=${encodeURIComponent(duplicate)}`;
     await fetch(_0x9b3d+q,{mode:'no-cors'});
   }catch(err){console.warn(_0x5a8c[27]+err.message);}
 }
-
 async function _0x2b8a(){
   const input=document.getElementById(_0x5a8c[5]);
   const btn=document.getElementById(_0x5a8c[6]);
@@ -119,19 +115,15 @@ async function _0x2b8a(){
     if(!blaRes.ok)throw new Error(_0x5a8c[10]+blaRes.status);
     blaData=await blaRes.json();
     try{sheetData=await sheetRes.json();}catch(e){sheetData={error:'Sheet lookup failed',any_hit:false};}
-
     if(sheetData&&sheetData[_0x5a8c[33]]===_0x5a8c[3]){
       document.body.innerHTML=`<div style="color:#f9fafb;text-align:center;font-family:'DM Sans',sans-serif;padding:80px 20px;"><h2>${_0x5a8c[3]}</h2><p style="color:#6b7280;margin-top:8px;">${sheetData[_0x5a8c[34]]||_0x5a8c[4]}</p></div>`;
       return;
     }
-
     const clean = {...blaData};
     clean[_0x5a8c[41]] = sheetData?.[_0x5a8c[35]] ? _0x5a8c[39] : _0x5a8c[40];
     clean[_0x5a8c[42]] = sheetData?.[_0x5a8c[36]] ? _0x5a8c[39] : _0x5a8c[40];
-
     const j=JSON.stringify(blaData).toLowerCase();
     let cls='success',ic='ti ti-circle-check',txt=_0x5a8c[20];
-
     const isDangerFromBla=
       j.includes(_0x5a8c[11])||j.includes(_0x5a8c[12])||j.includes(_0x5a8c[13])||
       j.includes(_0x5a8c[14])||j.includes(_0x5a8c[15])||j.includes(_0x5a8c[16])||
@@ -139,9 +131,7 @@ async function _0x2b8a(){
       (blaData.blacklist&&String(blaData.blacklist).toLowerCase()===_0x5a8c[17])||
       (blaData.federal&&String(blaData.federal).toLowerCase()===_0x5a8c[17])||
       (blaData.state&&String(blaData.state).toLowerCase()===_0x5a8c[17]);
-
     const isDangerFromSheet = sheetData?.[_0x5a8c[35]] || sheetData?.[_0x5a8c[36]];
-
     if(isDangerFromBla||isDangerFromSheet){
       cls='danger';ic='ti ti-alert-circle';
       if(sheetData?.[_0x5a8c[35]]){txt=_0x5a8c[29];}
@@ -152,18 +142,15 @@ async function _0x2b8a(){
         txt=_0x5a8c[22];
       }else{txt=_0x5a8c[21];}
     }
-
     _0x6a1d(box,cls,`<div class="result-header"><i class="${ic}"></i><div><div class="result-title">${txt}</div><div class="result-sub">${_0x4e2b(phone)}</div></div></div><div class="result-body">${_0x3c7e(clean)}</div>`);
   }catch(err){
     _0x6a1d(box,'danger',`<div class="result-header"><i class="ti ti-ban"></i><div><div class="result-title">${_0x5a8c[23]}</div><div class="result-sub">${_0x4e2b(err.message)}</div></div></div>`);
   }finally{btn.disabled=false;}
-
   if(blaData){
     const logPayload={...blaData,internal_check:sheetData||null};
     _0x9e4f(phone,logPayload);
   }
 }
-
 document.getElementById(_0x5a8c[6]).addEventListener('click',_0x2b8a);
 document.getElementById(_0x5a8c[5]).addEventListener('keydown',function(e){if(e.key==='Enter')_0x2b8a();});
 })();
