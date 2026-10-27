@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VTM RTB Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #548888;
+    --accent-light: #6ba3a3;
+    --bg: #18181c;
+    --panel: #222227;
+    --panel-border: #2f2f36;
+    --text: #e8e8ea;
+    --text-dim: #9a9aa2;
+    --danger: #d9534f;
+    --success: #4caf7d;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 48px 16px;
+  }
+  .card {
+    width: 100%;
+    max-width: 500px;
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+    padding: 28px;
+  }
+  h1 { font-size: 18px; margin: 0 0 24px; font-weight: 600; text-align: center; }
+  label { display: block; font-size: 13px; color: var(--text-dim); margin-bottom: 6px; font-weight: 500; }
+  input, select {
+    width: 100%;
+    padding: 11px 12px;
+    background: #1a1a1e;
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: inherit;
+    margin-bottom: 16px;
+  }
+  input:focus, select:focus { outline: none; border-color: var(--accent); }
+  select option { background: #1a1a1e; color: var(--text); }
+  button {
+    width: 100%;
+    padding: 12px;
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  button:hover:not(:disabled) { background: var(--accent-light); }
+  button:disabled { opacity: 0.6; cursor: not-allowed; }
+  .result {
+    margin-top: 20px;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid var(--panel-border);
+    background: #1a1a1e;
+    display: none;
+  }
+  .result.show { display: block; }
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+  }
+  .row:first-child { border-bottom: 1px solid var(--panel-border); }
+  .label { color: var(--text-dim); font-size: 13px; font-weight: 500; }
+  .value { font-size: 16px; font-weight: 600; }
+  .did-value { color: var(--accent-light); font-size: 18px; letter-spacing: 0.5px; }
+  .did-wrap { display: flex; align-items: center; gap: 8px; }
+  .copy-btn {
+    width: auto; padding: 4px 10px; font-size: 11px; font-weight: 600;
+    background: #2a2a30; border: 1px solid var(--panel-border);
+    color: var(--text-dim); border-radius: 6px;
+  }
+  .copy-btn:hover:not(:disabled) { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .copy-btn.copied { background: var(--success); color: #fff; border-color: var(--success); }
+  .status-msg { font-size: 13px; margin-top: 12px; text-align: center; font-weight: 500; }
+  .status-msg.error { color: var(--danger); }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>VTM RTB Portal</h1>
+  <form id="pingForm">
+    <label for="vertical">Vertical</label>
+    <select id="vertical" required>
+      <option value="">Select vertical…</option>
+      <option value="Roofing">Roofing</option>
+      <option value="HVAC">HVAC</option>
+      <option value="Plumbing">Plumbing</option>
+      <option value="Pest Control">Pest Control</option>
+      <option value="Electrical">Electrical</option>
+      <option value="Water Damage">Water Damage</option>
+      <option value="Mold Removal">Mold Removal</option>
+      <option value="Appliance Repair">Appliance Repair</option>
+    </select>
+
+    <label for="cid">Phone Number</label>
+    <input type="text" id="cid" placeholder="e.g. 3055551234" required />
+
+    <label for="zipcode">Zip Code</label>
+    <input type="text" id="zipcode" placeholder="e.g. 33101" required maxlength="5" pattern="\d{5}" />
+
+    <button type="submit" id="submitBtn">Submit</button>
+  </form>
+
+  <div id="statusMsg" class="status-msg"></div>
+
+  <div id="result" class="result">
+    <div class="row">
+      <span class="label">DID</span>
+      <span class="did-wrap">
+        <span class="value did-value" id="didValue">—</span>
+        <button type="button" class="copy-btn" id="copyBtn">Copy</button>
+      </span>
+    </div>
+    <div class="row">
+      <span class="label">Buffer Time</span>
+      <span class="value" id="bufferTimeValue">—</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ← Replace this with your deployed Apps Script Web App URL
+  const RTB_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxkXBlSEFQ68_f07rXQpNgIg8ksuuSlcqYU4NzBcsM2ue5-kTXGLR-lDdCe4wRZ_tCV/exec';
+
+  const form = document.getElementById('pingForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const statusMsg = document.getElementById('statusMsg');
+  const result = document.getElementById('result');
+  const didValue = document.getElementById('didValue');
+  const copyBtn = document.getElementById('copyBtn');
+  const bufferTimeValue = document.getElementById('bufferTimeValue');
+  let copyResetTimer = null;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const vertical = document.getElementById('vertical').value;
+    const cid = document.getElementById('cid').value.trim();
+    const zipcode = document.getElementById('zipcode').value.trim();
+
+    resetUI();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+
+    try {
+      const res = await fetch(RTB_APP_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ vertical, cid, zipcode })
+      });
+      const data = await res.json();
+
+      if (data.error) {
+        showStatus(data.rejected ? `Rejected: ${data.rejectReason}` : data.message, true);
+      } else {
+        showResult(data);
+      }
+    } catch (err) {
+      showStatus('Network error — could not reach ping service.', true);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit';
+    }
+  });
+
+  copyBtn.addEventListener('click', async () => {
+    const did = didValue.textContent.trim();
+    if (!did || did === '—') return;
+    try {
+      await navigator.clipboard.writeText(did);
+    } catch (err) {
+      const temp = document.createElement('textarea');
+      temp.value = did;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand('copy');
+      document.body.removeChild(temp);
+    }
+    copyBtn.textContent = 'Copied!';
+    copyBtn.classList.add('copied');
+    if (copyResetTimer) clearTimeout(copyResetTimer);
+    copyResetTimer = setTimeout(() => {
+      copyBtn.textContent = 'Copy';
+      copyBtn.classList.remove('copied');
+    }, 1500);
+  });
+
+  function resetUI() {
+    statusMsg.textContent = '';
+    statusMsg.classList.remove('error');
+    result.classList.remove('show');
+    copyBtn.textContent = 'Copy';
+    copyBtn.classList.remove('copied');
+  }
+
+  function showStatus(msg, isError) {
+    statusMsg.textContent = msg;
+    if (isError) statusMsg.classList.add('error');
+  }
+
+  function showResult(data) {
+    didValue.textContent = data.did || '—';
+    bufferTimeValue.textContent = data.bufferTimeSeconds != null ? `${data.bufferTimeSeconds}s` : 'N/A';
+    result.classList.add('show');
+  }
+</script>
+</body>
+</html>
