@@ -124,9 +124,10 @@ body {
 
 .live-dot {
   width: 7px;
-  height: 7px;
   border-radius: 50%;
   background: var(--teal);
+  width: 7px;
+  height: 7px;
   animation: pulse 1.4s ease-in-out infinite;
 }
 
@@ -229,12 +230,6 @@ label {
   box-shadow: 0 0 0 3px var(--teal-glow);
 }
 
-.input-wrap input.auto-filled,
-.input-wrap select.auto-filled {
-  border-color: rgba(26, 158, 117, .6);
-  background: rgba(26, 158, 117, .06);
-}
-
 .textarea-wrap {
   position: relative;
 }
@@ -307,7 +302,7 @@ textarea:focus {
 
 .btn-secondary {
   padding: 11px 16px;
-  background: 0 0;
+  background: transparent;
   color: var(--txt2);
   border: .5px solid var(--border2);
   border-radius: 8px;
@@ -326,8 +321,8 @@ textarea:focus {
   color: var(--txt);
 }
 
-.error-toast,
-.success-toast {
+.success-toast,
+.error-toast {
   display: none;
   align-items: center;
   gap: 10px;
@@ -347,11 +342,6 @@ textarea:focus {
   background: rgba(239, 68, 68, .1);
   border: .5px solid rgba(239, 68, 68, .3);
   color: #f87171;
-}
-
-.error-toast i,
-.success-toast i {
-  font-size: 18px;
 }
 
 .modal-overlay {
@@ -430,18 +420,12 @@ textarea:focus {
 }
 
 @media (max-width: 480px) {
-  .sale-form-inner {
-    padding: 1.25rem;
-  }
-  .vtm-header {
-    padding: 1.25rem;
-  }
-  .field-grid {
-    grid-template-columns: 1fr;
-  }
+  .sale-form-inner { padding: 1.25rem; }
+  .vtm-header { padding: 1.25rem; }
+  .field-grid { grid-template-columns: 1fr; }
 }
 
-/* ========== STATUS BANNER ========== */
+/* Status Banner */
 .status-banner {
   display: flex;
   align-items: center;
@@ -488,7 +472,7 @@ textarea:focus {
   to { transform: rotate(360deg); }
 }
 
-/* ========== FILL THE SALE FORM BUTTON ========== */
+/* Fill Form Button */
 .btn-fill-form {
   width: 100%;
   padding: 14px 20px;
@@ -516,15 +500,12 @@ textarea:focus {
   transform: scale(.98);
 }
 
-.btn-fill-form.hidden {
-  display: none;
-}
-
+.btn-fill-form.hidden,
 .hidden {
   display: none !important;
 }
 
-/* ========== DETAILED API RESPONSE CARD ========== */
+/* Detail Card */
 .detail-card {
   background: #0f1623;
   border-radius: 12px;
