@@ -24,6 +24,7 @@ function getParam(name) {
     company: ['company','vendor'],
     campaign: ['campaign','campaign_id'],
     did: ['did','did_id','inbound_number'],
+    list_id: ['list_id'],
     comments: ['comments','notes','comment']
   };
   const keys = aliases[name] || [name];
